@@ -42,7 +42,7 @@ class teacher {
             $course_ids = explode(',', $teacher_row->course_ids);
 
             $courses = array_map(function ($course_id) {
-                return course::get_by_id(intval($course_id));
+                return course::get(intval($course_id));
             }, $course_ids);
             return new teacher($teacher_row->id, $teacher_row->email, $courses);
         }, $teacher_rows);
