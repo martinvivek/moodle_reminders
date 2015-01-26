@@ -1,12 +1,12 @@
 {
-  "name": "vendor_name/package_name",
+  "name": "Arubaruba/moodle_reminders",
   "description": "description_text",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
     {
-      "name": "author's name",
-      "email": "email@example.com"
+      "name": "Andreas Stocker",
+      "email": "shadowstep7@gmail.com"
     }
   ],
   "require": {

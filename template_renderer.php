@@ -9,7 +9,7 @@ define('TWIG_CACHE_DIR', __DIR__ . '/twig_cache');
 /**
  * Renders templates stored in the TEMPLATE_DIR directory and caches them
  */
-class TemplateRenderer {
+class template_renderer {
     public $twig;
 
     /**

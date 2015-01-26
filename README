@@ -1,9 +1,10 @@
-Web service template plugin for Moodle 2.X
-------------------------------------------
+# Moodle Reminders
 
-It is a template designed as a starting point for developing third party web services.
-It includes a simple Hello World example.
+_Send automatic email reminders to teachers_
 
-To test:
-1- install the plugin in moodle/local/wstemplate/
-2- Read, setup and run moodle/local/wstemplate/client/client.php
+## Installation
+
+* `git clone https://github.com/Arubaruba/moodle-reminders.git <MOODLE_DIR>/local/moodle_reminders
+* In Browser: <MOODLE_WWW_ROOT>/admin/index.php?confirmplugincheck=1&cache=0
+
+__Important note:__ The dash '-' must become an underscore '_' for moodle to recognize the plugin
