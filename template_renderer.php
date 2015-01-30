@@ -14,10 +14,13 @@ class template_renderer {
 
     /**
      * Creates a twig loader and environment
+     * @param $cache boolean
      */
-    function __construct() {
+    function __construct($cache = true) {
         $loader = new Twig_Loader_Filesystem(TEMPLATE_DIR);
-        $this->twig = new Twig_Environment($loader, array('cache' => TWIG_CACHE_DIR));
+        $config = array();
+        if ($cache) $config['cache'] = TWIG_CACHE_DIR;
+        $this->twig = new Twig_Environment($loader, $config);
     }
 
     /**

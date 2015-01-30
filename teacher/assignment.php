@@ -19,25 +19,34 @@ class assignment extends \linkable {
      */
     public $id, $module_instance_id, $name, $submissions;
 
+    function __construct($id, $module_instance_id, $name, $submissions) {
+        $this->id = $id;
+        $this->module_instance_id = $module_instance_id;
+        $this->name = $name;
+        $this->submissions = $submissions;
+    }
+
     /**
      * Loads the assignment from the moodle database and then loads the __ungraded__ submissions associated with it
      * @param $id
+     * @return assignment
      */
     static function get($id) {
         global $DB;
-        // TODO get course_module_instance
         $assignment_row = $DB->get_record_sql('
-            SELECT CONCAT_WS(" ", mdl_user.firstname, mdl_user.lastname) AS student_name, {course_modules}.id AS module_instance_id,
-              {assign}.name, GROUP_CONCAT(DISTINCT {assign_submission}.id ORDER BY {assign_submission}.timecreated ASC) AS submission_ids FROM {assign}
-            LEFT JOIN {course_modules} ON {course_modules}.module = 1 AND {course_modules}.instance = {assign}.id
-            LEFT JOIN {assign_submission} ON {assign}.id = {assign_submission}.assignment
-            WHERE {assign_submission}.assignment = ? AND {assign_submission}.lastest = 1
-        ', array($id));
+          SELECT {assign}.name, GROUP_CONCAT(DISTINCT CASE WHEN {assign_grades}.id IS NOT NULL THEN NULL ELSE {assign_submission}.id END) AS submission_ids, {course_modules}.id AS module_instance_id FROM {assign}
+          LEFT JOIN {assign_submission} ON {assign_submission}.assignment = {assign}.id AND {assign_submission}.status = "submitted"
+          LEFT JOIN {assign_grades} ON {assign_grades}.assignment = {assign}.id AND {assign_grades}.userid = {assign_submission}.userid AND {assign_grades}.attemptnumber >= {assign_submission}.attemptnumber
+          LEFT JOIN {course_modules} ON {course_modules}.module = 1 AND {course_modules}.instance = {assign}.id
+          WHERE {assign}.id = ? LIMIT 1;', array($id));
 
-        $submission_ids = explode(',', $assignment_row->submission_ids, -1);
-        $submissions = array_map(function($submission_id) {
-            return submission::get($submission_id);
-        }, $submission_ids);
+        $submissions = null;
+        if ($assignment_row->submission_ids) {
+            $submission_ids = explode(',', $assignment_row->submission_ids);
+            $submissions = array_map(function ($submission_id) {
+                return submission::get(intval($submission_id));
+            }, $submission_ids);
+        }
 
         return new assignment($id, $assignment_row->module_instance_id, $assignment_row->name, $submissions);
     }
@@ -47,6 +56,6 @@ class assignment extends \linkable {
      */
     function get_link() {
         global $CFG;
-        return $CFG->wwwroot . '/user/profile.php?id=' . $this->id;
+        return $CFG->wwwroot . '/mod/assign/view.php?id=' . $this->module_instance_id;
     }
 }

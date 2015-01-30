@@ -4,7 +4,16 @@ namespace teacher;
 
 require_once(__DIR__ . '/../moodle_environment.php');
 
+/**
+ * A submission that has not yet been graded
+ * @package teacher
+ */
 class submission {
+    /**
+     * @var $id integer
+     * @var $student_name string
+     * @var $time_created \DateTime
+     */
     public $id, $student_name, $time_created;
 
     function __construct($id, $student_name, $time_created) {
@@ -20,11 +29,10 @@ class submission {
     static function get($id) {
         global $DB;
         $submission_row = $DB->get_record_sql('
-            SELECT CONCAT_WS(" ", mdl_user.firstname, mdl_user.lastname) AS student_name,
-              FROM_UNIXTIME({assign_submission}.timecreated) AS {assign_submission}.time_created FROM {assign_submission}
+            SELECT CONCAT_WS(" ", {user}.firstname, {user}.lastname) AS student_name,
+              FROM_UNIXTIME({assign_submission}.timecreated) AS time_created FROM {assign_submission}
             LEFT JOIN {user} ON {user}.id = {assign_submission}.userid
-            WHERE {assign_submission}.id = ? AND {assign_submission}.lastest = 1
-            ORDER BY time_created ASC
+            WHERE {assign_submission}.id = ? AND {assign_submission}.latest = 1 LIMIT 1
         ', array($id));
 
         return new submission($id, $submission_row->student_name, $submission_row->time_created);

@@ -35,8 +35,8 @@ class student extends \linkable {
     static function get($id, $course_id) {
         global $DB;
         $student_row = $DB->get_record_sql('
-            SELECT CONCAT_WS(" ", {user}.firstname, {user}.lastname) AS name, COUNT(DISTINCT logins_this_week.id) AS logins_this_week_count,
-              COUNT(DISTINCT logins_course_total.id) AS logins_course_total_count FROM {user}
+            SELECT CONCAT_WS(" ", {user}.firstname, {user}.lastname) AS name, COUNT(DISTINCT DATE(FROM_UNIXTIME(logins_this_week.timecreated))) AS logins_this_week_count,
+              COUNT(DISTINCT DATE(FROM_UNIXTIME(logins_course_total.timecreated))) AS logins_course_total_count FROM {user}
             LEFT JOIN {course} ON {course}.id = :course_id
             LEFT JOIN {logstore_standard_log} AS logins_this_week ON logins_this_week.userid = {user}.id AND
               logins_this_week.action = "loggedin" AND FROM_UNIXTIME(logins_this_week.timecreated) > NOW() - INTERVAL 1 WEEK

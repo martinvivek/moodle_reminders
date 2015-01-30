@@ -1,0 +1,64 @@
+<style>
+  body {
+    background: #f0f0f0;
+  }
+
+  .course {
+    display: block;
+    font-size: 24px;
+    margin: 15px 0;
+  }
+  .assignment {
+    background: #c1c1c1;
+    padding: 20px;
+  }
+  .assignment:nth-of-type(odd) {
+    background: #e6e6e6;
+  }
+</style>
+Teacher = {{ email }}
+<h2>Courses</h2>
+{% for course in courses %}
+  <a target="_blank" class="course" href="{{ course.get_link() }}">{{ course.name }}</a>
+  {% if course.assignments %}
+    <h3>Assignments</h3>
+    {% for assignment in course.assignments %}
+      <div class="assignment">
+        <a target="_blank" href="{{ assignment.get_link() }}">{{ assignment.name }}</a>
+        <h4>Submissions:</h4>
+        {% for submission in assignment.submissions %}
+          <div>
+            <b>{{ submission.student_name }}</b> {{ submission.time_created | date('H:i d/m/Y') }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if course.discussions %}
+    <h3>Discussions</h3>
+    {% for discussion in course.discussions %}
+      <a target="_blank" href="{{ discussion.get_link() }}">{{ discussion.name }}</a>
+    {% endfor %}
+  {% endif %}
+
+  <h3>Students Logins</h3>
+  <table>
+    <tr>
+      <th colspan="2">This Week</th>
+      <th>/</th>
+      <th colspan="2">Course Total</th>
+    </tr>
+    {% for student in course.students_in_table_format() %}
+      <tr>
+        <td>{{ student['this_week']['name'] }}</td>
+        <td>{{ student['this_week']['logins'] }}</td>
+        <th>/</th>
+        <td>{{ student['course_total']['name'] }}</td>
+        <td>{{ student['course_total']['logins'] }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endfor %}
+
+<a href="">Unsubscribe</a>
