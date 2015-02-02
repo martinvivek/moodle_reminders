@@ -5,6 +5,10 @@ namespace teacher;
 require_once(__DIR__ . '/../moodle_environment.php');
 require_once(__DIR__ . '/course.php');
 
+global $CFG;
+
+define('MESSAGE_SETTINGS_LINK', $CFG->wwwroot . '/message/edit.php');
+
 /**
  * Stores basic teacher data, loads teachers from the moodle database, sends teachers emails
  * @package teacher
@@ -14,12 +18,16 @@ class teacher {
      * @var $id integer
      * @var $email string
      * @var $courses array(course)
+     * @var $last_login /Date
+     * @var $message_settings_link string Complete moodle url to message settings page
      */
     public $id, $email, $courses;
+    public $message_settings_link = MESSAGE_SETTINGS_LINK;
 
-    function __construct($id, $email, $courses = array()) {
+    function __construct($id, $email, $last_login, $courses = array()) {
         $this->id = $id;
         $this->email = $email;
+        $this->last_login = $last_login;
         $this->courses = $courses;
     }
 
@@ -47,7 +55,7 @@ class teacher {
             $courses = array_map(function ($course_id) use ($teacher_id) {
                 return course::get(intval($course_id), $teacher_id);
             }, $course_ids);
-            return new teacher($teacher_row->id, $teacher_row->email, $courses);
+            return new teacher($teacher_row->id, $teacher_row->email, $teacher_row->last_login, $courses);
         }, $teacher_rows);
     }
 }

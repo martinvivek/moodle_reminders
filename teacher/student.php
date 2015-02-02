@@ -4,7 +4,6 @@
 namespace teacher;
 
 require_once(__DIR__ . '/../moodle_environment.php');
-require_once(__DIR__ . '/../linkable.php');
 
 // How each of these events affect the students' activity score
 define('POINTS_FOR_LOGIN', 10);
@@ -15,7 +14,7 @@ define('POINTS_FOR_VIEW', 3);
  * Represents a student instance within a course environment and at a certain point in time
  * @package teacher
  */
-class student extends \linkable {
+class student {
     /**
      * @var $id integer
      * @var $course_id integer
@@ -73,22 +72,16 @@ class student extends \linkable {
         ', array(
                 'user_id' => $id,
                 'course_id' => $course_id,
+
                 'points_for_create1' => POINTS_FOR_CREATE,
                 'points_for_login1' => POINTS_FOR_LOGIN,
                 'points_for_view1' => POINTS_FOR_VIEW,
+
                 'points_for_create2' => POINTS_FOR_CREATE,
                 'points_for_login2' => POINTS_FOR_LOGIN,
                 'points_for_view2' => POINTS_FOR_VIEW,
             )
         );
         return new student($id, $student_row->name, intval($student_row->score_this_week_count), intval($student_row->score_course_average_count));
-    }
-
-    /**
-     * @return string A link to this object's page in moodle; Note that a login may be required
-     */
-    function get_link() {
-        global $CFG;
-        return $CFG->wwwroot . '/user/profile.php?id=' . $this->id;
     }
 }

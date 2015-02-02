@@ -39,7 +39,8 @@ class course extends \linkable {
     static function get($id, $teacher_id) {
         global $DB;
         $course_row = $DB->get_record_sql('
-            SELECT {course}.fullname AS name, GROUP_CONCAT(DISTINCT {user}.id) as student_ids, GROUP_CONCAT(DISTINCT {assign}.id) AS assignment_ids, GROUP_CONCAT(DISTINCT CASE WHEN {logstore_standard_log}.id IS NOT NULL THEN NULL ELSE {forum_discussions}.id END) as discussion_ids FROM {course}
+            SELECT {course}.fullname AS name, GROUP_CONCAT(DISTINCT {user}.id) as student_ids, GROUP_CONCAT(DISTINCT {assign}.id) AS assignment_ids, GROUP_CONCAT(DISTINCT
+            CASE WHEN {logstore_standard_log}.id IS NOT NULL THEN NULL ELSE {forum_discussions}.id END) as discussion_ids FROM {course}
             LEFT JOIN {context} ON contextlevel = 50 AND {context}.instanceid = {course}.id
             LEFT JOIN {role_assignments} ON roleid = 5 AND {context}.id = {role_assignments}.contextid
             LEFT JOIN {user} ON {role_assignments}.userid = {user}.id

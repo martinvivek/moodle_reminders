@@ -15,14 +15,16 @@ class assignment extends \linkable {
      * @var $id string
      * @var $module_instance_id integer Used in the _get_link()_ method
      * @var $name string
+     * @var $time_due /Date
      * @var $submissions array(submission)
      */
-    public $id, $module_instance_id, $name, $submissions;
+    public $id, $module_instance_id, $name, $time_due, $submissions;
 
-    function __construct($id, $module_instance_id, $name, $submissions) {
+    function __construct($id, $module_instance_id, $name, $time_due, $submissions) {
         $this->id = $id;
         $this->module_instance_id = $module_instance_id;
         $this->name = $name;
+        $this->time_due = $time_due;
         $this->submissions = $submissions;
     }
 
@@ -34,7 +36,7 @@ class assignment extends \linkable {
     static function get($id) {
         global $DB;
         $assignment_row = $DB->get_record_sql('
-          SELECT {assign}.name, GROUP_CONCAT(DISTINCT CASE WHEN {assign_grades}.id IS NOT NULL THEN NULL ELSE {assign_submission}.id END) AS submission_ids, {course_modules}.id AS module_instance_id FROM {assign}
+          SELECT {assign}.name, GROUP_CONCAT(DISTINCT CASE WHEN {assign_grades}.id IS NOT NULL THEN NULL ELSE {assign_submission}.id END) AS submission_ids, FROM_UNIXTIME({assign}.duedate) AS time_due, {course_modules}.id AS module_instance_id FROM {assign}
           LEFT JOIN {assign_submission} ON {assign_submission}.assignment = {assign}.id AND {assign_submission}.status = "submitted"
           LEFT JOIN {assign_grades} ON {assign_grades}.assignment = {assign}.id AND {assign_grades}.userid = {assign_submission}.userid AND {assign_grades}.attemptnumber >= {assign_submission}.attemptnumber
           LEFT JOIN {course_modules} ON {course_modules}.module = 1 AND {course_modules}.instance = {assign}.id
@@ -48,7 +50,7 @@ class assignment extends \linkable {
             }, $submission_ids);
         }
 
-        return new assignment($id, $assignment_row->module_instance_id, $assignment_row->name, $submissions);
+        return new assignment($id, $assignment_row->module_instance_id, $assignment_row->name, $assignment_row->time_due, $submissions);
     }
 
     /**
