@@ -78,29 +78,29 @@ class course extends \linkable {
     }
 
     /**
-     * @return array Returns array containing two arrays of the students sorted by _logins_this_week_
-     * and _logins_course_total_ respectively; Meant for displaying the students in a table
+     * @return array Returns array containing two arrays of the students sorted by _score_this_week_
+     * and _score_course_average_ respectively; Meant for displaying the students in a table
      */
     function students_in_table_format() {
-        $students_by_logins_this_week = $this->students;
-        usort($students_by_logins_this_week, function ($student1, $student2) {
-            return $student1->logins_this_week - $student2->logins_this_week;
+        $students_by_score_this_week = $this->students;
+        usort($students_by_score_this_week, function ($student1, $student2) {
+            return $student1->score_this_week - $student2->score_this_week;
         });
 
-        $students_by_logins_course_total = $this->students;
-        usort($students_by_logins_course_total, function ($student1, $student2) {
-            return $student1->logins_course_total - $student2->logins_course_total;
+        $students_by_score_course_average = $this->students;
+        usort($students_by_score_course_average, function ($student1, $student2) {
+            return $student1->score_course_average - $student2->score_course_average;
         });
 
         $students_in_table_format = array();
         for($i = 0; $i < count($this->students); $i++) {
             $students_in_table_format[$i] = array(
                 'this_week' => array(
-                    'name' => $students_by_logins_this_week[$i]->name,
-                    'logins' => $students_by_logins_this_week[$i]->logins_this_week),
-                'course_total' => array(
-                    'name' => $students_by_logins_course_total[$i]->name,
-                    'logins' => $students_by_logins_course_total[$i]->logins_course_total)
+                    'name' => $students_by_score_this_week[$i]->name,
+                    'logins' => $students_by_score_this_week[$i]->score_this_week),
+                'course_average' => array(
+                    'name' => $students_by_score_course_average[$i]->name,
+                    'logins' => $students_by_score_course_average[$i]->score_course_average)
             );
         }
         return $students_in_table_format;

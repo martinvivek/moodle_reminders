@@ -47,15 +47,15 @@ Teacher = {{ email }}
     <tr>
       <th colspan="2">This Week</th>
       <th>/</th>
-      <th colspan="2">Course Total</th>
+      <th colspan="2">Course Average</th>
     </tr>
     {% for student in course.students_in_table_format() %}
       <tr>
         <td>{{ student['this_week']['name'] }}</td>
         <td>{{ student['this_week']['logins'] }}</td>
         <th>/</th>
-        <td>{{ student['course_total']['name'] }}</td>
-        <td>{{ student['course_total']['logins'] }}</td>
+        <td>{{ student['course_average']['name'] }}</td>
+        <td>{{ student['course_average']['logins'] }}</td>
       </tr>
     {% endfor %}
   </table>
