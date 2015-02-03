@@ -13,5 +13,7 @@ $teachers = teacher::get_all();
 // Don't use caching
 $renderer = new \template_renderer(false);
 
-echo $renderer->render('teacher_email.twig',(array) array_values($teachers)[0]);
+$data = (array) array_values($teachers)[0];
+
+echo $renderer->render('teacher_email.twig', $data);
 

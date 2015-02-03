@@ -22,11 +22,13 @@ class student {
      * @var $score_this_week integer Number of times student has logged in during the last seven days
      * @var $score_course_average integer Number of times the student has logged in since enrolled in the course with id $course_id
      */
-    public $id, $name, $score_course_average, $score_this_week;
+    public $id, $name, $email, $phone, $score_course_average, $score_this_week;
 
-    function __construct($id, $name, $score_this_week, $score_course_average) {
+    function __construct($id, $name, $email, $phone, $score_this_week, $score_course_average) {
         $this->id = $id;
         $this->name = $name;
+        $this->email = $email;
+        $this->phone= $phone;
         $this->score_this_week = $score_this_week;
         $this->score_course_average = $score_course_average;
     }
@@ -39,7 +41,7 @@ class student {
     static function get($id, $course_id) {
         global $DB;
         $student_row = $DB->get_record_sql('
-            SELECT CONCAT_WS(" ", {user}.firstname, {user}.lastname) AS name,
+            SELECT CONCAT_WS(" ", {user}.firstname, {user}.lastname) AS name, {user}.email AS email, {user}.phone1 AS phone,
               SUM(
                 CASE score_this_week.action
                  WHEN "create" THEN :points_for_create1
@@ -82,6 +84,6 @@ class student {
                 'points_for_view2' => POINTS_FOR_VIEW,
             )
         );
-        return new student($id, $student_row->name, intval($student_row->score_this_week_count), intval($student_row->score_course_average_count));
+        return new student($id, $student_row->name, $student_row->email, $student_row->phone, intval($student_row->score_this_week_count), intval($student_row->score_course_average_count));
     }
 }

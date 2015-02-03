@@ -16,15 +16,17 @@ class course extends \linkable {
     /**
      * @var $id integer
      * @var $name string
+     * @var $last_accessed \DateTime
      * @var $discussions array(discussion)
      * @var $students array(student)
      * @var $assignments array(assignment)
      */
-    public $id, $name, $discussions, $students, $assignments;
+    public $id, $name, $last_accessed, $discussions, $students, $assignments;
 
-    function __construct($id, $name, $discussions = array(), $students = array(), $assignments = array()) {
+    function __construct($id, $name, $last_accessed, $discussions = array(), $students = array(), $assignments = array()) {
         $this->id = $id;
         $this->name = $name;
+        $this->last_accessed = $last_accessed;
         $this->discussions = $discussions;
         $this->students = $students;
         $this->assignments = $assignments;
@@ -39,16 +41,21 @@ class course extends \linkable {
     static function get($id, $teacher_id) {
         global $DB;
         $course_row = $DB->get_record_sql('
-            SELECT {course}.fullname AS name, GROUP_CONCAT(DISTINCT {user}.id) as student_ids, GROUP_CONCAT(DISTINCT {assign}.id) AS assignment_ids, GROUP_CONCAT(DISTINCT
+            SELECT {course}.fullname AS name, GROUP_CONCAT(DISTINCT {user}.id) as student_ids, GROUP_CONCAT(DISTINCT {assign}.id) AS assignment_ids, FROM_UNIXTIME(MAX(last_login.timecreated)) AS last_login_date, GROUP_CONCAT(DISTINCT
             CASE WHEN {logstore_standard_log}.id IS NOT NULL THEN NULL ELSE {forum_discussions}.id END) as discussion_ids FROM {course}
             LEFT JOIN {context} ON contextlevel = 50 AND {context}.instanceid = {course}.id
             LEFT JOIN {role_assignments} ON roleid = 5 AND {context}.id = {role_assignments}.contextid
             LEFT JOIN {user} ON {role_assignments}.userid = {user}.id
             LEFT JOIN {assign} ON {assign}.course = {course}.id
             LEFT JOIN {forum_discussions} ON {forum_discussions}.course = {course}.id
-            LEFT JOIN {logstore_standard_log} ON {logstore_standard_log}.eventname = "\\mod_forum\\event\\discussion_viewed" AND {logstore_standard_log}.objectid = {forum_discussions}.id AND {logstore_standard_log}.userid = :teacher_id
+            LEFT JOIN {logstore_standard_log} ON {logstore_standard_log}.target = "discussion" AND {logstore_standard_log}.objectid = {forum_discussions}.id AND {logstore_standard_log}.userid = :teacher_id1
+            LEFT JOIN {logstore_standard_log} AS last_login ON last_login.userid = :teacher_id2 AND last_login.target = "loggedin"
             WHERE {course}.id = :course_id LIMIT 1;
-        ', array('teacher_id' => $teacher_id, 'course_id' => $id));
+        ', array(
+            'teacher_id1' => $teacher_id,
+            'teacher_id2' => $teacher_id,
+            'course_id' => $id
+        ));
 
         $discussions = null;
         if ($course_row->discussion_ids) {
@@ -75,7 +82,7 @@ class course extends \linkable {
             }, $assignment_ids));
         }
 
-        return new course($id, $course_row->name, $discussions, $students, $assignments);
+        return new course($id, $course_row->name, $course_row->last_login_date, $discussions, $students, $assignments);
     }
 
     /**
@@ -96,12 +103,8 @@ class course extends \linkable {
         $students_in_table_format = array();
         for($i = 0; $i < count($this->students); $i++) {
             $students_in_table_format[$i] = array(
-                'this_week' => array(
-                    'name' => $students_by_score_this_week[$i]->name,
-                    'logins' => $students_by_score_this_week[$i]->score_this_week),
-                'course_average' => array(
-                    'name' => $students_by_score_course_average[$i]->name,
-                    'logins' => $students_by_score_course_average[$i]->score_course_average)
+                'this_week' => (array) $students_by_score_this_week[$i],
+                'course_average' => (array) $students_by_score_course_average[$i]
             );
         }
         return $students_in_table_format;
