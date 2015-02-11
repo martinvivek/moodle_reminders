@@ -10,7 +10,7 @@ global $CFG;
 define('MESSAGE_SETTINGS_LINK', $CFG->wwwroot . '/message/edit.php');
 
 /**
- * Stores basic teacher data, loads teachers from the moodle database, sends teachers emails
+ * Stores basic teacher data, loads teachers from the moodle database
  * @package teacher
  */
 class teacher {

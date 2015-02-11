@@ -15,5 +15,4 @@ $renderer = new \template_renderer(false);
 
 $data = (array) array_values($teachers)[0];
 
-echo $renderer->render('teacher_email.twig', $data);
-
+echo $renderer->render('teacher_email.twig', 'teacher_email.css', $data);

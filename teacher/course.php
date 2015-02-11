@@ -3,7 +3,6 @@
 namespace teacher;
 
 require_once(__DIR__ . '/../moodle_environment.php');
-require_once(__DIR__ . '/../linkable.php');
 require_once(__DIR__ . '/discussion.php');
 require_once(__DIR__ . '/student.php');
 require_once(__DIR__ . '/assignment.php');
@@ -12,7 +11,7 @@ require_once(__DIR__ . '/assignment.php');
  * Stores basic class info along with an array of students enrolled, and assignments that have ungraded submissions
  * @package teacher
  */
-class course extends \linkable {
+class course {
     /**
      * @var $id integer
      * @var $name string
@@ -86,28 +85,35 @@ class course extends \linkable {
     }
 
     /**
-     * @return array Returns array containing two arrays of the students sorted by _score_this_week_
-     * and _score_course_average_ respectively; Meant for displaying the students in a table
+     * @param $on_sort callable($student1, $student2) A function that returns an int based on how any two students should be sorted
+     * @return array(student)
      */
-    function students_in_table_format() {
-        $students_by_score_this_week = $this->students;
-        usort($students_by_score_this_week, function ($student1, $student2) {
+    private function sort_students($on_sort) {
+        $students = $this->students;
+        usort($students, $on_sort);
+
+        // We need to arrayify each student object so twig can use it
+        return array_map(function($student) {
+            return (array) $student;
+        }, $students);
+    }
+
+    /**
+     * @return array(student)
+     */
+    function students_by_score_this_week() {
+        return $this->sort_students(function($student1, $student2) {
             return $student1->score_this_week - $student2->score_this_week;
         });
+    }
 
-        $students_by_score_course_average = $this->students;
-        usort($students_by_score_course_average, function ($student1, $student2) {
+    /**
+     * @return array(student)
+     */
+    function students_by_score_course_average() {
+        return $this->sort_students(function($student1, $student2) {
             return $student1->score_course_average - $student2->score_course_average;
         });
-
-        $students_in_table_format = array();
-        for($i = 0; $i < count($this->students); $i++) {
-            $students_in_table_format[$i] = array(
-                'this_week' => (array) $students_by_score_this_week[$i],
-                'course_average' => (array) $students_by_score_course_average[$i]
-            );
-        }
-        return $students_in_table_format;
     }
 
     function get_link() {

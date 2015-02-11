@@ -1,0 +1,160 @@
+body {
+    color: #282828;
+    padding: 0;
+    margin: 0;
+    background: #fff;
+}
+
+.message {
+    background: #fff;
+    font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+    color: #333;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.last-login {
+    font-weight: normal;
+    color: #828282;
+    font-size: 12px;
+}
+
+.course-container {
+    background: #f5fdff;
+    border:1px solid #d9f7ff;
+    padding: 20px;
+    overflow: auto;
+    margin: 0 5px 10px 5px;
+}
+
+.course-name {
+    text-decoration: underline;
+    color: #eb571c;
+    font-weight: bold;
+    font-size: 27px;
+}
+
+.indicator-container {
+    margin-top: 10px;
+    position: relative;
+}
+
+.indicator {
+    width: 300px;
+    margin: 10px 30px 0 0;
+    float: left;
+}
+
+.indicator:last-child {
+    width: auto;
+}
+
+.indicator-title {
+    display: block;
+    font-weight: bold;
+    color: #4c4c4c;
+    margin-bottom: 5px;
+}
+
+.indicator-box {
+    margin-top: 10px;
+    padding: 15px;
+    border: 1px solid #bff2ff;
+    background: #fff;
+    border-radius: 2px;
+    margin-right: 5px;
+}
+.indicator-box:first-of-type {
+    margin-right: 0;
+}
+
+.indicator-box-half {
+    text-align: center;
+    float: left;
+    margin-top: 5px;
+    width: 145px;
+    box-sizing: border-box;
+}
+
+.indicator-box-half:last-child {
+    float: right;
+}
+
+.indicator-box-empty {
+    font-weight: bold;
+    color: #b1b1b1;
+}
+
+.item-name {
+    color: inherit;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+a.item-name {
+    color: inherit;
+    text-decoration: underline;
+}
+
+a.item-name:visited {
+    color: #828282;
+}
+
+.item-subtext-area {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.item-subtext-label {
+    margin-left: 5px;
+    display: inline-block;
+    color: #828282;
+}
+
+.item-subtext-value {
+    display: inline-block;
+    color: #5d5d5d;
+}
+
+.item-subtext-label:first-of-type {
+    margin-left: 0;
+}
+
+.ungraded-submissions-title {
+    font-size: 13px;
+    margin-top: 20px;
+    color: #666666;
+    font-weight: bold;
+}
+
+.student-table {
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.student-table .student-name {
+    color: #282828;
+}
+
+.student-table .date {
+    text-align: right;
+    color: #5d5d5d;
+}
+
+.unsubscribe-instructions {
+    color: #5d5d5d;
+    font-size: 11px;
+    padding: 20px;
+}
+
+.unsubscribe-title {
+    font-weight: bold;
+    color: #333333;
+}
+
+.unsubscribe-settings-link {
+    color: inherit;
+    font-weight: bold;
+}

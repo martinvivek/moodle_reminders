@@ -1,173 +1,17 @@
-<style>
-  body {
-    color: #000;
-    padding: 0;
-    margin: 0;
-    background: #fff;
-  }
-
-  .content {
-    font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
-  }
-
-  .message {
-    color: #333;
-    font-weight: bold;
-    font-size: 18px;
-    padding: 15px;
-  }
-
-  .last-login {
-    font-weight: normal;
-    color: #828282;
-    font-size: 12px;
-  }
-
-  .course-container {
-    padding: 20px;
-    background: #edfbff;
-    overflow: auto;
-    margin-bottom: 30px;
-  }
-
-  .course-name {
-    text-decoration: underline;
-    color: #eb571c;
-    font-weight: bold;
-    font-size: 27px;
-  }
-
-  .indicator-container {
-    margin-top: 10px;
-    position: relative;
-  }
-
-  .indicator {
-    width: 300px;
-    margin: 10px 30px 0 0;
-    float: left;
-  }
-
-  .indicator-title {
-    display: block;
-    font-weight: bold;
-    color: #4c4c4c;
-    margin-bottom: 5px;
-  }
-
-  .indicator-box {
-    margin-top: 10px;
-    padding: 15px;
-    border: 1px solid #bff2ff;
-    background: #fff;
-    border-radius: 2px;
-  }
-
-  .indicator-box-half {
-    text-align: center;
-    float: left;
-    margin-top: 5px;
-    width: 145px;
-    box-sizing: border-box;
-  }
-
-  .indicator-box-half:last-child {
-    float: right;
-  }
-
-  .indicator-box-empty {
-    font-weight: bold;
-    color: #b1b1b1;
-  }
-
-  .item-name {
-    color: inherit;
-    font-weight: bold;
-    font-size: 16px;
-  }
-
-  a.item-name {
-    color: #000;
-    text-decoration: underline;
-  }
-
-  a.item-name:visited {
-    color: #828282;
-  }
-
-  .item-subtext-area {
-    font-weight: bold;
-    font-size: 12px;
-  }
-
-  .item-subtext-label {
-    margin-left: 5px;
-    display: inline-block;
-    color: #828282;
-  }
-
-  .item-subtext-value {
-    display: inline-block;
-    color: #5d5d5d;
-  }
-
-  .item-subtext-label:first-of-type {
-    margin-left: 0;
-  }
-
-  .ungraded-submissions-title {
-    font-size: 13px;
-    margin-top: 20px;
-    color: #666666;
-    font-weight: bold;
-  }
-
-  .student-table {
-    margin-top: 5px;
-    font-size: 12px;
-    font-weight: bold;
-    width: 100%;
-  }
-
-  .student-table .student-name {
-    color: #282828;
-  }
-
-  .student-table .date {
-    text-align: right;
-    color: #5d5d5d;
-  }
-
-  .unsubscribe-instructions {
-    color: #5d5d5d;
-    font-size: 11px;
-    padding: 20px;
-  }
-
-  .unsubscribe-title {
-    font-weight: bold;
-    color: #333333;
-  }
-
-  .unsubscribe-settings-link {
-    color: inherit;
-    font-weight: bold;
-  }
-</style>
-
 <div class="content">
   <div class="message">
     <p>Hello,</p>
     <p>here is your weekly course report</p>
     <p class="last-login">
-      Last Login: <b>{{ last_login | date("g:i - m / d / Y") }}</b>
+      Last Login to Moodle: <b>{{ last_login | date("m / d / Y") }}</b>
     </p>
   </div>
   {% for course in courses %}
     <div class="course-container">
       <a target="_blank" href="{{ course.get_link() }}" class="course-name">{{ course.name }}</a>
-      <p> Last Access: {{ course.last_accessed | date("g:i - m / d / Y") }}</p>
-
+      <p class="last-login">
+        Last Accessed: <b>{{ course.last_accessed | date("m / d / Y") }}</b>
+      </p>
       <div class="indicator-container">
         <div class="indicator">
           <div class="indicator-title">Ungraded Assignments</div>
@@ -217,20 +61,19 @@
         </div>
         <div class="indicator">
           <div class="indicator-title">Student Engagement Scores</div>
-          <p>Mouse over a students name to get their contact detail</p>
           <div class="indicator-box indicator-box-half">
             <div class="item-name">This Week</div>
             <table class="student-table" cellpadding="0" cellspacing="0">
-              {% for student in course.students_in_table_format() %}
+              {% for student in course.students_by_score_this_week() %}
               <tr>
                 <td class="student-name">
-                  <span title="Email: {{ student['this_week']['email'] }}
-                    {% if student['this_week']['phone'] %}
-                    Phone: {{ student['this_week']['phone'] }}
+                  <span title="Email: {{ student['email'] }}
+                    {% if student['phone'] %}
+                    Phone: {{ student['phone'] }}
                     {% endif %}
-">{{ student['this_week']['name'] }}</span>
+">{{ student['name'] }}</span>
                 </td>
-                <td class="date">{{ student['this_week']['score_this_week'] }}</td>
+                <td class="date">{{ student['score_this_week'] }}</td>
               </tr>
               {% endfor %}
             </table>
@@ -238,16 +81,16 @@
           <div class="indicator-box indicator-box-half">
             <div class="item-name">Average</div>
             <table class="student-table" cellpadding="0" cellspacing="0">
-              {% for student in course.students_in_table_format() %}
+              {% for student in course.students_by_score_course_average() %}
                 <tr>
                   <td class="student-name">
-                    <span title="Email: {{ student['course_average']['email'] }}
-                    {% if student['course_average']['phone'] %}
-                    Phone: {{ student['course_average']['phone'] }}
+                    <span title="Email: {{ student['email'] }}
+                    {% if student['phone'] %}
+                    Phone: {{ student['phone'] }}
                     {% endif %}
-                    ">{{ student['course_average']['name'] }}</span>
+                    ">{{ student['name'] }}</span>
                   </td>
-                  <td class="date">{{ student['course_average']['score_course_average'] }}</td>
+                  <td class="date">{{ student['score_course_average'] }}</td>
                 </tr>
               {% endfor %}
             </table>

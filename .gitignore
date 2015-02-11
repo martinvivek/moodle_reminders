@@ -36,3 +36,5 @@ vendor
 # Twig Cache
 twig_cache
 
+docs
+

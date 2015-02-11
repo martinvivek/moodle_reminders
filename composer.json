@@ -11,6 +11,6 @@
   ],
   "require": {
     "twig/twig": "1.6.5",
-    "phpmailer/phpmailer": "v5.2.9"
+    "tijsverkoyen/css-to-inline-styles": "1.5.2"
   }
 }

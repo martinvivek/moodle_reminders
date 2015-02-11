@@ -25,10 +25,14 @@ class template_renderer {
 
     /**
      * @param $file_name
+     * @param $style_name
      * @param $vars
      * @return string Rendered template
      */
-    function render($file_name, $vars) {
-        return $this->twig->render($file_name, $vars);
+    function render($file_name, $style_name, $vars) {
+        $cssInliner = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
+        $cssInliner->setHTML($this->twig->render($file_name, $vars));
+        $cssInliner->setCSS($this->twig->render($style_name, $vars));
+        return $cssInliner->convert();
     }
 }
