@@ -1,40 +1,44 @@
 <div class="content">
-  <div class="message">
-    <p>Hello,</p>
-    <p>here is your weekly course report</p>
-    <p class="last-login">
-      Last Login to Moodle: <b>{{ last_login | date("m / d / Y") }}</b>
-    </p>
-  </div>
+  <p class="message">Hello, <br>
+    here is your weekly course report</p>
+
+  <p class="last-login">
+    Last Login to Moodle: <b>{{ last_login | date("m / d / Y") }}</b>
+  </p>
   {% for course in courses %}
     <div class="course-container">
       <a target="_blank" href="{{ course.get_link() }}" class="course-name">{{ course.name }}</a>
+
       <p class="last-login">
         Last Accessed: <b>{{ course.last_accessed | date("m / d / Y") }}</b>
       </p>
+
       <div class="indicator-container">
         <div class="indicator">
           <div class="indicator-title">Ungraded Assignments</div>
           {% if course.assignments %}
-          {% for assignment in course.assignments %}
-          <div class="indicator-box">
-            <a target="_blank" href="{{ assignment.get_link() }}" class="item-name">{{ assignment.name }}</a>
+            {% for assignment in course.assignments %}
+              <div class="indicator-box">
+                <div class="item-box">
+                  <a target="_blank" href="{{ assignment.get_link() }}" class="item-name">{{ assignment.name }}</a>
 
-            <div class="item-subtext-area">
-              <div class="item-subtext-label">Due Date:</div>
-              <div class="item-subtext-value">{{ assignment.time_due | date("m / d / Y") }}</div>
-            </div>
-            <div class="ungraded-submissions-title">Ungraded Submissions:</div>
-            <table class="student-table" cellpadding="0" cellspacing="0">
-              {% for submission in assignment.submissions %}
-              <tr>
-                <td class="student-name">{{ submission.student_name }}</td>
-                <td class="date">{{ submission.time_created | date("m / d / Y") }}</td>
-              </tr>
-              {% endfor %}
-            </table>
-          </div>
-          {% endfor %}
+                  <div class="item-subtext-area">
+                    <span class="item-subtext">Duedate: {{ assignment.time_due | date("m / d / Y") }}</span>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <div class="ungraded-submissions-title">Ungraded Submissions:</div>
+                  <table class="student-table" cellpadding="0" cellspacing="0">
+                    {% for submission in assignment.submissions %}
+                      <tr>
+                        <td class="student-name">{{ submission.student_name }}</td>
+                        <td class="date">{{ submission.time_created | date("m / d / Y") }}</td>
+                      </tr>
+                    {% endfor %}
+                  </table>
+                </div>
+              </div>
+            {% endfor %}
           {% else %}
             <div class="indicator-box indicator-box-empty">None</div>
           {% endif %}
@@ -42,19 +46,16 @@
         <div class="indicator">
           <div class="indicator-title">Unread Discussions</div>
           {% if course.discussions %}
-          {% for discussion in course.discussions %}
-          <div class="indicator-box">
-            <a target="_blank" href="{{ discussion.get_link() }}" class="item-name">{{ discussion.name }}</a>
+            {% for discussion in course.discussions %}
+              <div class="indicator-box item-box">
+                <a target="_blank" href="{{ discussion.get_link() }}" class="item-name">{{ discussion.name }}</a>
 
-            <div class="item-subtext-area">
-              <div class="item-subtext-label">Posts:</div>
-              <div class="item-subtext-value">{{ discussion.post_count }}</div>
-
-              <div class="item-subtext-label">Created:</div>
-              <div class="item-subtext-value">{{ discussion.time_created | date("m / d / Y") }}</div>
-            </div>
-          </div>
-          {% endfor %}
+                <div class="item-subtext-area">
+                  <span class="item-subtext">Posts: {{ discussion.post_count }}</span>
+                  <span class="item-subtext">Created: {{ discussion.time_created | date("m / d / Y") }}</span>
+                </div>
+              </div>
+            {% endfor %}
           {% else %}
             <div class="indicator-box indicator-box-empty">None</div>
           {% endif %}
@@ -62,38 +63,46 @@
         <div class="indicator">
           <div class="indicator-title">Student Engagement Scores</div>
           <div class="indicator-box indicator-box-half">
-            <div class="item-name">This Week</div>
-            <table class="student-table" cellpadding="0" cellspacing="0">
-              {% for student in course.students_by_score_this_week() %}
-              <tr>
-                <td class="student-name">
+            <div class="item-box">
+              <div class="item-score-description">This Week</div>
+            </div>
+            <div class="item-content">
+              <table class="student-table" cellpadding="0" cellspacing="0">
+                {% for student in course.students_by_score_this_week() %}
+                  <tr>
+                    <td class="student-name">
                   <span title="Email: {{ student['email'] }}
                     {% if student['phone'] %}
                     Phone: {{ student['phone'] }}
                     {% endif %}
 ">{{ student['name'] }}</span>
-                </td>
-                <td class="date">{{ student['score_this_week'] }}</td>
-              </tr>
-              {% endfor %}
-            </table>
+                    </td>
+                    <td class="date">{{ student['score_this_week'] }}</td>
+                  </tr>
+                {% endfor %}
+              </table>
+            </div>
           </div>
           <div class="indicator-box indicator-box-half">
-            <div class="item-name">Average</div>
-            <table class="student-table" cellpadding="0" cellspacing="0">
-              {% for student in course.students_by_score_course_average() %}
-                <tr>
-                  <td class="student-name">
+            <div class="item-box">
+              <div class="item-score-description">Average</div>
+            </div>
+            <div class="item-content">
+              <table class="student-table" cellpadding="0" cellspacing="0">
+                {% for student in course.students_by_score_course_average() %}
+                  <tr>
+                    <td class="student-name">
                     <span title="Email: {{ student['email'] }}
                     {% if student['phone'] %}
                     Phone: {{ student['phone'] }}
                     {% endif %}
                     ">{{ student['name'] }}</span>
-                  </td>
-                  <td class="date">{{ student['score_course_average'] }}</td>
-                </tr>
-              {% endfor %}
-            </table>
+                    </td>
+                    <td class="date">{{ student['score_course_average'] }}</td>
+                  </tr>
+                {% endfor %}
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -102,7 +111,8 @@
 
   <div class="unsubscribe-instructions">
     <div class="unsubscribe-title">How to Unsubscribe:</div>
-    Go to <a target="_blank" href="{{ message_settings_link }}?id={{ id }}" class="unsubscribe-settings-link">Message Settings</a>, uncheck Email under <i>[[messageprovider:course_reports]]</i>, then click <b>Update Profile</b>
+    Go to <a target="_blank" href="{{ message_settings_link }}?id={{ id }}" class="unsubscribe-settings-link">Message
+      Settings</a>, uncheck Email under <i>[[messageprovider:course_reports]]</i>, then click <b>Update Profile</b>
   </div>
 </div>
 
