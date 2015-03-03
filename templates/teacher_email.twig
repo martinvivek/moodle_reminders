@@ -1,118 +1,224 @@
-<div class="content">
-  <p class="message">Hello, <br>
-    here is your weekly course report</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <!--
+    This template was created by Campaign Monitor (campaignmonitor.com)
+    It was available as a free email template 3 March 2015
+   -->
+  <title>Course Report</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+</head>
+<body>
 
-  <p class="last-login">
-    Last Login to Moodle: <b>{{ last_login | date("m / d / Y") }}</b>
-  </p>
-  {% for course in courses %}
-    <div class="course-container">
-      <a target="_blank" href="{{ course.get_link() }}" class="course-name">{{ course.name }}</a>
-
-      <p class="last-login">
-        Last Accessed: <b>{{ course.last_accessed | date("m / d / Y") }}</b>
-      </p>
-
-      <div class="indicator-container">
-        <div class="indicator">
-          <div class="indicator-title">Ungraded Assignments</div>
-          {% if course.assignments %}
-            {% for assignment in course.assignments %}
-              <div class="indicator-box">
-                <div class="item-box">
-                  <a target="_blank" href="{{ assignment.get_link() }}" class="item-name">{{ assignment.name }}</a>
-
-                  <div class="item-subtext-area">
-                    <span class="item-subtext">Duedate: {{ assignment.time_due | date("m / d / Y") }}</span>
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+  <tr>
+    <td valign="top" align="center" id="top" class="outer" bgcolor="#3d4852" background="images/bg_body.gif">
+      <table class="texttopbottom" cellpadding="0" cellspacing="0" align="center" width="600">
+        <tr>
+          <td valign="top"><img src="images/blank.gif" width="1" height="8" alt=""/></td>
+        </tr>
+        <tr>
+          <td style="background: url(images/bg_top.png) no-repeat;"><img src="images/blank.gif" width="1" height="12"
+                                                                         alt=""/></td>
+        </tr>
+      </table>
+      <table cellpadding="0" cellspacing="0" align="center" width="600"
+             style="background: url(images/bg_email_rightcol.png) repeat-y;">
+        <tr>
+          <td rowspan="4" valign="top"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
+          <td rowspan="4" valign="top"><img src="images/header_strip.gif" alt="" width="20" height="249"/></td>
+          <td rowspan="3" valign="top"><img src="images/header_l.gif" alt="" width="405" height="184"/></td>
+          <td bgcolor="#fbfdfd" colspan="2" width="100" height="26"><img src="images/blank.gif" width="100" height="26"
+                                                                         alt=""/></td>
+          <td rowspan="4" valign="top"><img src="images/header_r.gif" alt="" width="45" height="249"/></td>
+          <td rowspan="4" valign="top"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
+        </tr>
+        <tr>
+          <td valign="top"><img src="images/header_mbsbg.gif" width="16" height="79" alt=""/></td>
+          <td valign="top" width="84" align="left" class="date" height="79"></td>
+        </tr>
+        <tr>
+          <td colspan="2"><img src="images/header_m.gif" alt="" width="100" height="79"/></td>
+        </tr>
+        <tr>
+          <td style="background: url(images/bg_title.gif) no-repeat;" background="images/bg_title.gif" valign="bottom"
+              colspan="3" height="65" align="left">
+            <h1>
+              Course Report
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="7" align="left">
+            <table cellpadding="0" cellspacing="0" width="600" align="left">
+              <tr>
+                <td colspan="2"><img src="images/topbot_rightcol.gif" width="600" height="14" alt=""/></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="student-engagement-label">
+                    Student Engagement Scores
                   </div>
-                </div>
-                <div class="item-content">
-                  <div class="ungraded-submissions-title">Ungraded Submissions:</div>
-                  <table class="student-table" cellpadding="0" cellspacing="0">
-                    {% for submission in assignment.submissions %}
-                      <tr>
-                        <td class="student-name">{{ submission.student_name }}</td>
-                        <td class="date">{{ submission.time_created | date("m / d / Y") }}</td>
-                      </tr>
-                    {% endfor %}
+                  <div class="score-description">
+                    <b>What does the score mean?</b><br>
+                    A student's engagement score indicates how active a student has been in a particular course.
+                  </div>
+                </td>
+                <td valign="top" width="240">
+                  <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
+                    <tr>
+                      <td valign="top" width="15" rowspan="2"></td>
+                      <td bgcolor="#d3e7eb" valign="top" width="20" rowspan="2"></td>
+                      <td valign="bottom" width="135">
+                        <div class="todo-list-label">Course TODO List</div>
+                        <div class="todo-disclaimer">
+                          <p><i>Includes Assignments and Forum Posts only</i></p>
+                        </div>
+                      </td>
+                    </tr>
                   </table>
-                </div>
-              </div>
-            {% endfor %}
-          {% else %}
-            <div class="indicator-box indicator-box-empty">None</div>
-          {% endif %}
-        </div>
-        <div class="indicator">
-          <div class="indicator-title">Unread Discussions</div>
-          {% if course.discussions %}
-            {% for discussion in course.discussions %}
-              <div class="indicator-box item-box">
-                <a target="_blank" href="{{ discussion.get_link() }}" class="item-name">{{ discussion.name }}</a>
+                </td>
+              </tr>
 
-                <div class="item-subtext-area">
-                  <span class="item-subtext">Posts: {{ discussion.post_count }}</span>
-                  <span class="item-subtext">Created: {{ discussion.time_created | date("m / d / Y") }}</span>
-                </div>
-              </div>
-            {% endfor %}
-          {% else %}
-            <div class="indicator-box indicator-box-empty">None</div>
-          {% endif %}
-        </div>
-        <div class="indicator">
-          <div class="indicator-title">Student Engagement Scores</div>
-          <div class="indicator-box indicator-box-half">
-            <div class="item-box">
-              <div class="item-score-description">This Week</div>
-            </div>
-            <div class="item-content">
-              <table class="student-table" cellpadding="0" cellspacing="0">
-                {% for student in course.students_by_score_this_week() %}
-                  <tr>
-                    <td class="student-name">
-                  <span title="Email: {{ student['email'] }}
-                    {% if student['phone'] %}
-                    Phone: {{ student['phone'] }}
+              {% for course in courses %}
+                <tr>
+                  <td valign="top" width="360">
+                    <table cellpadding="0" cellspacing="0" width="360" class="whitecol">
+                      <tr>
+                        <td valign="top" width="15" rowspan="3"><img src="images/title_rightsinglecol_blue1.gif" alt=""
+                                                                     width="15" height="56"/></td>
+                        <td bgcolor="#eaf4f7" valign="top" width="21" rowspan="3"><img src="images/title_blue2.gif"
+                                                                                       alt=""
+                                                                                       width="21" height="56"/></td>
+                        <td bgcolor="#eaf4f7"><img src="images/blank.gif" alt="" width="1" height="20"/></td>
+                        <td bgcolor="#eaf4f7" rowspan="4"><img src="images/blank.gif" alt="" width="5" height="1"/></td>
+                      </tr>
+                      <tr>
+                        <td bgcolor="#eaf4f7" valign="top" width="319"><h2>{{ course.name }}</h2></td>
+                      </tr>
+                      <tr>
+                        <td bgcolor="#eaf4f7" valign="top" class="border">
+                          <table class="student-engagement">
+                            <tr>
+                              <th></th>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>This<br>Week</th>
+                              <th>All<br>Time</th>
+                            </tr>
+                            {% for student in course.students_by_score_this_week() %}
+                              <tr>
+                                <td><img src="images/bullet_white.gif" alt=""/></td>
+                                <td>{{ student['name'] }}</td>
+                                <td class="selectable">{{ student['email'] }}</td>
+                                <td>{{ student['score_course_average'] }}</td>
+                                <td>3</td>
+                              </tr>
+                            {% endfor %}
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" width="15">&nbsp;</td>
+                        <td bgcolor="#eaf4f7" colspan="2" valign="top" align="right" class="backtotop"><a href="#top">Back
+                            to top</a></td>
+                      </tr>
+                    </table>
+
+                  </td>
+                  <td valign="top" width="240">
+                    <p><!-- for spacing --></p>
+                    <p><!-- for spacing --></p>
+
+                    {% if course.assignments %}
+                      <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
+                        <tr>
+                          <td valign="top" width="15" rowspan="2"><img src="images/title_rightcol_red1.gif" alt=""
+                                                                       width="15" height="36"/></td>
+                          <td bgcolor="#d3e7eb" valign="top" width="20" rowspan="2"><img src="images/title_red2.gif"
+                                                                                         alt=""
+                                                                                         width="20" height="36"/></td>
+                          <td bgcolor="#d3e7eb" valign="bottom" width="175">
+                            <h2>Assignments to Grade</h2>
+                          </td>
+                          <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
+                          </td>
+                          <td rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/></td>
+                        </tr>
+                        <tr>
+                          <td bgcolor="#d3e7eb" valign="top" class="border">
+                            {% for assignment in course.assignments %}
+                              <p>
+                                <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
+                                {{ assignment.name }} <b>x {{ assignment.submission_count }}</b>
+                                <a target="_blank" href="{{ assignment.get_link() }}">Grade</a>
+                              </p>
+                            {% endfor %}
+                          </td>
+                        </tr>
+                      </table>
                     {% endif %}
-">{{ student['name'] }}</span>
-                    </td>
-                    <td class="date">{{ student['score_this_week'] }}</td>
-                  </tr>
-                {% endfor %}
-              </table>
-            </div>
-          </div>
-          <div class="indicator-box indicator-box-half">
-            <div class="item-box">
-              <div class="item-score-description">Average</div>
-            </div>
-            <div class="item-content">
-              <table class="student-table" cellpadding="0" cellspacing="0">
-                {% for student in course.students_by_score_course_average() %}
-                  <tr>
-                    <td class="student-name">
-                    <span title="Email: {{ student['email'] }}
-                    {% if student['phone'] %}
-                    Phone: {{ student['phone'] }}
+
+                    {% if course.discussions %}
+                    <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
+
+                      <tr>
+                        <td valign="top" width="15" rowspan="2"><img src="images/title_rightcol_red1.gif" alt=""
+                                                                     width="15" height="36"/></td>
+                        <td bgcolor="#d3e7eb" valign="top" width="20" rowspan="2"><img src="images/title_red2.gif"
+                                                                                       alt=""
+                                                                                       width="20" height="36"/></td>
+                        <td bgcolor="#d3e7eb" valign="bottom" width="175">
+                          <h2>Unread Forum Posts</h2>
+                        </td>
+                        <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
+                        </td>
+                        <td rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/></td>
+                      </tr>
+                      <tr>
+                        <td bgcolor="#d3e7eb" valign="top" class="border">
+
+                          {% for discussion in course.discussions %}
+                          <p>
+                            <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
+                            {{ discussion.name }}
+                            <a target="_blank" href="{{ discussion.get_link() }}">Read</a>
+                          </p>
+                          {% endfor %}
+                        </td>
+                      </tr>
+                    </table>
                     {% endif %}
-                    ">{{ student['name'] }}</span>
-                    </td>
-                    <td class="date">{{ student['score_course_average'] }}</td>
-                  </tr>
-                {% endfor %}
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  {% endfor %}
-
-  <div class="unsubscribe-instructions">
-    <div class="unsubscribe-title">How to Unsubscribe:</div>
-    Go to <a target="_blank" href="{{ message_settings_link }}?id={{ id }}" class="unsubscribe-settings-link">Message
-      Settings</a>, uncheck Email under <i>[[messageprovider:course_reports]]</i>, then click <b>Update Profile</b>
-  </div>
-</div>
-
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+            <table class="texttopbottom" cellpadding="0" cellspacing="0" align="center" width="600">
+              <tr>
+                <td colspan="3" style="background: url(images/bg_bottom.png) no-repeat;"><img src="images/blank.gif"
+                                                                                              width="1"
+                                                                                              height="12" alt=""/></td>
+              </tr>
+              <tr>
+                <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
+                <td valign="top" align="center"
+                    style="font-family: Verdana, Arial, sans-serif; color: #8d9ca4;font-size: 10px;margin: 0;">
+                  <p>
+                    Not interested anymore?
+                    <unsubscribe>Unsubscribe Instantly</unsubscribe>
+                    .
+                  </p>
+                </td>
+                <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
+              </tr>
+              <tr>
+                <td><img src="images/blank.gif" width="570" height="8" alt=""/></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+</table>
+</body>
+</html>

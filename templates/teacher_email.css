@@ -1,160 +1,298 @@
-.content {
-  color: #282828;
-  padding: 10px;
-  margin: 0;
-  background: #fff;
-  font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
-  background: green;
+/* Thanks to BalusC on Stackoverflow */
+.selectable {
+  -webkit-touch-callout: text;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
-.message {
-  background: #fff;
-  color: #333;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.last-login {
-  font-weight: normal;
-  color: #828282;
-  font-size: 12px;
-}
-
-.course-container {
-  overflow: auto;
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.course-container:first-child {
-  margin-top: 20px;
-}
-
-.course-name {
-  text-decoration: underline;
-  color: #594d7e;
-  font-weight: bold;
-  font-size: 27px;
-}
-
-.indicator-container {
-  position: relative;
-}
-
-.indicator {
-  width: 300px;
-  margin-right: 30px;
-  float: left;
-}
-
-.indicator:last-child {
-  width: auto;
-  min-width: 300px;
-}
-
-.indicator-title {
-  display: block;
-  font-weight: bold;
-  color: #594d7e;
-  font-size: 20px;
-  padding-bottom: 5px;
-}
-
-.indicator-box {
-  border: 1px solid #ededed;
-  font-size: 16px;
-  margin-top: 17px;
-}
-
-.indicator-box:nth-child(2) {
-  margin-top: 0;
-}
-
-.indicator-box-half {
-  text-align: center;
-  float: left;
-  width: 140px;
-  box-sizing: border-box;
-  margin-top: 0;
-}
-
-.indicator-box-half:last-child {
-  float: right;
-}
-
-.indicator-box-empty {
-  font-weight: bold;
-  color: #b1b1b1;
-  padding: 14px;
-}
-
-.item-box {
-  color: #fff;
-  background: #594d7e;
-  padding: 5px;
-  box-sizing: border-box;
-  border: 1px solid #436da1;
-}
-
-.item-content {
-  border: 1px solid #ededed;
-}
-
-.item-score-description {
-  font-weight: bold;
-  font-size: 20px;
+.todo-list-label {
+  color: #648d97 !important;
+  font-family: Arial, Helvetica;
   text-align: left;
-  padding: 5px 0;
+  font-weight: bold;
+  font-size: 16px;
+  margin: 8px 0 10px -15px;
+  padding: 6px 0 0 0;
 }
 
-a.item-name {
-  font-size: 14px;
+.todo-disclaimer {
+  margin-left: -15px;
+  padding-right: 15px;
+}
+
+.student-engagement-label {
+  color: #648d97 !important;
+  font-family: Arial, Helvetica;
+  text-align: left;
   font-weight: bold;
-  color: inherit;
+  font-size: 22px;
+  margin: 0 0 6px 33px;
+  padding: 6px 0 0 0;
+}
+
+.score-description {
+  color: #4b5863;
+  font-family: Verdana, Arial;
+  text-align: left;
+  font-size: 11px;
+  line-height: 18px;
+  margin: 0 0 12px 33px;
+}
+
+table.student-engagement {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 99%;
+  color: #4b5863;
+  font-family: Verdana, Arial;
+  text-align: left;
+  font-size: 11px;
+  line-height: 18px;
+  margin: 0 0 8px 0;
+}
+
+table.student-engagement td {
+  padding: 3px;
+}
+
+body, div.outer {
+  padding: 0px;
+  margin: 0px;
+  background-image: url(images/bg_body.gif);
+  background-repeat: repeat-y no-repeat;
+  background-position: top center;
+  background-color: #3d4852;
+}
+
+a:link, a:visited {
+  color: #fd4d53;
   text-decoration: underline;
 }
 
-.item-subtext-area {
-  font-size: 14px;
+a:hover, a:active {
+  color: #3994b5;
+  text-decoration: underline;
 }
 
-.item-subtext-label:first-of-type {
-  margin-left: 0;
-}
-
-.ungraded-submissions-title {
-  font-size: 13px;
+a {
   font-weight: bold;
-  padding: 3px;
+  font-family: Verdana, Arial;
+  color: #8d9ca4;
+  font-size: 10px;
+  text-align: center;
+  text-wrap: avoid
 }
 
-.student-table {
+td.date {
+  background-image: url(images/header_mbg.gif);
+  background-repeat: repeat-y no-repeat;
+  background-position: top center;
+  background-color: #f2f8fa;
+}
+
+img {
+  display: block;
+  padding: 0;
+  border: 0 none;
+  margin: 0;
+}
+
+img.inline {
+  display: inline;
+}
+
+.texttopbottom p {
+  font-family: Verdana, Arial;
+  color: #8d9ca4;
+  font-size: 10px;
+  margin: 0;
+  text-align: center;
+}
+
+p.month {
+  color: #4dc8da;
+  font-family: Arial, Helvetica;
   font-size: 12px;
-  width: 100%;
+  line-height: 12px;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
 }
 
-.student-table tr:nth-child(odd) {
-  background: #ededed;
-}
-.student-table td {
-  padding: 3px;
-}
-
-.student-table td:last-child {
-  text-align: right;
+p.year {
+  color: #b4ebf3;
+  font-family: 'Arial Black', Arial, Helvetica;
+  font-size: 18px;
+  line-height: 18px;
+  margin: 0;
+  padding: 0;
 }
 
-.unsubscribe-instructions {
-  color: #5d5d5d;
+h1 {
+  color: #ffffff;
+  font-family: 'Arial Black', Arial, Helvetica;
+  font-size: 48px;
+  line-height: 39px;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0px 0px 1px #1b5362;
+}
+
+.whitecol h2 {
+  color: #3994b5 !important;
+  font-family: Arial, Helvetica;
+  text-align: left;
+  font-weight: normal;
+  font-size: 22px;
+  line-height: 32px;
+  margin: 0;
+}
+
+.whitecol h3 {
+  color: #648d97 !important;
+  font-family: Arial, Helvetica;
+  text-align: left;
+  font-weight: bold;
+  font-size: 12px;
+  margin: 0 0 6px 0;
+  padding: 6px 0 0 0;
+}
+
+.whitecol p {
+  color: #4b5863;
+  font-family: Verdana, Arial;
+  text-align: left;
   font-size: 11px;
+  line-height: 18px;
+  margin: 0 0 8px 0;
 }
 
-.unsubscribe-title {
-  font-weight: bold;
-  color: #333333;
+.whitecol ul, .whitecol ol {
+  padding: 0;
+  margin: 20px 0 10px 20px;
 }
 
-.unsubscribe-settings-link {
-  color: inherit;
-  font-weight: bold;
+.whitecol ul {
+  list-style-image: url(images/bullet_white.gif);
 }
+
+.whitecol ol {
+  padding: 0;
+  margin: 20px 0 10px 20px;
+}
+
+.whitecol ul li, .whitecol ol li {
+  color: #4b5863;
+  font-family: Verdana, Arial;
+  font-size: 11px;
+  line-height: 18px;
+  padding: 3px 0 10px 0;
+  border-top: 1px dotted #9c9c93;
+}
+
+.bluecol h2 {
+  color: #82867b !important;
+  font-family: 'Arial Black', Arial, Helvetica;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 11px;
+  line-height: 50px;
+  margin: 0 0 -10px 0;
+}
+
+.bluecol h3 {
+  color: #648d97 !important;
+  font-family: Arial, Helvetica;
+  text-align: left;
+  font-weight: bold;
+  font-size: 12px;
+  margin: 0;
+  padding: 6px 0 0 0;
+}
+
+.bluecol p {
+  color: #636c6a;
+  font-family: Verdana, Arial;
+  text-align: left;
+  font-size: 11px;
+  line-height: 18px;
+  margin: 0 0 8px 0;
+}
+
+.bluecol ul li, .bluecol ol li {
+  color: #636c6a;
+  font-family: Verdana, Arial;
+  font-size: 11px;
+  line-height: 18px;
+  padding: 0 0 10px 0
+}
+
+.bluecol a:link, .bluecol a:visited {
+  color: #fe494f;
+  text-decoration: none;
+}
+
+.bluecol a:hover, .bluecol a:active {
+  color: #fe494f;
+  text-decoration: underline;
+}
+
+.bluecol table.thisissue td {
+  border-bottom: 1px dotted #9c9c93;
+}
+
+.bluecol table.thisissue td {
+  color: #636c6a;
+  font-family: Verdana, Arial;
+  font-size: 11px;
+  padding: 5px 0 5px 0
+}
+
+.bluecol table.thisissue a:link, .bluecol table.thisissue a:visited {
+  color: #636c6a;
+  text-decoration: none;
+}
+
+.bluecol table.thisissue a:hover, .bluecol table.thisissue a:active {
+  color: #fe494f;
+  text-decoration: underline;
+}
+
+.border {
+  border-bottom: 1px dotted #9c9c93;
+  padding-bottom: 15px;
+}
+
+.backtotop {
+  font-size: 11px;
+  line-height: 24px;
+}
+
+.backtotop a {
+  background: url(images/backtotop.gif) top right no-repeat;
+  padding: 0 17px 0 0;
+  font-family: Verdana, Arial;
+}
+
+.backtotop a:link, .backtotop a:visited {
+  color: #92afb6;
+  text-decoration: none;
+}
+
+.backtotop a:hover, .backtotop a:active {
+  color: #fd4d53;
+  text-decoration: none;
+  background-position: bottom right;
+}
+
+.mb-editor-button {
+  display: inline;
+}
+

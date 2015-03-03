@@ -77,7 +77,7 @@ class course {
             $assignment_ids = explode(',', $course_row->assignment_ids);
             $assignments = array_filter(array_map(function ($assignment_id) use ($id) {
                 $assignment = assignment::get(intval($assignment_id));
-                if ($assignment->submissions != null) return $assignment;
+                if ($assignment->submission_count != 0) return $assignment;
             }, $assignment_ids));
         }
 
