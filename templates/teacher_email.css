@@ -1,3 +1,14 @@
+.unsubscribe-link {
+  color: inherit !important;
+}
+.todo-info-box {
+  background: rgb(211, 231, 235);
+  box-sizing: border-box;
+  padding: 0 5px;
+}
+.todo-items {
+  padding-top: 36px;
+}
 /* Thanks to BalusC on Stackoverflow */
 .selectable {
   -webkit-touch-callout: text;
@@ -14,22 +25,27 @@
   text-align: left;
   font-weight: bold;
   font-size: 16px;
-  margin: 8px 0 10px -15px;
+  margin: 8px 0 10px 0;
   padding: 6px 0 0 0;
 }
 
 .todo-disclaimer {
-  margin-left: -15px;
-  padding-right: 15px;
+  margin-left: 0px;
+  padding-right: 0px;
 }
 
+.student-engagement-info {
+  margin-left: 15px;
+  padding-left: 24px;
+  background: #eaf4f7;
+}
 .student-engagement-label {
   color: #648d97 !important;
   font-family: Arial, Helvetica;
   text-align: left;
   font-weight: bold;
   font-size: 22px;
-  margin: 0 0 6px 33px;
+  margin: 0 0 6px 0;
   padding: 6px 0 0 0;
 }
 
@@ -39,7 +55,7 @@
   text-align: left;
   font-size: 11px;
   line-height: 18px;
-  margin: 0 0 12px 33px;
+  margin: 0 0 12px 0;
 }
 
 table.student-engagement {
@@ -63,8 +79,8 @@ table.student-engagement td {
 }
 
 body, div.outer {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   background-image: url(images/bg_body.gif);
   background-repeat: repeat-y no-repeat;
   background-position: top center;

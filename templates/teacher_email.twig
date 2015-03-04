@@ -57,20 +57,20 @@
               </tr>
               <tr>
                 <td>
-                  <div class="student-engagement-label">
-                    Student Engagement Scores
-                  </div>
-                  <div class="score-description">
-                    <b>What does the score mean?</b><br>
-                    A student's engagement score indicates how active a student has been in a particular course.
+                  <div class="student-engagement-info">
+                    <div class="student-engagement-label">
+                      Student Engagement Scores
+                    </div>
+                    <div class="score-description">
+                      <b>What does the score mean?</b><br>
+                      A student's engagement score indicates how active a student has been in a particular course.
+                    </div>
                   </div>
                 </td>
                 <td valign="top" width="240">
-                  <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
+                  <table style="padding: 0 20px;" cellpadding="0" cellspacing="0" width="240" class="bluecol">
                     <tr>
-                      <td valign="top" width="15" rowspan="2"></td>
-                      <td bgcolor="#d3e7eb" valign="top" width="20" rowspan="2"></td>
-                      <td valign="bottom" width="135">
+                      <td valign="bottom" width="135" class="todo-info-box">
                         <div class="todo-list-label">Course TODO List</div>
                         <div class="todo-disclaimer">
                           <p><i>Includes Assignments and Forum Posts only</i></p>
@@ -127,10 +127,7 @@
                     </table>
 
                   </td>
-                  <td valign="top" width="240">
-                    <p><!-- for spacing --></p>
-                    <p><!-- for spacing --></p>
-
+                  <td valign="top" width="240" class="todo-items">
                     {% if course.assignments %}
                       <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
                         <tr>
@@ -161,34 +158,34 @@
                     {% endif %}
 
                     {% if course.discussions %}
-                    <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
+                      <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
 
-                      <tr>
-                        <td valign="top" width="15" rowspan="2"><img src="images/title_rightcol_red1.gif" alt=""
-                                                                     width="15" height="36"/></td>
-                        <td bgcolor="#d3e7eb" valign="top" width="20" rowspan="2"><img src="images/title_red2.gif"
-                                                                                       alt=""
-                                                                                       width="20" height="36"/></td>
-                        <td bgcolor="#d3e7eb" valign="bottom" width="175">
-                          <h2>Unread Forum Posts</h2>
-                        </td>
-                        <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
-                        </td>
-                        <td rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/></td>
-                      </tr>
-                      <tr>
-                        <td bgcolor="#d3e7eb" valign="top" class="border">
+                        <tr>
+                          <td valign="top" width="15" rowspan="2"><img src="images/title_rightcol_red1.gif" alt=""
+                                                                       width="15" height="36"/></td>
+                          <td bgcolor="#d3e7eb" valign="top" width="20" rowspan="2"><img src="images/title_red2.gif"
+                                                                                         alt=""
+                                                                                         width="20" height="36"/></td>
+                          <td bgcolor="#d3e7eb" valign="bottom" width="175">
+                            <h2>Unread Forum Posts</h2>
+                          </td>
+                          <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
+                          </td>
+                          <td rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/></td>
+                        </tr>
+                        <tr>
+                          <td bgcolor="#d3e7eb" valign="top" class="border">
 
-                          {% for discussion in course.discussions %}
-                          <p>
-                            <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
-                            {{ discussion.name }}
-                            <a target="_blank" href="{{ discussion.get_link() }}">Read</a>
-                          </p>
-                          {% endfor %}
-                        </td>
-                      </tr>
-                    </table>
+                            {% for discussion in course.discussions %}
+                              <p>
+                                <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
+                                {{ discussion.name }}
+                                <a target="_blank" href="{{ discussion.get_link() }}">Read</a>
+                              </p>
+                            {% endfor %}
+                          </td>
+                        </tr>
+                      </table>
                     {% endif %}
                   </td>
                 </tr>
@@ -205,9 +202,10 @@
                 <td valign="top" align="center"
                     style="font-family: Verdana, Arial, sans-serif; color: #8d9ca4;font-size: 10px;margin: 0;">
                   <p>
-                    Not interested anymore?
-                    <unsubscribe>Unsubscribe Instantly</unsubscribe>
-                    .
+                    How to Unsubscribe:
+                    Go to <a target="_blank" href="{{ message_settings_link }}?id={{ id }}"
+                             class="unsubscribe-link">Message
+                      Settings</a>,<br>uncheck Email under <i>[[messageprovider:course_reports]]</i> (two checkboxes) and click <b>Update Profile</b>
                   </p>
                 </td>
                 <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>

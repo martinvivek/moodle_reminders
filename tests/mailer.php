@@ -1,13 +1,8 @@
 <?php
 
-$headers = "From: noreply@unic.ac.cy\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+define('CLI_SCRIPT', 1);
 
-$message = 'this is the message';
-$message = str_replace('\n.', '\n..', $message);
-$message = wordwrap($message, 70, '\r\n');
+require(__DIR__ . '/../lib.php');
 
-$a = mail('shadowstep7@gmail.com', 'My Subject', $message, $headers);
+local_moodle_reminders_cron('shadowstep7@gmail.com');
 
-echo 'done';
