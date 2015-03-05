@@ -1,14 +1,29 @@
+.stars {
+  float: left;
+  overflow: hidden;
+}
+
+.stars-background {
+  float: left;
+  width: 0;
+  color: #eaf4f7;
+  text-shadow: 0 0 0 black;
+}
+
 .unsubscribe-link {
   color: inherit !important;
 }
+
 .todo-info-box {
   background: rgb(211, 231, 235);
   box-sizing: border-box;
   padding: 0 5px;
 }
+
 .todo-items {
   padding-top: 36px;
 }
+
 /* Thanks to BalusC on Stackoverflow */
 .selectable {
   -webkit-touch-callout: text;
@@ -39,6 +54,7 @@
   padding-left: 24px;
   background: #eaf4f7;
 }
+
 .student-engagement-label {
   color: #648d97 !important;
   font-family: Arial, Helvetica;

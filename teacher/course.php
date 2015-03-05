@@ -88,32 +88,20 @@ class course {
      * @param $on_sort callable($student1, $student2) A function that returns an int based on how any two students should be sorted
      * @return array(student)
      */
-    private function sort_students($on_sort) {
+    function sort_students_by_score() {
         $students = $this->students;
-        usort($students, $on_sort);
+        usort($students, function($student1, $student2) {
+            // Sort by Score
+            $difference = $student1->score_percentage - $student2->score_percentage;
+            // If the Scores are the same sort by name
+            if ($difference == 0) $difference = intval($student1->name) - intval($student2->name);
+            return $difference;
+        });
 
         // We need to arrayify each student object so twig can use it
         return array_map(function($student) {
             return (array) $student;
         }, $students);
-    }
-
-    /**
-     * @return array(student)
-     */
-    function students_by_score_this_week() {
-        return $this->sort_students(function($student1, $student2) {
-            return $student1->score_this_week - $student2->score_this_week;
-        });
-    }
-
-    /**
-     * @return array(student)
-     */
-    function students_by_score_course_average() {
-        return $this->sort_students(function($student1, $student2) {
-            return $student1->score_course_average - $student2->score_course_average;
-        });
     }
 
     function get_link() {

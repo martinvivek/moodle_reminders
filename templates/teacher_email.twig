@@ -104,16 +104,24 @@
                               <th></th>
                               <th>Name</th>
                               <th>Email</th>
-                              <th>This<br>Week</th>
-                              <th>All<br>Time</th>
+                              <th>Last Login</th>
+                              <th>Score</th>
                             </tr>
-                            {% for student in course.students_by_score_this_week() %}
+                            {% for student in course.sort_students_by_score() %}
                               <tr>
                                 <td><img src="images/bullet_white.gif" alt=""/></td>
                                 <td>{{ student['name'] }}</td>
                                 <td class="selectable">{{ student['email'] }}</td>
-                                <td>{{ student['score_course_average'] }}</td>
-                                <td>3</td>
+                                <td>{{ student['last_login'] | date("m / d / y") }}</td>
+                                {#<td>{{ student['score_percentage'] * 50 }}</td>#}
+                                <td>
+                                  <div class="stars-background">
+                                    &#9733;&#9733;&#9733;&#9733;&#9733;
+                                  </div>
+                                  <div class="stars" style="width: {{ student['score_percentage'] * 50 }}px">
+                                    &#9733;&#9733;&#9733;&#9733;&#9733;
+                                  </div>
+                                </td>
                               </tr>
                             {% endfor %}
                           </table>

@@ -2,8 +2,10 @@
 
 require_once('../../config.php');
 
+$url_unsubscribe = '/local/moodle_reminders/unsubscribe.php';
+$url_resubscribe = '/local/moodle_reminders/unsubscribe.php?resubscribe=1';
 
-$url = new moodle_url('/local/moodle_reminders/unsubscribe.php');
+$url = new moodle_url(($_GET['resubscribe']) ? $url_resubscribe : $url_unsubscribe);
 $PAGE->set_url($url);
 
 require_login();
