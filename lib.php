@@ -4,9 +4,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/teacher/teacher.php');
 require_once(__DIR__ . '/template_renderer.php');
 
-define('IMG_DIR', __DIR__ . '/templates/images/');
-
-function local_moodle_reminders_cron($test_override = null) {
+function local_moodle_reminders_cron() {
     $renderer = new \template_renderer();
 
     echo 'Gathering data ... ';
@@ -15,37 +13,30 @@ function local_moodle_reminders_cron($test_override = null) {
 
     echo 'Sending Emails ... ';
 
+    global $CFG;
+    $image_url = $CFG->wwwroot . '/local/moodle_reminders/templates/images/';
+
     foreach ($teachers as $teacher) {
-        $message = str_replace('images/', 'cid:',$renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher));
-        $emailAddress = ($test_override) ? $test_override : $teacher->email;
+        $rendered_template = $renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher);
+        $email_html = str_replace('images/', $image_url, $rendered_template);
 
         $mail = new PHPMailer();
-        $mail->isSendmail();                                      // Set mailer to use SMTP
+        $mail->isSendmail();
 
         $mail->From = 'noreply@unic.ac.cy';
         $mail->FromName = 'DLIT';
-        $mail->addAddress($emailAddress, 'Andy');     // Add a recipient
-
-        echo "IMAGES:\n\n";
-        foreach (scandir(IMG_DIR) as $image) {
-            echo $image;
-            $mail->addEmbeddedImage(IMG_DIR . $image, $image);    // Optional name
-        }
-        $mail->isHTML(true);                                  // Set email format to HTML
-        echo 'IMAGES: END';
+        $mail->addAddress($teacher->email, $teacher->name);
+        $mail->isHTML(true);
 
         $mail->Subject = 'Weekly Course Report';
-        $mail->Body = $message;
-        $mail->AltBody = $message;
+        $mail->Body = $email_html;
 
         if (!$mail->send()) {
             echo 'Message could not be sent.';
             echo 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
-            echo 'Message has been sent';
+            echo 'Message has been sent (' . $teacher->email . ')';
         }
-
-        if ($test_override) break; // We only want to send on email if testing
     }
 
     echo 'Sent Emails';

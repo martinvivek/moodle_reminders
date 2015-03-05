@@ -15,3 +15,4 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 $string['pluginname'] = 'Moodle Reminders';
+$string['messageprovider:course_reports'] = 'Email Reminders for Teachers';
