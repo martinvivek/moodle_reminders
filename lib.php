@@ -5,6 +5,11 @@ require_once(__DIR__ . '/teacher/teacher.php');
 require_once(__DIR__ . '/template_renderer.php');
 
 function local_moodle_reminders_cron() {
+
+    echo "[MOODLE_REMINDERS] Automatic cron emails disabled in moodle_reminders/lib.php\n";
+
+    return;
+
     $renderer = new \template_renderer();
 
     echo 'Gathering data ... ';

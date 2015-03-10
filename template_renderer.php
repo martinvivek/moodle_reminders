@@ -5,6 +5,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 /** The twig template source files are stored here */
 define('TEMPLATE_DIR', __DIR__ . '/templates');
 define('TWIG_CACHE_DIR', __DIR__ . '/twig_cache');
+define('IMG_DIR', '/local/moodle_reminders/images/');
 
 /**
  * Renders templates stored in the TEMPLATE_DIR directory and caches them
@@ -33,6 +34,9 @@ class template_renderer {
         $cssInliner = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
         $cssInliner->setHTML($this->twig->render($file_name, $vars));
         $cssInliner->setCSS($this->twig->render($style_name, $vars));
-        return $cssInliner->convert();
+        $html_with_inline_styles = $cssInliner->convert();
+
+        global $CFG;
+        return str_replace('images/', $CFG->wwwroot . IMG_DIR, $html_with_inline_styles);
     }
 }
