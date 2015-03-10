@@ -1,13 +1,13 @@
 .stars {
   float: left;
   overflow: hidden;
+  color: #fd4d53;
 }
 
 .stars-background {
   float: left;
   width: 0;
-  color: #eaf4f7;
-  text-shadow: 0 0 0 black;
+  color: #648d97;
 }
 
 .unsubscribe-link {

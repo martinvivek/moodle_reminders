@@ -6,10 +6,6 @@ require_once(__DIR__ . '/template_renderer.php');
 
 function local_moodle_reminders_cron() {
 
-    echo "[MOODLE_REMINDERS] Automatic cron emails disabled in moodle_reminders/lib.php\n";
-
-    return;
-
     $renderer = new \template_renderer();
 
     echo 'Gathering data ... ';
@@ -22,8 +18,7 @@ function local_moodle_reminders_cron() {
     $image_url = $CFG->wwwroot . '/local/moodle_reminders/templates/images/';
 
     foreach ($teachers as $teacher) {
-        $rendered_template = $renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher);
-        $email_html = str_replace('images/', $image_url, $rendered_template);
+        $email_html = $renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher);
 
         $mail = new PHPMailer();
         $mail->isSendmail();
