@@ -1,84 +1,59 @@
 <?php
 
+/*
+ * Created in March 2015 by Andreas Stocker
+ *
+ * The purpose of this script is to determine the optimal total number of views and creates
+ * a student should have, as well as the ratio of views to creates a student should have each week to receive
+ * a certain activity score for the teacher email
+ */
+
 require_once(__DIR__ . '/../moodle_environment.php');
 require_once(__DIR__ . '/../template_renderer.php');
 
+define('WEEKS_PAST_CONSIDERED', 4);
+
 global $DB;
 
-$actions = array();
-$action_occurrences = array();
-$total_action_count = 0;
-$max_events_in_step = 0;
+// Get student events from a certain number of weeks back
+// Also make sure the student is currently in an active course
+$events = array_values($DB->get_records_sql('
+    SELECT COUNT({logstore_standard_log}.id) / :weeks1 AS occurrences, {logstore_standard_log}.action AS name FROM {logstore_standard_log}
+    INNER JOIN {role_assignments} ON {role_assignments}.roleid = 5 AND {role_assignments}.userid = {logstore_standard_log}.userid
+    INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
+    INNER JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"
+    WHERE FROM_UNIXTIME({logstore_standard_log}.timecreated) > NOW() - INTERVAL :weeks2 WEEK
+    GROUP BY {logstore_standard_log}.action
+', array(
+    // Annoyingly, we cannot use a parameter twice, lest we get a "duplicate parameter" error
+    // Therefore we needs to add numbers to duplicate parameters and enter them multiple times
+    'weeks1' => WEEKS_PAST_CONSIDERED,
+    'weeks2' => WEEKS_PAST_CONSIDERED,
+)));
 
-// Seconds
-define('DEFAULT_RANGE_CAP', 30);
-define('STEP_COUNT', 15);
-if ($_POST['max_range']) $_COOKIE['max_range'] = $_POST['max_range'];
-define('RANGE_CAP', ($_COOKIE['max_range']) ? $_COOKIE['max_range'] : DEFAULT_RANGE_CAP);
-define('RANGE_SIZE', ceil(RANGE_CAP / STEP_COUNT));
+// Get the number of students
+// Also make sure the student is currently in an active course
+$student_count = $DB->get_record_sql('
+    SELECT COUNT(DISTINCT {role_assignments}.id) AS student_count FROM {role_assignments}
+    INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
+    INNER JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"
+    WHERE {role_assignments}.roleid = 5
+')->student_count;
 
-// Get student's ids
-$students = array_values($DB->get_records_sql('
-    SELECT {user}.id FROM {user}
-    INNER JOIN mdl_role_assignments ON roleid = 5
-'));
+// Reduce events by their occurrences property
+$total_event_count = array_reduce($events, function ($carry, $event) {
+    return $carry + $event->occurrences;
+}, 0);
 
-// Loop through students and add their action info to the global action var
-foreach ($students as &$student) {
-    // Load the student's events
-    $events = array_values($DB->get_records_sql('
-        SELECT id, timecreated, action FROM {logstore_standard_log}
-        WHERE userid = ? ORDER BY timecreated
-        ', array($student->id)));
-
-    $last_event = null;
-    $total_action_count += sizeof($events);
-    foreach ($events as &$event) {
-        // if there is no last event just set the time difference to 0
-        $time_difference = ($last_event) ? $event->timecreated - $last_event->timecreated : 0;
-        // get in which time range the event belongs
-        $step_id = min(ceil($time_difference / RANGE_SIZE), RANGE_CAP);
-
-        // If the action does not yet exist in the array declare it as an array
-        // and set all of the step values to zero
-        if (!$actions[$event->action]) $actions[$event->action] = array();
-        $action_occurrences[$event->action] += 1;
-        $actions[$event->action][$step_id] += 1;
-        $max_events_in_step = max($max_events_in_step, $actions[$event->action][$step_id]);
-        $last_event = $event;
-    }
-}
-
-$selected_action = ($actions[$_GET['action']]) ? $_GET['action'] : array_keys($actions)[0];
-
-$renderer = new template_renderer(false);
-
-
-$steps = array();
-for ($i = 0; $i <= RANGE_CAP; $i = $i + RANGE_SIZE) {
-    array_push($steps, array(
-        'seconds' => $i,
-        'action_count' => $actions[$selected_action][$i]
-    ));
-}
-
-$action_table = array();
-foreach ($action_occurrences as $action_name => &$occurrences) {
-    array_push($action_table, array(
-        'name' => $action_name,
-        'occurrences' => $occurrences,
-        'percentage' => $occurrences / $total_action_count * 100
-    ));
-}
-
-usort($action_table, function($action1, $action2) {
-    return $action2['occurrences'] - $action1['occurrences'];
+//  Sort events by greatest to least number of occurrences
+usort($events, function ($event1, $event2) {
+    return $event2->occurrences - $event1->occurrences;
 });
 
+$renderer = new template_renderer(false);
 echo $renderer->twig->render('event_analysis.twig', array(
-    'selected_action' => $selected_action,
-    'steps' => $steps,
-    'max_events_in_step' => $max_events_in_step,
-    'action_table' => $action_table,
-    'RANGE_CAP' => RANGE_CAP
+    'events' => $events,
+    'total_event_count' => $total_event_count,
+    'student_count' => $student_count,
+    'WEEKS_PAST_CONSIDERED' => WEEKS_PAST_CONSIDERED,
 ));

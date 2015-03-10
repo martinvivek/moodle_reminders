@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <title>Event Analysis - {{ selected_action | upper }}</title>
+  <title>Event Analysis</title>
   <meta name="generator" content="Bootply"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link href="../tests/event_analysis/css/bootstrap.min.css" rel="stylesheet">
@@ -34,63 +34,25 @@
   </div>
   <!-- upper section -->
   <div class="row">
-    <div class="col-sm-3">
-      <!-- left -->
-      <h3> Action Types</h3>
-      <hr>
-
-      <ul class="nav nav-stacked">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Action</th>
-            <th>Occurrences</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for action in action_table %}
-            <tr>
-              <td><a href="?action={{ action['name'] }}">{{ action['name'] }}</a></td>
-              <td>{{ action['occurrences'] }}</td>
-              <td>{{ action['percentage'] | number_format(2) }}%</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </ul>
-
-      <hr>
-
-    </div>
-    <!-- /span-3 -->
-    <div class="col-sm-9">
-
-      <!-- column 2 -->
-      <h3><b>{{ selected_action | upper }}</b> - time until users' next action</h3>
-
-      <hr>
-
-      <div class="row">
-        {% for step in steps %}
-          <div class="progress-label">{{ step['seconds'] }}s
-            {% if loop.last %}
-              <b>and more</b>
-            {% endif %}
-          </div>
-          <div class="progress">
-            <span class="action-count">{{ step['action_count'] }}</span>
-
-            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                 aria-valuemax="100" style="width: {{ step['action_count'] / max_events_in_step * 0.8 * 100 }}%"></div>
-          </div>
-        {% endfor %}
-        <form class="form-inline" action="" method="POST"><br>
-          <h4>Max Time until next Action:</h4>
-          <input class="form-control" value="{{ RANGE_CAP }}" name="max_range" type="text"/>
-          <button class="form-control" type="submit">Update</button>
-        </form>
-      </div>
-    </div>
+    <i>*Events from the last 4 Weeks</i>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Action</th>
+        <th>Average Occurrences Per Student Per Week</th>
+        <th>Percent of Occurrences</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for action in events %}
+        <tr>
+          <td>{{ action.name }}</td>
+          <td>{{ (action.occurrences / student_count)  | number_format(2) }}</td>
+          <td>{{ (action.occurrences / total_event_count * 100)  | number_format(2) }}%</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
     <!--/col-span-9-->
   </div>
   <!--/row-->

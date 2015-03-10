@@ -2,7 +2,7 @@
   "name": "Arubaruba/moodle_reminders",
   "description": "description_text",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Andreas Stocker",
