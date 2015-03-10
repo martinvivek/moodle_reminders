@@ -37,10 +37,10 @@ global $DB;
 // Get student events from a certain number of weeks back
 // Also make sure the student is currently in an active course
 $events = array_values($DB->get_records_sql('
-    SELECT COUNT(DISTINCT {logstore_standard_log}.id) / DATEDIFF(CURDATE(), FROM_UNIXTIME(MAX({course}.timecreated))) / 7 AS occurrences, {logstore_standard_log}.action AS name FROM {logstore_standard_log}
+    SELECT COUNT(DISTINCT {logstore_standard_log}.id) / DATEDIFF(CURDATE(), FROM_UNIXTIME(MAX({course}.startdate))) / 7 AS occurrences, {logstore_standard_log}.action AS name FROM {logstore_standard_log}
     INNER JOIN {role_assignments} ON {role_assignments}.roleid = 5 AND {role_assignments}.userid = {logstore_standard_log}.userid
     INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.timecreated) BETWEEN :start_date AND :end_date
+    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.startdate) BETWEEN :start_date AND :end_date
     GROUP BY {logstore_standard_log}.action ORDER BY COUNT(DISTINCT {logstore_standard_log}.id)
 ', array(
     'start_date' => $course_create_date_start->format('Y-m-d'),
@@ -52,7 +52,7 @@ $events = array_values($DB->get_records_sql('
 $student_count = $DB->get_record_sql('
     SELECT COUNT(DISTINCT {role_assignments}.id) AS student_count FROM {role_assignments}
     INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.timecreated) BETWEEN :start_date AND :end_date
+    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.startdate) BETWEEN :start_date AND :end_date
     WHERE {role_assignments}.roleid = 5
 ', array(
     'start_date' => $course_create_date_start->format('Y-m-d'),
