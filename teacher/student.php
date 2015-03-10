@@ -48,7 +48,7 @@ class student {
                   /* Has the same effect of only getting distinct rows */
                   * COUNT(DISTINCT {logstore_standard_log}.id) / COUNT({logstore_standard_log}.id) /
                   /* We want the score per week */
-                  DATEDIFF(NOW(), FROM_UNIXTIME({course}.startdate)) / 7
+                  DATEDIFF(NOW(), FROM_UNIXTIME({course}.startdate))
                AS score
             FROM {user}
             LEFT JOIN {course} ON {course}.id = :course_id

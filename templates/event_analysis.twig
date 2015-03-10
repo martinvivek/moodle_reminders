@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>Event Analysis - {{ selected_action | upper }}</title>
+  <meta name="generator" content="Bootply"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href="../tests/event_analysis/css/bootstrap.min.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="../tests/event_analysis/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<!-- Header -->
+<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-toggle"></span>
+      </button>
+      <a class="navbar-brand" href="#">Event Analysis</a>
+    </div>
+  </div>
+  <!-- /container -->
+</div>
+<!-- /Header -->
+
+<!-- Main -->
+<div class="container">
+
+  <div class="row">
+  </div>
+  <!-- upper section -->
+  <div class="row">
+    <div class="col-sm-3">
+      <!-- left -->
+      <h3> Action Types</h3>
+      <hr>
+
+      <ul class="nav nav-stacked">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Action</th>
+            <th>Occurrences</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for action in action_table %}
+            <tr>
+              <td><a href="?action={{ action['name'] }}">{{ action['name'] }}</a></td>
+              <td>{{ action['occurrences'] }}</td>
+              <td>{{ action['percentage'] | number_format(2) }}%</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </ul>
+
+      <hr>
+
+    </div>
+    <!-- /span-3 -->
+    <div class="col-sm-9">
+
+      <!-- column 2 -->
+      <h3><b>{{ selected_action | upper }}</b> - time until users' next action</h3>
+
+      <hr>
+
+      <div class="row">
+        {% for step in steps %}
+          <div class="progress-label">{{ step['seconds'] }}s
+            {% if loop.last %}
+              <b>and more</b>
+            {% endif %}
+          </div>
+          <div class="progress">
+            <span class="action-count">{{ step['action_count'] }}</span>
+
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                 aria-valuemax="100" style="width: {{ step['action_count'] / max_events_in_step * 0.8 * 100 }}%"></div>
+          </div>
+        {% endfor %}
+        <form class="form-inline" action="" method="POST"><br>
+          <h4>Max Time until next Action:</h4>
+          <input class="form-control" value="{{ RANGE_CAP }}" name="max_range" type="text"/>
+          <button class="form-control" type="submit">Update</button>
+        </form>
+      </div>
+    </div>
+    <!--/col-span-9-->
+  </div>
+  <!--/row-->
+</div>
+<!--/container-->
+<!-- /Main -->
+
+
+<footer class="text-center">This Bootstrap 3 dashboard layout is compliments of <a
+    href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>
+
+<!-- script references -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="../tests/event_analysis/js/bootstrap.min.js"></script>
+</body>
+</html>
