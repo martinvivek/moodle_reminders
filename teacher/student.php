@@ -5,10 +5,25 @@ namespace teacher;
 
 require_once(__DIR__ . '/../moodle_environment.php');
 
-// How each of these events affect the students' activity score
-define('POINTS_FOR_CREATE', 7);
-define('POINTS_FOR_VIEW', 1);
-define('WEEKLY_TARGET', 20);
+// Average Occurrences per week of actions that give points
+// see file: tests/event_analysis.php
+$average_weekly_action_occurrences = array(
+    'created' => 0.18,
+    'submitted' => 0.06,
+    'viewed' => 9.85,
+);
+
+// Calculate action rewards
+$cases = array_map(function($action) use (&$average_weekly_action_occurrences) {
+    $points =
+        (1 / $average_weekly_action_occurrences[$action])
+        / sizeof($average_weekly_action_occurrences)
+        // Weekly occurrences represent the average student, who should have a medium score
+        / 2
+    ;
+    return "WHEN \"" . $action . "\" THEN 1";
+}, array_keys($average_weekly_action_occurrences));
+define('ACTION_REWARD_CASES', implode("\n", $cases));
 
 /**
  * Represents a student instance within a course environment and at a certain point in time
@@ -42,13 +57,12 @@ class student {
             SELECT CONCAT_WS(" ", {user}.firstname, {user}.lastname) AS name, {user}.email AS email, FROM_UNIXTIME({user}.lastlogin) AS last_login,
                   SUM(
                     CASE {logstore_standard_log}.action
-                     WHEN "created" THEN :points_for_create
-                     WHEN "viewed" THEN :points_for_view
+                      '. ACTION_REWARD_CASES.'
                     ELSE 0 END)
                   /* Has the same effect of only getting distinct rows */
                   * COUNT(DISTINCT {logstore_standard_log}.id) / COUNT({logstore_standard_log}.id) /
                   /* We want the score per week */
-                  DATEDIFF(NOW(), FROM_UNIXTIME({course}.startdate))
+                  DATEDIFF(NOW(), FROM_UNIXTIME({course}.startdate)) / 7
                AS score
             FROM {user}
             LEFT JOIN {course} ON {course}.id = :course_id
@@ -56,11 +70,9 @@ class student {
             WHERE {user}.id = :user_id LIMIT 1;
         ', array(
                 'user_id' => $id,
-                'course_id' => $course_id,
-                'points_for_create' => POINTS_FOR_CREATE,
-                'points_for_view' => POINTS_FOR_VIEW,
+                'course_id' => $course_id
             )
         );
-        return new student($id, $student_row->name, $student_row->email, $student_row->last_login, $student_row->score / WEEKLY_TARGET);
+        return new student($id, $student_row->name, $student_row->email, $student_row->last_login, min($student_row->score, 1));
     }
 }

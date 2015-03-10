@@ -43,7 +43,7 @@ class teacher {
           LEFT JOIN {context} ON contextlevel = 50 AND {context}.id = {role_assignments}.contextid
           LEFT JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"
           LEFT JOIN {user_preferences} ON {user_preferences}.userid = {user}.id AND {user_preferences}.name = "message_provider_local_moodle_reminders_course_reports_loggedoff"
-          WHERE {course}.id IS NOT NULL AND ({user_preferences}.value LIKE "email" OR {user_preferences}.id IS NULL)
+          WHERE {course}.id IS NOT NULL AND {user_preferences}.value LIKE "email"
           GROUP BY {user}.id
         ');
 

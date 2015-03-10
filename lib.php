@@ -22,6 +22,7 @@ function local_moodle_reminders_cron() {
 
         $mail = new PHPMailer();
         $mail->isSendmail();
+        $mail->CharSet = 'UTF-8';
 
         $mail->From = 'noreply@unic.ac.cy';
         $mail->FromName = 'DLIT';

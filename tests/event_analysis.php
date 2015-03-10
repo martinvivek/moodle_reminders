@@ -55,5 +55,5 @@ echo $renderer->twig->render('event_analysis.twig', array(
     'events' => $events,
     'total_event_count' => $total_event_count,
     'student_count' => $student_count,
-    'WEEKS_PAST_CONSIDERED' => WEEKS_PAST_CONSIDERED,
+    'WEEKS_PAST_CONSIDERED' => WEEKS_PAST_CONSIDERED
 ));
