@@ -12,23 +12,39 @@ require_once(__DIR__ . '/../moodle_environment.php');
 require_once(__DIR__ . '/../template_renderer.php');
 
 define('WEEKS_PAST_CONSIDERED', 4);
+define('DATE_FORMAT', 'd/m/Y');
+
+$course_create_date_start = (new DateTime())->modify('-1 year');
+$course_create_date_end = new DateTime();
+
+$invalid_dates = false;
+
+if ($_GET['cc_start']) {
+    $parsed_start = DateTime::createFromFormat(DATE_FORMAT, $_GET['cc_start']);
+    $parsed_end = DateTime::createFromFormat(DATE_FORMAT, $_GET['cc_end']);
+
+    // Make sure both entered dates are valid
+    if (!$parsed_start || !$parsed_end) {
+        $invalid_dates = true;
+    } else {
+        $course_create_date_start = $parsed_start;
+        $course_create_date_end = $parsed_end;
+    }
+}
 
 global $DB;
 
 // Get student events from a certain number of weeks back
 // Also make sure the student is currently in an active course
 $events = array_values($DB->get_records_sql('
-    SELECT COUNT({logstore_standard_log}.id) / :weeks1 AS occurrences, {logstore_standard_log}.action AS name FROM {logstore_standard_log}
+    SELECT COUNT(DISTINCT {logstore_standard_log}.id) / DATEDIFF(CURDATE(), FROM_UNIXTIME(MAX({course}.timecreated))) / 7 AS occurrences, {logstore_standard_log}.action AS name FROM {logstore_standard_log}
     INNER JOIN {role_assignments} ON {role_assignments}.roleid = 5 AND {role_assignments}.userid = {logstore_standard_log}.userid
     INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    INNER JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"
-    WHERE FROM_UNIXTIME({logstore_standard_log}.timecreated) > NOW() - INTERVAL :weeks2 WEEK
-    GROUP BY {logstore_standard_log}.action
+    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.timecreated) BETWEEN :start_date AND :end_date
+    GROUP BY {logstore_standard_log}.action ORDER BY COUNT(DISTINCT {logstore_standard_log}.id)
 ', array(
-    // Annoyingly, we cannot use a parameter twice, lest we get a "duplicate parameter" error
-    // Therefore we needs to add numbers to duplicate parameters and enter them multiple times
-    'weeks1' => WEEKS_PAST_CONSIDERED,
-    'weeks2' => WEEKS_PAST_CONSIDERED,
+    'start_date' => $course_create_date_start->format('Y-m-d'),
+    'end_date' => $course_create_date_end->format('Y-m-d'),
 )));
 
 // Get the number of students
@@ -36,9 +52,12 @@ $events = array_values($DB->get_records_sql('
 $student_count = $DB->get_record_sql('
     SELECT COUNT(DISTINCT {role_assignments}.id) AS student_count FROM {role_assignments}
     INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    INNER JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"
+    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.timecreated) BETWEEN :start_date AND :end_date
     WHERE {role_assignments}.roleid = 5
-')->student_count;
+', array(
+    'start_date' => $course_create_date_start->format('Y-m-d'),
+    'end_date' => $course_create_date_end->format('Y-m-d'),
+))->student_count;
 
 // Reduce events by their occurrences property
 $total_event_count = array_reduce($events, function ($carry, $event) {
@@ -52,6 +71,9 @@ usort($events, function ($event1, $event2) {
 
 $renderer = new template_renderer(false);
 echo $renderer->twig->render('event_analysis.twig', array(
+    'formatted_date_start' => $course_create_date_start->format(DATE_FORMAT),
+    'formatted_date_end' => $course_create_date_end->format(DATE_FORMAT),
+    'invalid_dates' => $invalid_dates,
     'events' => $events,
     'total_event_count' => $total_event_count,
     'student_count' => $student_count,

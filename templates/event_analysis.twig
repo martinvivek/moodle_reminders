@@ -31,22 +31,36 @@
 <div class="container">
 
   <div class="row">
+    {% if invalid_dates %}
+    <div class="alert alert-danger">
+      <strong>Error</strong>
+      The dates you entered are not formatted correctly
+    </div>
+    {% endif %}
   </div>
   <!-- upper section -->
   <div class="row">
-    <i>*Events from the last {{ WEEKS_PAST_CONSIDERED }} Weeks</i>
+
+    <form class="form-inline" action="" method="GET"><br>
+      <h3>Data for Courses that began between:</h3>
+      <input class="form-control" value="{{ formatted_date_start }}" name="cc_start" type="text"/>
+      <input class="form-control" value="{{ formatted_date_end }}" name="cc_end" type="text"/>
+      <button class="form-control" type="submit">Show</button>
+    </form>
+    <br>
+
     <table class="table table-striped">
       <thead>
       <tr>
         <th>Action</th>
-        <th>Average Occurrences Per Student Per Week</th>
+        <th>Weekly Occurrences Per Student</th>
         <th>Percent of Occurrences</th>
       </tr>
       </thead>
       <tbody>
       {% for action in events %}
         <tr>
-          <td>{{ action.name }}</td>
+          <td>{{ action.name }} {{ action.started }}</td>
           <td>{{ (action.occurrences / student_count)  | number_format(2) }}</td>
           <td>{{ (action.occurrences / total_event_count * 100)  | number_format(2) }}%</td>
         </tr>
