@@ -13,7 +13,7 @@
 
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
   <tr>
-    <td valign="top" align="center" id="top" class="outer" bgcolor="#3d4852" background="images/bg_body.gif">
+    <td valign="top" align="center" id="top" class="outer" background="images/bg_body.gif">
       <table class="texttopbottom" cellpadding="0" cellspacing="0" align="center" width="600">
         <tr>
           <td valign="top"><img src="images/blank.gif" width="1" height="8" alt=""/></td>
@@ -24,7 +24,7 @@
         </tr>
       </table>
       <table cellpadding="0" cellspacing="0" align="center" width="600"
-             style="background: url(images/bg_email_rightcol.png) repeat-y;">
+             style="background: url(images/bg_email_rightcol.png);">
         <tr>
           <td rowspan="4" valign="top"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
           <td rowspan="4" valign="top"><img src="images/header_strip.gif" alt="" width="20" height="249"/></td>
@@ -51,36 +51,8 @@
         </tr>
         <tr>
           <td colspan="7" align="left">
-            <table cellpadding="0" cellspacing="0" width="600" align="left">
-              <tr>
-                <td colspan="2"><img src="images/topbot_rightcol.gif" width="600" height="14" alt=""/></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="student-engagement-info">
-                    <div class="student-engagement-label">
-                      Student Engagement Scores
-                    </div>
-                    <div class="score-description">
-                      <b>What does the score mean?</b><br>
-                      A student's engagement score indicates how active a student has been in a particular course.
-                    </div>
-                  </div>
-                </td>
-                <td valign="top" width="240">
-                  <table style="padding: 0 20px;" cellpadding="0" cellspacing="0" width="240" class="bluecol">
-                    <tr>
-                      <td valign="bottom" width="135" class="todo-info-box">
-                        <div class="todo-list-label">Course TODO List</div>
-                        <div class="todo-disclaimer">
-                          <p><i>Includes Assignments and Forum Posts only</i></p>
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-
+            <table background="images/topbot_rightcol.gif" style="background: url(images/topbot_rightcol.gif)"
+                   cellpadding="0" cellspacing="0" width="600" align="left">
               {% for course in courses %}
                 <tr>
                   <td valign="top" width="360">
@@ -105,22 +77,17 @@
                               <th>Name</th>
                               <th>Email</th>
                               <th>Last Login</th>
-                              <th>Score</th>
+                              <th>Activity Level</th>
                             </tr>
                             {% for student in course.sort_students_by_score() %}
                               <tr>
                                 <td><img src="images/bullet_white.gif" alt=""/></td>
                                 <td>{{ student['name'] }}</td>
                                 <td class="selectable">{{ student['email'] }}</td>
-                                <td>{{ student['last_login'] | date("m / d / y") }}</td>
+                                <td>{{ student['last_login'] | date("m/d/y") }}</td>
                                 {#<td>{{ student['score_percentage'] * 50 }}</td>#}
                                 <td>
-                                  <div class="stars-background">
-                                    &#9733;&#9733;&#9733;&#9733;&#9733;
-                                  </div>
-                                  <div class="stars" style="width: {{ student['score_percentage'] * 50 }}px">
-                                    &#9733;&#9733;&#9733;&#9733;&#9733;
-                                  </div>
+                                  {% for i in 1..((student['score_percentage'] * 5) | number_format) %}&#9733;{% endfor %}
                                 </td>
                               </tr>
                             {% endfor %}
@@ -145,7 +112,7 @@
                                                                                          alt=""
                                                                                          width="20" height="36"/></td>
                           <td bgcolor="#d3e7eb" valign="bottom" width="175">
-                            <h2>Assignments to Grade</h2>
+                            <h2>Ungraded Assignments</h2>
                           </td>
                           <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
                           </td>
@@ -209,10 +176,8 @@
                 <td valign="top" align="center"
                     style="font-family: Verdana, Arial, sans-serif; color: #8d9ca4;font-size: 10px;margin: 0;">
                   <p>
-                    <a target="_blank" href="{{ unsubscribe_link }}"
-                       class="unsubscribe-link">Unsubscribe</a> /
-                    <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1"
-                       class="unsubscribe-link">Resubscribe</a>
+                    <a target="_blank" href="{{ unsubscribe_link }}">Unsubscribe</a> /
+                    <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">Resubscribe</a>
                   </p>
                 </td>
                 <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>

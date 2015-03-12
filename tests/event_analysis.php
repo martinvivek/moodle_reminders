@@ -14,8 +14,8 @@ require_once(__DIR__ . '/../template_renderer.php');
 define('WEEKS_PAST_CONSIDERED', 4);
 define('DATE_FORMAT', 'd/m/Y');
 
-$course_create_date_start = (new DateTime())->modify('-1 year');
-$course_create_date_end = new DateTime();
+$date_start = (new DateTime())->modify('-2 month');
+$date_end = new DateTime();
 
 $invalid_dates = false;
 
@@ -27,36 +27,38 @@ if ($_GET['cc_start']) {
     if (!$parsed_start || !$parsed_end) {
         $invalid_dates = true;
     } else {
-        $course_create_date_start = $parsed_start;
-        $course_create_date_end = $parsed_end;
+        $date_start = $parsed_start;
+        $date_end = $parsed_end;
     }
 }
 
 global $DB;
 
+$began_sql_queries = microtime(true);
+
 // Get student events from a certain number of weeks back
 // Also make sure the student is currently in an active course
 $events = array_values($DB->get_records_sql('
-    SELECT COUNT(DISTINCT {logstore_standard_log}.id) / DATEDIFF(CURDATE(), FROM_UNIXTIME(MAX({course}.startdate))) / 7 AS occurrences, {logstore_standard_log}.action AS name FROM {logstore_standard_log}
+    SELECT COUNT(DISTINCT {logstore_standard_log}.id) / DATEDIFF(DATE(:end_date1), DATE(:start_date1)) / 7 AS occurrences, {logstore_standard_log}.action AS name FROM {logstore_standard_log}
     INNER JOIN {role_assignments} ON {role_assignments}.roleid = 5 AND {role_assignments}.userid = {logstore_standard_log}.userid
-    INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.startdate) BETWEEN :start_date AND :end_date
-    GROUP BY {logstore_standard_log}.action ORDER BY COUNT(DISTINCT {logstore_standard_log}.id)
+    WHERE FROM_UNIXTIME({logstore_standard_log}.timecreated) BETWEEN :start_date2 AND :end_date2
+    GROUP BY {logstore_standard_log}.action ORDER BY occurrences DESC
+
 ', array(
-    'start_date' => $course_create_date_start->format('Y-m-d'),
-    'end_date' => $course_create_date_end->format('Y-m-d'),
+    'start_date1' => $date_start->format('Y-m-d'),
+    'end_date1' => $date_end->format('Y-m-d'),
+    'start_date2' => $date_start->format('Y-m-d'),
+    'end_date2' => $date_end->format('Y-m-d'),
 )));
 
 // Get the number of students
-// Also make sure the student is currently in an active course
 $student_count = $DB->get_record_sql('
-    SELECT COUNT(DISTINCT {role_assignments}.id) AS student_count FROM {role_assignments}
-    INNER JOIN {context} ON {context}.contextlevel = 50 AND {context}.id = {role_assignments}.contextid
-    INNER JOIN {course} ON {course}.id = {context}.instanceid AND FROM_UNIXTIME({course}.startdate) BETWEEN :start_date AND :end_date
+    SELECT COUNT(DISTINCT {role_assignments}.userid) AS student_count FROM {role_assignments}
+    INNER JOIN {logstore_standard_log} ON FROM_UNIXTIME({logstore_standard_log}.timecreated) BETWEEN :start_date AND :end_date
     WHERE {role_assignments}.roleid = 5
 ', array(
-    'start_date' => $course_create_date_start->format('Y-m-d'),
-    'end_date' => $course_create_date_end->format('Y-m-d'),
+    'start_date' => $date_start->format('Y-m-d'),
+    'end_date' => $date_end->format('Y-m-d'),
 ))->student_count;
 
 // Reduce events by their occurrences property
@@ -64,15 +66,14 @@ $total_event_count = array_reduce($events, function ($carry, $event) {
     return $carry + $event->occurrences;
 }, 0);
 
-//  Sort events by greatest to least number of occurrences
-usort($events, function ($event1, $event2) {
-    return $event2->occurrences - $event1->occurrences;
-});
+$finished_sql_queries = microtime(true);
+
 
 $renderer = new template_renderer(false);
 echo $renderer->twig->render('event_analysis.twig', array(
-    'formatted_date_start' => $course_create_date_start->format(DATE_FORMAT),
-    'formatted_date_end' => $course_create_date_end->format(DATE_FORMAT),
+    'time_taken' => $finished_sql_queries - $began_sql_queries,
+    'formatted_date_start' => $date_start->format(DATE_FORMAT),
+    'formatted_date_end' => $date_end->format(DATE_FORMAT),
     'invalid_dates' => $invalid_dates,
     'events' => $events,
     'total_event_count' => $total_event_count,
