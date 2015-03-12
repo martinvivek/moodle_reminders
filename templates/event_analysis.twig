@@ -15,14 +15,15 @@
 <body>
 <div class="container">
   <br><br>
+
   <div class="row">
-    <div class="alert alert-info">
-      Query took {{ time_taken | number_format(4) }} seconds ({{ (time_taken / 60) | number_format(1) }} min)
-    </div>
     {% if invalid_dates %}
-      <div class="alert alert-danger">
-        <strong>Error</strong>
-        The dates you entered are not formatted correctly
+      <div class="alert alert-warning">
+        Enter valid dates inputs
+      </div>
+    {% else %}
+      <div class="alert alert-info">
+        Query took {{ time_taken | number_format(4) }} seconds ({{ (time_taken / 60) | number_format(1) }} min)
       </div>
     {% endif %}
   </div>
