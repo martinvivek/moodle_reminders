@@ -13,43 +13,32 @@
   <link href="../tests/event_analysis/css/styles.css" rel="stylesheet">
 </head>
 <body>
-<!-- Header -->
-<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="icon-toggle"></span>
-      </button>
-      <a class="navbar-brand" href="#">Event Analysis</a>
-    </div>
-  </div>
-  <!-- /container -->
-</div>
-<!-- /Header -->
-
-<!-- Main -->
 <div class="container">
-
+  <br><br>
   <div class="row">
-    {% if invalid_dates %}
-    <div class="alert alert-danger">
-      <strong>Error</strong>
-      The dates you entered are not formatted correctly
+    <div class="alert alert-info">
+      Query took {{ time_taken | number_format(4) }} seconds ({{ (time_taken / 60) | number_format(1) }} min)
     </div>
+    {% if invalid_dates %}
+      <div class="alert alert-danger">
+        <strong>Error</strong>
+        The dates you entered are not formatted correctly
+      </div>
     {% endif %}
   </div>
   <!-- upper section -->
-  <div class="row">
+  <div style="text-align: center;">
 
     <form class="form-inline" action="" method="GET"><br>
-      <h3>Data for Courses that began between:</h3>
+
+      <h3>Time Frame:</h3>
       <input class="form-control" value="{{ formatted_date_start }}" name="cc_start" type="text"/>
       <input class="form-control" value="{{ formatted_date_end }}" name="cc_end" type="text"/>
       <button class="form-control" type="submit">Show</button>
     </form>
     <br>
 
-    <table class="table table-striped">
+    <table class="table table-striped" style="margin: 0 auto">
       <thead>
       <tr>
         <th>Action</th>
@@ -61,7 +50,7 @@
       {% for action in events %}
         <tr>
           <td>{{ action.name }} {{ action.started }}</td>
-          <td>{{ (action.occurrences / student_count)  | number_format(2) }}</td>
+          <td>{{ (action.occurrences / student_count)  | number_format(3) }}</td>
           <td>{{ (action.occurrences / total_event_count * 100)  | number_format(2) }}%</td>
         </tr>
       {% endfor %}
@@ -73,10 +62,6 @@
 </div>
 <!--/container-->
 <!-- /Main -->
-
-
-<footer class="text-center">This Bootstrap 3 dashboard layout is compliments of <a
-    href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>
 
 <!-- script references -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>

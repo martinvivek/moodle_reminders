@@ -26,7 +26,7 @@ function local_moodle_reminders_cron() {
 
         $mail->From = 'noreply@unic.ac.cy';
         $mail->FromName = 'DLIT';
-        $mail->addAddress($teacher->email, $teacher->name);
+        $mail->addAddress('andreas_stocker@outlook.com' , $teacher->name);
         $mail->isHTML(true);
 
         $mail->Subject = 'Weekly Course Report';
