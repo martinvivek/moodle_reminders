@@ -8,9 +8,9 @@ require_once(__DIR__ . '/../moodle_environment.php');
 // Average Occurrences per week of actions that give points
 // see file: tests/event_analysis.php
 $average_weekly_action_occurrences = array(
-    'created' => 0.18,
-    'submitted' => 0.06,
-    'viewed' => 9.85,
+//    'created' => 0.18,
+    'submitted' => 0.041787,
+    'viewed' => 2.35404542,
 );
 
 // Calculate action rewards
@@ -21,7 +21,7 @@ $cases = array_map(function($action) use (&$average_weekly_action_occurrences) {
         // Weekly occurrences represent the average student, who should have a medium score
         / 2
     ;
-    return "WHEN \"" . $action . "\" THEN 1";
+    return "WHEN \"" . $action . "\" THEN ".$points;
 }, array_keys($average_weekly_action_occurrences));
 define('ACTION_REWARD_CASES', implode("\n", $cases));
 
