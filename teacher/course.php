@@ -47,7 +47,7 @@ class course {
             LEFT JOIN {user} ON {role_assignments}.userid = {user}.id
             LEFT JOIN {assign} ON {assign}.course = {course}.id
             LEFT JOIN {forum_discussions} ON {forum_discussions}.course = {course}.id
-            LEFT JOIN {logstore_standard_log} ON {logstore_standard_log}.target = "discussion" AND {logstore_standard_log}.objectid = {forum_discussions}.id AND {logstore_standard_log}.userid = :teacher_id1
+            LEFT JOIN {logstore_standard_log} ON {logstore_standard_log}.target = "discussion" AND {logstore_standard_log}.objectid = {forum_discussions}.id AND {logstore_standard_log}.userid = :teacher_id1 AND {logstore_standard_log}.timecreated > {forum_discussions}.timemodified
             LEFT JOIN {logstore_standard_log} AS last_login ON last_login.userid = :teacher_id2 AND last_login.target = "loggedin"
             WHERE {course}.id = :course_id LIMIT 1;
         ', array(
