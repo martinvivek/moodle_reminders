@@ -2,7 +2,7 @@
 
 namespace teacher;
 
-require_once(__DIR__ . '/../moodle_environment.php');
+require_once(__DIR__ . '/../../../config.php');
 
 /**
  * A submission that has not yet been graded

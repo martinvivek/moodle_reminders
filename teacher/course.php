@@ -2,7 +2,7 @@
 
 namespace teacher;
 
-require_once(__DIR__ . '/../moodle_environment.php');
+require_once(__DIR__ . '/../../../config.php');
 require_once(__DIR__ . '/discussion.php');
 require_once(__DIR__ . '/student.php');
 require_once(__DIR__ . '/assignment.php');

@@ -6,7 +6,7 @@
     This template was created by Campaign Monitor (campaignmonitor.com)
     It was available as a free email template 3 March 2015
    -->
-  <title>Course Report</title>
+  <title>Course Report {{ 'course_report' | i18n }}</title>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 </head>
 <body>
@@ -74,10 +74,10 @@
                           <table class="student-engagement">
                             <tr>
                               <th></th>
-                              <th>Name</th>
-                              <th>Email</th>
-                              <th>Last Login</th>
-                              <th>Activity Level</th>
+                              <th>{{ 'name' | i18n }}</th>
+                              <th>{{ 'email' | i18n }}</th>
+                              <th>{{ 'last_login' | i18n }}</th>
+                              <th>{{ 'activity_level' | i18n }}</th>
                             </tr>
                             {% for student in course.sort_students_by_score() %}
                               <tr>
@@ -96,8 +96,7 @@
                       </tr>
                       <tr>
                         <td valign="top" width="15">&nbsp;</td>
-                        <td bgcolor="#eaf4f7" colspan="2" valign="top" align="right" class="backtotop"><a href="#top">Back
-                            to top</a></td>
+                        <td bgcolor="#eaf4f7" colspan="2" valign="top" align="right" class="backtotop"><a href="#top">{{ 'back_to_top' | i18n }}</a></td>
                       </tr>
                     </table>
 
@@ -112,7 +111,7 @@
                                                                                          alt=""
                                                                                          width="20" height="36"/></td>
                           <td bgcolor="#d3e7eb" valign="bottom" width="175">
-                            <h2>Ungraded Assignments</h2>
+                            <h2>{{ 'ungraded_assignments' | i18n }}</h2>
                           </td>
                           <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
                           </td>
@@ -124,7 +123,7 @@
                               <p>
                                 <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
                                 {{ assignment.name }} <b>x {{ assignment.submission_count }}</b>
-                                <a target="_blank" href="{{ assignment.get_link() }}">Grade Now</a>
+                                <a target="_blank" href="{{ assignment.get_link() }}">{{ 'grade_now' | i18n }}</a>
                               </p>
                             {% endfor %}
                           </td>
@@ -142,7 +141,7 @@
                                                                                          alt=""
                                                                                          width="20" height="36"/></td>
                           <td bgcolor="#d3e7eb" valign="bottom" width="175">
-                            <h2>New Forum Posts</h2>
+                            <h2>{{ 'unread_forum_posts' | i18n }}</h2>
                           </td>
                           <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
                           </td>
@@ -154,7 +153,7 @@
                               <p>
                                 <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
                                 {{ discussion.name }}
-                                <a target="_blank" href="{{ discussion.get_link() }}">Read Now</a>
+                                <a target="_blank" href="{{ discussion.get_link() }}">{{ 'read_now' | i18n }}</a>
                               </p>
                             {% endfor %}
                           </td>
@@ -176,8 +175,8 @@
                 <td valign="top" align="center"
                     style="font-family: Verdana, Arial, sans-serif; color: #8d9ca4;font-size: 10px;margin: 0;">
                   <p>
-                    <a target="_blank" href="{{ unsubscribe_link }}">Unsubscribe</a> /
-                    <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">Resubscribe</a>
+                    <a target="_blank" href="{{ unsubscribe_link }}">{{ 'unsubscribe' | i18n }}</a> /
+                    <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">{{ 'resubscribe' | i18n }}</a>
                   </p>
                 </td>
                 <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>

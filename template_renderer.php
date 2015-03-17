@@ -22,6 +22,10 @@ class template_renderer {
         $config = array();
         if ($cache) $config['cache'] = TWIG_CACHE_DIR;
         $this->twig = new Twig_Environment($loader, $config);
+        function i18n($string_name) {
+            return get_string($string_name, 'local_moodle_reminders');
+        }
+        $this->twig->addFilter('i18n', new Twig_Filter_Function('i18n'));
     }
 
     /**

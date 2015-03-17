@@ -3,7 +3,7 @@
 
 namespace teacher;
 
-require_once(__DIR__ . '/../moodle_environment.php');
+require_once(__DIR__ . '/../../../config.php');
 
 // Average Occurrences per week of actions that give points
 // see file: tests/event_analysis.php

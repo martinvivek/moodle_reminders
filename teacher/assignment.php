@@ -3,14 +3,13 @@
 
 namespace teacher;
 
-require_once(__DIR__ . '/../moodle_environment.php');
-require_once(__DIR__ . '/../linkable.php');
+require_once(__DIR__ . '/../../../config.php');
 require_once(__DIR__ . '/submission.php');
 
 /**
  * @package teacher
  */
-class assignment extends \linkable {
+class assignment {
     /**
      * @var $id string
      * @var $module_instance_id integer Used in the _get_link()_ method
