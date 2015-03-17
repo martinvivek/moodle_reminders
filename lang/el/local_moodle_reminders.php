@@ -14,19 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$string['pluginname'] = 'GR Moodle Reminders';
-$string['messageprovider:course_reports'] = 'GR Email Reminders for Teachers';
+$string['pluginname'] = 'Moodle Reminders';
+$string['messageprovider:course_reports'] = 'Email Reminders for Teachers';
 
 // For the Template
-$string['course_report'] = 'GR Course Report';
-$string['ungraded_assignments'] = 'GR Ungraded Assignments';
-$string['grade_now'] = 'GR Grade Now';
-$string['unread_forum_posts'] = 'GR Unread Forum Posts';
-$string['read_now'] = 'GR Read Now';
-$string['unsubscribe'] = 'GR Unsubscribe';
-$string['resubscribe'] = 'GR Resubscribe';
-$string['back_to_top'] = 'GR Back to Top';
-$string['name'] = 'GR Name';
-$string['email'] = 'GR Email';
-$string['last_login'] = 'GR Last Login';
-$string['activity_level'] = 'GR Activity Level';
+$string['course_report'] = 'Course Report';
+$string['ungraded_assignments'] = 'Ungraded Assignments';
+$string['grade_now'] = 'Grade Now';
+$string['unread_forum_posts'] = 'Unread Forum Posts';
+$string['read_now'] = 'Read Now';
+$string['unsubscribe'] = 'Unsubscribe';
+$string['resubscribe'] = 'Resubscribe';
+$string['back_to_top'] = 'Back to Top';
+$string['name'] = 'Name';
+$string['email'] = 'Email';
+$string['last_login'] = 'Last Login';
+$string['activity_level'] = 'Activity Level';

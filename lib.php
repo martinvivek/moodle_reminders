@@ -15,7 +15,7 @@ function local_moodle_reminders_cron() {
     if (sizeof($teachers) == 0) {
         echo "No subscribed Teachers Found! See: https://github.com/Arubaruba/moodle_reminders#how-to-subscribe-all-teachers\n";
     } else {
-        echo 'Sending Emails ... ';
+        echo "Sending Emails ... \n";
 
         foreach ($teachers as $teacher) {
             $email_html = $renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher);
@@ -26,7 +26,7 @@ function local_moodle_reminders_cron() {
 
             $mail->From = 'noreply@unic.ac.cy';
             $mail->FromName = 'DLIT';
-            $mail->addAddress('andreas_stocker@outlook.com', $teacher->name);
+            $mail->addAddress($teacher->email, $teacher->name);
             $mail->isHTML(true);
 
             $mail->Subject = 'Weekly Course Report';
@@ -36,7 +36,7 @@ function local_moodle_reminders_cron() {
                 echo 'Message could not be sent.';
                 echo 'Mailer Error: ' . $mail->ErrorInfo;
             } else {
-                echo 'Message has been sent (' . $teacher->email . ')';
+                echo "Message has been sent (" . $teacher->email . ")\n";
             }
         }
 
