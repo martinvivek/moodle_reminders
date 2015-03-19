@@ -53,6 +53,12 @@
           <td colspan="7" align="left">
             <table background="images/topbot_rightcol.gif" style="background: url(images/topbot_rightcol.gif)"
                    cellpadding="0" cellspacing="0" width="600" align="left">
+              <tr>
+                <td class="last-login">
+                  Your Last Login:
+                    <b>{{ course['last-accessed'] | date("m/d/y") }}</b>
+                </td>
+              </tr>
               {% for course in courses %}
                 <tr>
                   <td valign="top" width="360">
@@ -67,23 +73,44 @@
                         <td bgcolor="#eaf4f7" rowspan="4"><img src="images/blank.gif" alt="" width="5" height="1"/></td>
                       </tr>
                       <tr>
-                        <td bgcolor="#eaf4f7" valign="top" width="319"><h2>{{ course.name }}</h2></td>
+                        <td bgcolor="#eaf4f7" valign="top" width="319">
+                          <h2>{{ course.name }}</h2>
+
+                          <div class="last-course-accessed">
+                            Last Accessed by You:
+                            <b>{{ course['last-accessed'] | date("m/d/y") }}</b>
+                          </div>
+                        </td>
                       </tr>
                       <tr>
                         <td bgcolor="#eaf4f7" valign="top" class="border">
-                          <table class="student-engagement">
+                          <div class="student-engagement-table-container">
+                          <table class="student-engagement" cellpadding="0" cellspacing="0">
                             <tr>
                               <th></th>
                               <th>{{ 'name' | i18n }}</th>
-                              <th>{{ 'email' | i18n }}</th>
                               <th>{{ 'last_login' | i18n }}</th>
                               <th>{{ 'activity_level' | i18n }}</th>
                             </tr>
                             {% for student in course.sort_students_by_score() %}
-                              <tr>
+                              <tr class="student-row">
                                 <td><img src="images/bullet_white.gif" alt=""/></td>
-                                <td>{{ student['name'] }}</td>
-                                <td class="selectable">{{ student['email'] }}</td>
+                                <td>{{ student['name'] }}
+                                  <br>
+                                  <b>{{ student['email'] }}</b>
+                                </td>
+                                <td>{{ student['last_login'] | date("m/d/y") }}</td>
+                                {#<td>{{ student['score_percentage'] * 50 }}</td>#}
+                                <td>
+                                  {% for i in 1..((student['score_percentage'] * 5) | number_format) %}&#9733;{% endfor %}
+                                </td>
+                              </tr>
+                              <tr class="student-row">
+                                <td><img src="images/bullet_white.gif" alt=""/></td>
+                                <td>{{ student['name'] }}
+                                  <br>
+                                  <b>{{ student['email'] }}</b>
+                                </td>
                                 <td>{{ student['last_login'] | date("m/d/y") }}</td>
                                 {#<td>{{ student['score_percentage'] * 50 }}</td>#}
                                 <td>
@@ -92,11 +119,13 @@
                               </tr>
                             {% endfor %}
                           </table>
+                          </div>
                         </td>
                       </tr>
                       <tr>
                         <td valign="top" width="15">&nbsp;</td>
-                        <td bgcolor="#eaf4f7" colspan="2" valign="top" align="right" class="backtotop"><a href="#top">{{ 'back_to_top' | i18n }}</a></td>
+                        <td bgcolor="#eaf4f7" colspan="2" valign="top" align="right" class="backtotop"><a
+                            href="#top">{{ 'back_to_top' | i18n }}</a></td>
                       </tr>
                     </table>
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace teacher;
 
 require_once(__DIR__ . '/../../../config.php');
@@ -9,8 +8,8 @@ require_once(__DIR__ . '/../../../config.php');
 // see file: tests/event_analysis.php
 $average_weekly_action_occurrences = array(
 //    'created' => 0.18,
-    'submitted' => 0.041787,
-    'viewed' => 2.35404542,
+    'submitted' => 2,
+    'viewed' => 10,
 );
 
 // Calculate action rewards

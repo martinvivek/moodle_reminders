@@ -7,7 +7,7 @@ _Send automatic email reminders to teachers_
 * `git clone https://github.com/Arubaruba/moodle-reminders.git <MOODLE_DIR>/local/moodle_reminders`
 * In Browser: `http://localhost/MOODLE_LOCATION/admin/index.php?confirmplugincheck=1&cache=0`
 
-_Note: Teachers are NOT subscribed by default._ 
+__Note:__ Teachers are NOT subscribed by default. 
 
 ## How to Subscribe all Teachers
 ```sql
