@@ -21,3 +21,10 @@ SELECT null, userid,'message_provider_local_moodle_reminders_course_reports_logg
 DELETE FROM mdl_user_preferences
 WHERE name = 'message_provider_local_moodle_reminders_course_reports_loggedoff'
 ```
+
+## How to set the Email Language
+
+_Administration > Site Administration > Language > Language Settings >  Default Language_
+
+__Note:__ The language set here must also exist within the _lang_ directory of this project
+
