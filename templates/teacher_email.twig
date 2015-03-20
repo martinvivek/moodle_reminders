@@ -6,9 +6,10 @@
     This template was created by Campaign Monitor (campaignmonitor.com)
     It was available as a free email template 3 March 2015
    -->
-  <title>Course Report {{ 'course_report' | i18n }}</title>
+  <title>{{ 'course_report' | i18n }}</title>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 </head>
+
 <body>
 
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -55,8 +56,8 @@
                    cellpadding="0" cellspacing="0" width="600" align="left">
               <tr>
                 <td class="last-login">
-                  Your Last Login:
-                    <b>{{ course['last-accessed'] | date("m/d/y") }}</b>
+                  Your last login:
+                  <b>{{ course['last-accessed'] | date("m/d/y") }}</b>
                 </td>
               </tr>
               {% for course in courses %}
@@ -77,7 +78,7 @@
                           <h2>{{ course.name }}</h2>
 
                           <div class="last-course-accessed">
-                            Last Accessed by You:
+                            Last accessed by you:
                             <b>{{ course['last-accessed'] | date("m/d/y") }}</b>
                           </div>
                         </td>
@@ -85,40 +86,28 @@
                       <tr>
                         <td bgcolor="#eaf4f7" valign="top" class="border">
                           <div class="student-engagement-table-container">
-                          <table class="student-engagement" cellpadding="0" cellspacing="0">
-                            <tr>
-                              <th></th>
-                              <th>{{ 'name' | i18n }}</th>
-                              <th>{{ 'last_login' | i18n }}</th>
-                              <th>{{ 'activity_level' | i18n }}</th>
-                            </tr>
-                            {% for student in course.sort_students_by_score() %}
-                              <tr class="student-row">
-                                <td><img src="images/bullet_white.gif" alt=""/></td>
-                                <td>{{ student['name'] }}
-                                  <br>
-                                  <b>{{ student['email'] }}</b>
-                                </td>
-                                <td>{{ student['last_login'] | date("m/d/y") }}</td>
-                                {#<td>{{ student['score_percentage'] * 50 }}</td>#}
-                                <td>
-                                  {% for i in 1..((student['score_percentage'] * 5) | number_format) %}&#9733;{% endfor %}
-                                </td>
+                            <table class="student-engagement" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <th></th>
+                                <th>{{ 'name' | i18n }}</th>
+                                <th>{{ 'last_login' | i18n }}</th>
+                                <th>{{ 'activity_level' | i18n }}</th>
                               </tr>
-                              <tr class="student-row">
-                                <td><img src="images/bullet_white.gif" alt=""/></td>
-                                <td>{{ student['name'] }}
-                                  <br>
-                                  <b>{{ student['email'] }}</b>
-                                </td>
-                                <td>{{ student['last_login'] | date("m/d/y") }}</td>
-                                {#<td>{{ student['score_percentage'] * 50 }}</td>#}
-                                <td>
-                                  {% for i in 1..((student['score_percentage'] * 5) | number_format) %}&#9733;{% endfor %}
-                                </td>
-                              </tr>
-                            {% endfor %}
-                          </table>
+                              {% for student in course.sort_students_by_score() %}
+                                <tr class="student-row">
+                                  <td><img src="images/bullet_white.gif" alt=""/></td>
+                                  <td>{{ student['name'] }}
+                                    <br>
+                                    <b>{{ student['email'] }}</b>
+                                  </td>
+                                  <td>{{ student['last_login'] | date("m/d/y") }}</td>
+                                  {#<td>{{ student['score_percentage'] * 50 }}</td>#}
+                                  <td>
+                                    {% for i in 1..((student['score_percentage'] * 5) | number_format) %}&#9733;{% endfor %}
+                                  </td>
+                                </tr>
+                              {% endfor %}
+                            </table>
                           </div>
                         </td>
                       </tr>
@@ -206,6 +195,8 @@
                   <p>
                     <a target="_blank" href="{{ unsubscribe_link }}">{{ 'unsubscribe' | i18n }}</a> /
                     <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">{{ 'resubscribe' | i18n }}</a>
+                    &nbsp;
+                    {{ 'trouble_viewing' | i18n }} <a target="_blank" href="{{ web_view_link }}">{{ 'go_to_web_view' | i18n }}</a>
                   </p>
                 </td>
                 <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>

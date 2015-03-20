@@ -2,17 +2,19 @@
   overflow: auto;
   max-height: 400px;
 }
+
 .student-row td {
   border-bottom: 1px #8ec4ce solid;
 }
-.student-row:last-child td
-{
+
+.student-row:last-child td {
   border-bottom: none;
 }
-.student-row td:first-child
-{
+
+.student-row td:first-child {
   border-bottom: none;
 }
+
 .last-login {
   padding-top: 10px;
   padding-left: 38px;
@@ -37,7 +39,7 @@
 }
 
 .todo-items {
-  padding-top: 17px;
+  padding-top: 13px;
 }
 
 /* Thanks to BalusC on Stackoverflow */

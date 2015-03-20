@@ -8,6 +8,7 @@ require_once(__DIR__ . '/course.php');
 global $CFG;
 
 define('UNSUBSCRIBE_LINK', $CFG->wwwroot . '/local/moodle_reminders/unsubscribe.php');
+define('WEB_VIEW_LINK', $CFG->wwwroot . '/local/moodle_reminders/web_view.php');
 
 /**
  * Stores basic teacher data, loads teachers from the moodle database
@@ -23,6 +24,7 @@ class teacher {
      */
     public $id, $email, $courses;
     public $unsubscribe_link = UNSUBSCRIBE_LINK;
+    public $web_view_link = WEB_VIEW_LINK;
 
     function __construct($id, $email, $last_login, $courses = array()) {
         $this->id = $id;
@@ -32,20 +34,21 @@ class teacher {
     }
 
     /**
+     * @param $user_id int An optional user id to get a specific teacher
      * @return array(teacher) users who are teaching active courses from the moodle database
      */
 
-    static function get_all() {
+    static function get_all($user_id = null) {
         global $DB;
         $teacher_rows = $DB->get_records_sql('
           SELECT {user}.id, email, GROUP_CONCAT(DISTINCT {course}.id ORDER BY {course}.fullname) as course_ids, FROM_UNIXTIME({user}.lastaccess) AS last_login FROM {user}
-          LEFT JOIN {role_assignments} ON (roleid = 3 OR roleid = 4) AND {role_assignments}.userid = {user}.id
+          INNER JOIN {role_assignments} ON (roleid = 3 OR roleid = 4) AND {role_assignments}.userid = {user}.id
           LEFT JOIN {context} ON contextlevel = 50 AND {context}.id = {role_assignments}.contextid
           LEFT JOIN {course} ON {course}.id = {context}.instanceid AND {course}.visible = 1 AND {course}.format != "site"
           LEFT JOIN {user_preferences} ON {user_preferences}.userid = {user}.id AND {user_preferences}.name = "message_provider_local_moodle_reminders_course_reports_loggedoff"
-          WHERE {course}.id IS NOT NULL AND {user_preferences}.value LIKE "email"
+          WHERE {course}.id IS NOT NULL AND ({user_preferences}.value LIKE "email" AND ? IS NULL OR {user}.id = ?)
           GROUP BY {user}.id
-        ');
+        ', array($user_id, $user_id));
 
         return array_map(function ($teacher_row) {
             // We don't need to check if the course_ids are null because someone doesn't have

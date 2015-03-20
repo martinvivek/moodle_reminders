@@ -30,3 +30,6 @@ $string['name'] = 'Name';
 $string['email'] = 'Email';
 $string['last_login'] = 'Last Login';
 $string['activity_level'] = 'Activity Level';
+$string['not_teacher'] = 'Error - You are currently not teaching any courses';
+$string['trouble_viewing'] = 'Trouble viewing this Email?';
+$string['go_to_web_view'] = 'Go to Web View';
