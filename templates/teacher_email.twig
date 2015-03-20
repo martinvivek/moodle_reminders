@@ -6,7 +6,7 @@
     This template was created by Campaign Monitor (campaignmonitor.com)
     It was available as a free email template 3 March 2015
    -->
-  <title>Course Report</title>
+  <title>Weekly Moodle Report</title>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 </head>
 
@@ -46,7 +46,7 @@
           <td style="background: url(images/bg_title.gif) no-repeat;" background="images/bg_title.gif" valign="bottom"
               colspan="3" height="65" align="left">
             <h1>
-              Course Report
+              Weekly Report
             </h1>
           </td>
         </tr>
@@ -55,13 +55,14 @@
             <table background="images/topbot_rightcol.gif" style="background: url(images/topbot_rightcol.gif)"
                    cellpadding="0" cellspacing="0" width="600" align="left">
               <tr>
+                <td></td>
                 <td class="last-login">
                   Your last login:
-                  <b>{{ course['last-accessed'] | date("m/d/y") }}</b>
+                  <b>{{ course['last-accessed'] | date("d/m/y") }}</b>
                 </td>
               </tr>
               {% for course in courses %}
-                <tr>
+                <tr class="course-tr" >
                   <td valign="top" width="360">
                     <table cellpadding="0" cellspacing="0" width="360" class="whitecol">
                       <tr>
@@ -79,29 +80,41 @@
 
                           <div class="last-course-accessed">
                             Last accessed by you:
-                            <b>{{ course['last-accessed'] | date("m/d/y") }}</b>
+                            <b>
+                              {% if course.last_accessed %}
+                                {{ course.last_accessed | date('d/m/y') }}
+                              {% else %}
+                                Never
+                              {% endif %}
+                            </b>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td bgcolor="#eaf4f7" valign="top" class="border">
+                        <td bgcolor="#eaf4f7" valign="top">
                           {% if course.students | length > 0 %}
                             <div class="student-engagement-table-container">
                               <table class="student-engagement" cellpadding="0" cellspacing="0">
                                 <tr>
                                   <th></th>
                                   <th>Name</th>
-                                  <th>Last Login</th>
+                                  <th>Last Access</th>
                                   <th>Activity Level</th>
                                 </tr>
-                                {% for student in course.sort_students_by_score() %}
+                                {% for student in course.students | sort_by('score_percentage') %}
                                   <tr class="student-row">
                                     <td><img src="images/bullet_white.gif" alt=""/></td>
                                     <td>{{ student.name }}
                                       <br>
                                       <b>{{ student.email }}</b>
                                     </td>
-                                    <td>{{ student.last_login | date("m/d/y") }}</td>
+                                    <td>
+                                      {% if student.last_accessed %}
+                                        {{ student.last_accessed | date("d/m/y") }}
+                                      {% else %}
+                                        Never
+                                      {% endif %}
+                                    </td>
                                     <td>{{ student.get_stars() }}</td>
                                   </tr>
                                 {% endfor %}
@@ -112,13 +125,7 @@
                           {% endif %}
                         </td>
                       </tr>
-                      <tr>
-                        <td valign="top" width="15">&nbsp;</td>
-                        <td bgcolor="#eaf4f7" colspan="2" valign="top" align="right" class="backtotop"><a
-                            href="#top">back to top</a></td>
-                      </tr>
                     </table>
-
                   </td>
                   <td valign="top" width="240" class="todo-items">
                     <table cellpadding="0" cellspacing="0" width="240" class="bluecol">
@@ -128,7 +135,7 @@
                         <td bgcolor="#d3e7eb" valign="top" width="20" rowspan="2"><img src="images/title_red2.gif"
                                                                                        alt=""
                                                                                        width="20" height="36"/></td>
-                        <td bgcolor="#d3e7eb" valign="bottom" width="175">
+                        <td bgcolor="#d3e7eb" valign="bottom" width="175" class="border">
                           <h2>Ungraded Assignments</h2>
                         </td>
                         <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
@@ -136,7 +143,7 @@
                         <td rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/></td>
                       </tr>
                       <tr>
-                        <td bgcolor="#d3e7eb" valign="top" class="border">
+                        <td bgcolor="#d3e7eb" valign="top">
                           {% for assignment in course.assignments %}
                             <p>
                               <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
@@ -168,7 +175,7 @@
                         <td rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/></td>
                       </tr>
                       <tr>
-                        <td bgcolor="#d3e7eb" valign="top" class="border">
+                        <td bgcolor="#d3e7eb" valign="top">
                           {% for discussion in course.discussions %}
                             <p>
                               <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>

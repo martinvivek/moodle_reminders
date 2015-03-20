@@ -1,6 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/../../config.php');
 
 /** The twig template source files are stored here */
 define('TEMPLATE_DIR', __DIR__ . '/templates');
@@ -13,6 +14,18 @@ define('IMG_DIR', '/local/moodle_reminders/images/');
 class template_renderer {
     public $twig;
 
+    static function sort_by_filter($arr, $property, $direction = 'desc') {
+        usort($arr, function($item1, $item2) use ($property, $direction) {
+            $item1_arr = (array) $item1;
+            $item2_arr = (array) $item2;
+
+            $result =  $item1_arr[$property] > $item2_arr[$property];
+
+            return $direction == 'desc' ? $result : !$result;
+        });
+        return $arr;
+    }
+
     /**
      * Creates a twig loader and environment
      * @param $cache boolean
@@ -22,10 +35,7 @@ class template_renderer {
         $config = array();
         if ($cache) $config['cache'] = TWIG_CACHE_DIR;
         $this->twig = new Twig_Environment($loader, $config);
-        function i18n($string_name) {
-            return get_string($string_name, 'local_moodle_reminders');
-        }
-        $this->twig->addFilter('i18n', new Twig_Filter_Function('i18n'));
+        $this->twig->addFilter('sort_by', new Twig_Filter_Function('template_renderer::sort_by_filter'));
     }
 
     /**
@@ -34,7 +44,7 @@ class template_renderer {
      * @param $vars
      * @return string Rendered template
      */
-    function render($file_name, $style_name, $vars) {
+    public function render($file_name, $style_name, $vars = array()) {
         $cssInliner = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
         $cssInliner->setHTML($this->twig->render($file_name, $vars));
         $cssInliner->setCSS($this->twig->render($style_name, $vars));

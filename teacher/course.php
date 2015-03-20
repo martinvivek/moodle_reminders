@@ -40,7 +40,7 @@ class course {
     static function get($id, $teacher_id) {
         global $DB;
         $course_row = $DB->get_record_sql('
-            SELECT {course}.fullname AS name, GROUP_CONCAT(DISTINCT {user}.id) as student_ids, GROUP_CONCAT(DISTINCT {assign}.id) AS assignment_ids, FROM_UNIXTIME(MAX(last_login.timecreated)) AS last_login_date, GROUP_CONCAT(DISTINCT
+            SELECT {course}.fullname AS name, GROUP_CONCAT(DISTINCT {user}.id) as student_ids, GROUP_CONCAT(DISTINCT {assign}.id) AS assignment_ids, FROM_UNIXTIME(MAX(last_accessed.timecreated)) AS last_accessed_date, GROUP_CONCAT(DISTINCT
             CASE WHEN {logstore_standard_log}.id IS NOT NULL THEN NULL ELSE {forum_discussions}.id END) as discussion_ids FROM {course}
             LEFT JOIN {context} ON contextlevel = 50 AND {context}.instanceid = {course}.id
             LEFT JOIN {role_assignments} ON roleid = 5 AND {context}.id = {role_assignments}.contextid
@@ -48,7 +48,7 @@ class course {
             LEFT JOIN {assign} ON {assign}.course = {course}.id
             LEFT JOIN {forum_discussions} ON {forum_discussions}.course = {course}.id
             LEFT JOIN {logstore_standard_log} ON {logstore_standard_log}.target = "discussion" AND {logstore_standard_log}.objectid = {forum_discussions}.id AND {logstore_standard_log}.userid = :teacher_id1 AND {logstore_standard_log}.timecreated > {forum_discussions}.timemodified
-            LEFT JOIN {logstore_standard_log} AS last_login ON last_login.userid = :teacher_id2 AND last_login.target = "loggedin"
+            LEFT JOIN {logstore_standard_log} AS last_accessed ON last_accessed.userid = :teacher_id2 AND last_accessed.courseid = {course}.id
             WHERE {course}.id = :course_id LIMIT 1;
         ', array(
             'teacher_id1' => $teacher_id,
@@ -81,27 +81,7 @@ class course {
             }, $assignment_ids));
         }
 
-        return new course($id, $course_row->name, $course_row->last_login_date, $discussions, $students, $assignments);
-    }
-
-    /**
-     * @param $on_sort callable($student1, $student2) A function that returns an int based on how any two students should be sorted
-     * @return array(student)
-     */
-    function sort_students_by_score() {
-        $students = $this->students;
-        usort($students, function($student1, $student2) {
-            // Sort by Score
-            $difference = $student1->score_percentage - $student2->score_percentage;
-            // If the Scores are the same sort by name
-            if ($difference == 0) $difference = intval($student1->name) - intval($student2->name);
-            return $difference;
-        });
-
-        // We need to arrayify each student object so twig can use it
-        return array_map(function($student) {
-            return $student;
-        }, $students);
+        return new course($id, $course_row->name, $course_row->last_accessed_date, $discussions, $students, $assignments);
     }
 
     function get_link() {
