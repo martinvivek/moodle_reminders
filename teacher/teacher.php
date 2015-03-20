@@ -8,7 +8,6 @@ require_once(__DIR__ . '/course.php');
 global $CFG;
 
 define('UNSUBSCRIBE_LINK', $CFG->wwwroot . '/local/moodle_reminders/unsubscribe.php');
-define('WEB_VIEW_LINK', $CFG->wwwroot . '/local/moodle_reminders/web_view.php');
 
 /**
  * Stores basic teacher data, loads teachers from the moodle database
@@ -24,7 +23,6 @@ class teacher {
      */
     public $id, $email, $courses;
     public $unsubscribe_link = UNSUBSCRIBE_LINK;
-    public $web_view_link = WEB_VIEW_LINK;
 
     function __construct($id, $email, $last_login, $courses = array()) {
         $this->id = $id;

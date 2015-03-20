@@ -100,7 +100,7 @@ class course {
 
         // We need to arrayify each student object so twig can use it
         return array_map(function($student) {
-            return (array) $student;
+            return $student;
         }, $students);
     }
 

@@ -276,6 +276,10 @@ h1 {
   margin: 0 0 8px 0;
 }
 
+.bluecol p.light {
+  color: #899694;
+}
+
 .bluecol ul li, .bluecol ol li {
   color: #636c6a;
   font-family: Verdana, Arial;

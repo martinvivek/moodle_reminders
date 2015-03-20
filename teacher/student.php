@@ -18,12 +18,12 @@ $cases = array_map(function($action) use (&$average_weekly_action_occurrences) {
         (1 / $average_weekly_action_occurrences[$action])
         / sizeof($average_weekly_action_occurrences)
         // Weekly occurrences represent the average student, who should have a medium score
-        / 2
     ;
     return "WHEN \"" . $action . "\" THEN ".$points;
 }, array_keys($average_weekly_action_occurrences));
 define('ACTION_REWARD_CASES', implode("\n", $cases));
 
+define('STAR_CHARACTER', '★');
 /**
  * Represents a student instance within a course environment and at a certain point in time
  * @package teacher
@@ -33,9 +33,23 @@ class student {
      * @var $id integer
      * @var $course_id integer
      * @var $name string
-     * @var $score_percentage number A student's score divided by their weekly target
+     * @var $score_percentage number Percentage of the average student's score (100% = 1)
      */
     public $id, $name, $email, $last_login, $score_percentage;
+
+    /**
+     * @return string This student's score as a string of stars
+     */
+    function get_stars() {
+        // Halve the score so the average student would have 2.5 stars
+        // A score of 100% (1) should have 5 stars
+        $number_of_stars = min($this->score_percentage / 2, 1) * 5;
+        $stars = '';
+        for ($i = 0; $i < $number_of_stars; $i++) {
+            $stars .= STAR_CHARACTER;
+        }
+        return $stars;
+    }
 
     function __construct($id, $name, $email, $last_login, $score_percentage) {
         $this->id = $id;
@@ -61,7 +75,7 @@ class student {
                   /* Has the same effect of only getting distinct rows */
                   * COUNT(DISTINCT {logstore_standard_log}.id) / COUNT({logstore_standard_log}.id) /
                   /* We want the score per week */
-                  DATEDIFF(NOW(), FROM_UNIXTIME({course}.startdate)) / 7
+                  (DATEDIFF(NOW(), FROM_UNIXTIME({course}.startdate)) / 7)
                AS score
             FROM {user}
             LEFT JOIN {course} ON {course}.id = :course_id
@@ -72,6 +86,6 @@ class student {
                 'course_id' => $course_id
             )
         );
-        return new student($id, $student_row->name, $student_row->email, $student_row->last_login, min($student_row->score, 1));
+        return new student($id, $student_row->name, $student_row->email, $student_row->last_login,abs($student_row->score));
     }
 }
