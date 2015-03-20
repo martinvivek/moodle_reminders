@@ -50,6 +50,7 @@ if (sizeof($teachers) == 0) {
     $mail->FromName = 'DLIT';
     $mail->addAddress('andreas_stocker@outlook.com', 'Teacher Email Recipient');
     $mail->addAddress('alexander.c@unic.ac.cy', 'Teacher Email Recipient');
+    $mail->addAddress('savva.c@unic.ac.cy', 'Teacher Email Recipient');
     $mail->isHTML(true);
 
     $mail->Subject = 'Weekly Course Report';
