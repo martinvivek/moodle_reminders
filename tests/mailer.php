@@ -5,7 +5,6 @@
  * the browser instead of inside an email client
  */
 
-require_once(__DIR__ . '/../lib.php');
 require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/../../../config.php');
 require_once(__DIR__ . '/../teacher/teacher.php');
@@ -15,12 +14,17 @@ $url = new moodle_url('/local/moodle_reminders/web_view.php');
 $PAGE->set_url($url);
 
 global $DB;
-$teacher_ids = $DB->get_record_sql('
+$teacher_ids = $DB->get_records_sql('
     SELECT {user}.id FROM {user}
     INNER JOIN {role_assignments} ON {role_assignments}.userid = {user}.id AND ({role_assignments}.roleid =  3 OR {role_assignments}.roleid = 4)
-');
+    WHERE {user}.id = ? OR ? IS NULL
+    LIMIT 1;
+', array($_GET['teacher_id'], $_GET['teacher_id']));
 
-$teachers = teacher\teacher::get_all($USER->id);
+$found_teacher = array_values($teacher_ids)[0];
+if(!$found_teacher) die('No teacher found');
+
+$teachers = teacher\teacher::get_all($found_teacher->id);
 
 if (sizeof($teachers) == 0) {
 // Set Renderer Options
@@ -55,6 +59,7 @@ if (sizeof($teachers) == 0) {
         echo 'Message could not be sent.';
         echo 'Mailer Error: ' . $mail->ErrorInfo;
     } else {
-        echo "Message has been sent (" . $teacher->email . ")\n";
+        echo "Message has been sent \n \n";
+        var_dump($mail->getAllRecipientAddresses());
     }
 }
