@@ -1,16 +1,15 @@
 <?php
 
-namespace teacher;
-
+// Must be localhost to view this
 if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')))
     die('Must view from localhost');
 
 error_reporting(E_ALL);
-ini_set('display_errors', 1);// Must be localhost to view this
+ini_set('display_errors', 1);
 
 require_once(__DIR__ . '/../template_renderer.php');
 require_once(__DIR__ . '/../../../config.php');
-require_once(__DIR__ . '/../teacher/teacher.php');
+require_once(__DIR__ . '/../classes/teacher.php');
 
 $teachers = teacher::get_all();
 

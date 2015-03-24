@@ -1,16 +1,16 @@
 <?php
 
 require_once(__DIR__ . '/vendor/autoload.php');
-require_once(__DIR__ . '/teacher/teacher.php');
+require_once(__DIR__ . '/classes/teacher.php');
 require_once(__DIR__ . '/template_renderer.php');
 
 function local_moodle_reminders_cron() {
 
-    $renderer = new \template_renderer();
+    $renderer = new template_renderer();
 
     echo "Gathering data ... \n";
 
-    $teachers = \teacher\teacher::get_all();
+    $teachers = teacher::get_all();
 
     if (sizeof($teachers) == 0) {
         echo "No subscribed Teachers Found! See: https://github.com/Arubaruba/moodle_reminders#how-to-subscribe-all-teachers\n";

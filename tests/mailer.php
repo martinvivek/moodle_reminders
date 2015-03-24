@@ -7,7 +7,7 @@
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/../../../config.php');
-require_once(__DIR__ . '/../teacher/teacher.php');
+require_once(__DIR__ . '/../classes/teacher.php');
 require_once(__DIR__ . '/../template_renderer.php');
 
 $url = new moodle_url('/local/moodle_reminders/web_view.php');

@@ -1,6 +1,6 @@
 <?php
 
-define('CLI_SCRIPT', true);
+if(!defined('CLI_SCRIPT')) define('CLI_SCRIPT', true);
 
 require_once(__DIR__ . '/../../template_renderer.php');
 

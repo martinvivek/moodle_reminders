@@ -1,13 +1,13 @@
 <?php
 
-define('CLI_SCRIPT', true);
+if(!defined('CLI_SCRIPT')) define('CLI_SCRIPT', true);
 
-require_once(__DIR__ . '/../../../teacher/student.php');
+require_once(__DIR__ . '/../../../classes/student.php');
 
 class studentTest extends PHPUnit_Framework_TestCase {
     // Make sure that the correct number of stars are awarded for a student's score
     public function test_get_stars() {
-        $student = new \teacher\student(0, '', '', 0, 0);
+        $student = new student(0, '', '', 0, 0);
 
         // The edge case where a student has done
         // NOTHING in the course results in no stars
@@ -37,7 +37,7 @@ class studentTest extends PHPUnit_Framework_TestCase {
     public function test_get_action_reward_sql() {
         $actions = array('action1' => 10, 'action2' => 3);
 
-        $action_reward_sql = teacher\student::get_action_reward_sql($actions);
+        $action_reward_sql = student::get_action_reward_sql($actions);
 
         preg_match_all('/[\.\d]+/', $action_reward_sql, $matches);
 
