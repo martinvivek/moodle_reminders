@@ -1,7 +1,7 @@
 <?php
 
 require_once('factory.php');
-require_once('course.php');
+require_once(__DIR__ .'/../course.php');
 require_once('assignment_factory.php');
 require_once('discussion_factory.php');
 require_once('student_factory.php');

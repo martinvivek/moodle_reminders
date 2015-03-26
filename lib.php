@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/vendor/autoload.php');
-require_once(__DIR__ . '/classes/teacher.php');
+require_once(__DIR__ . '/classes/factory/teacher_factory.php');
 require_once(__DIR__ . '/template_renderer.php');
 
 function local_moodle_reminders_cron() {
@@ -10,7 +10,8 @@ function local_moodle_reminders_cron() {
 
     echo "Gathering data ... \n";
 
-    $teachers = teacher::get_all();
+    $teacher_factory = new teacher_factory();
+    $teachers = $teacher_factory->load_records('teacher.sql');
 
     if (sizeof($teachers) == 0) {
         echo "No subscribed Teachers Found! See: https://github.com/Arubaruba/moodle_reminders#how-to-subscribe-all-teachers\n";

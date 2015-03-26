@@ -1,7 +1,7 @@
 <?php
 
 require_once('factory.php');
-require_once('student.php');
+require_once(__DIR__ .'/../student.php');
 
 class student_factory extends factory {
     /**

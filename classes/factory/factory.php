@@ -1,6 +1,6 @@
 <?php
 
-define('FACTORY_QUERY_FOLDER', __DIR__ . '/../sql/factory/');
+define('FACTORY_QUERY_FOLDER', __DIR__ . '/../../sql/factory/');
 define('UNESCAPED_VAR_PREFIX', '#SQL:');
 
 abstract class factory {
@@ -35,7 +35,7 @@ abstract class factory {
         // Insert unescaped vars
         $query_string = str_replace($prefixed_unescaped_var_keys, array_values($unescaped_vars), $query_string);
         // Replace mdl_table with {table} for maximum compatibility
-        // (we do this later so phpstorm hinting can load the actual tables from the database)
+        // (we don't do this in the file so phpstorm hinting can load the actual tables from the database)
         $query_string = preg_replace('/mdl_(\w+)/','{$1}', $query_string);
 
         // Execute the query and map each record with a custom defined 'construct_record' function

@@ -1,7 +1,5 @@
 <?php
 
-if(!defined('CLI_SCRIPT')) define('CLI_SCRIPT', true);
-
 require_once(__DIR__ . '/../../template_renderer.php');
 
 class template_rendererTest extends PHPUnit_Framework_TestCase {
