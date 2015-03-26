@@ -55,11 +55,11 @@
             <table background="images/topbot_rightcol.gif" style="background: url(images/topbot_rightcol.gif)"
                    cellpadding="0" cellspacing="0" width="600" align="left">
               <tr>
-                <td></td>
                 <td class="last-login">
                   Your last login:
                   <b>{{ course['last-accessed'] | date("d/m/y") }}</b>
                 </td>
+                <td></td>
               </tr>
               {% for course in courses %}
                 <tr class="course-tr" >
@@ -101,7 +101,7 @@
                                   <th>Last Access</th>
                                   <th>Activity Level</th>
                                 </tr>
-                                {% for student in course.students | sort_by('score_percentage') %}
+                                {% for student in course.students %}
                                   <tr class="student-row">
                                     <td><img src="images/bullet_white.gif" alt=""/></td>
                                     <td>{{ student.name }}

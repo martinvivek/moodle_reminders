@@ -4,25 +4,38 @@ require_once('factory.php');
 require_once('student.php');
 
 class student_factory extends factory {
-
-    private $target_action_occurrences = array(
+    /**
+     * @var array Maps the name of an action (see mdl_logstore_standard_log.action) to the number of times a week a good student should take that action
+     */
+    private $weekly_action_targets = array(
         'submitted' => 2,
         'viewed' => 10
     );
 
     /**
-     * @param array (action => weekly_occurrence_count)
+     * The formula for converting weekly action targets to points rewarded per action event
+     * @param $weekly_action_target
+     * @param $action_type_count
+     * @return float
+     */
+    private function calculate_action_points($weekly_action_target, $action_type_count) {
+        return 1 / $weekly_action_target / $action_type_count;
+    }
+
+    /**
      * @return string SQL covering cases of rewarded actions and specifying the amount rewarded
      */
-    function get_action_points() {
-        $action_points = array();
-        foreach ($this->target_action_occurrences as $action => $occurrences) {
-            $action_points[$action] = 1 / $occurrences / count($this->target_action_occurrences);
+    public function get_action_cases_sql() {
+        $sql = '';
+        foreach ($this->weekly_action_targets as $action => $weekly_target) {
+            $points = $this->calculate_action_points($weekly_target, count($this->weekly_action_targets));
+            $sql .= 'WHEN \'' . filter_var($action, FILTER_SANITIZE_STRING) . '\' THEN ' .
+                filter_var($points, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) . "\n";
         }
-        return $action_points;
+        return $sql;
     }
 
     protected function construct_record($row) {
-        return new student($row->name, $row->email, $row->last_access_date, $row->score);
+        return new student($row->id, $row->name, $row->email, $row->last_access_date, $row->score);
     }
 }

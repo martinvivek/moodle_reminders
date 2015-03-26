@@ -16,7 +16,7 @@ class teacher_factory extends factory {
             $row->id,
             $row->email,
             $row->last_login,
-            $this->course_factory->load_records('course.sql', array($row->id))
+            $this->course_factory->load_records('course.sql', array('teacher_id' => $row->id))
         );
     }
 }

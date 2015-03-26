@@ -9,9 +9,10 @@ ini_set('display_errors', 1);
 
 require_once(__DIR__ . '/../template_renderer.php');
 require_once(__DIR__ . '/../../../config.php');
-require_once(__DIR__ . '/../classes/teacher.php');
+require_once(__DIR__ . '/../classes/teacher_factory.php');
 
-$teachers = teacher::get_all();
+$teacher_factory = new teacher_factory();
+$teachers = $teacher_factory->load_records('teacher.sql');
 
 $renderer = new \template_renderer(false);
 if (sizeof($teachers) == 0) {
