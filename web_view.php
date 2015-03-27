@@ -18,8 +18,8 @@ global $USER;
 $teacher_factory = new teacher_factory();
 $teachers = $teacher_factory->load_records('teacher_by_id.sql', array('teacher_id' => $USER->id));
 
-$teacher = (array)array_values($teachers)[0];
-if (!$teacher['courses']) {
+$teacher = array_values($teachers)[0];
+if (!$teacher->courses) {
 // Set Renderer Options
     $PAGE->set_pagelayout('report'); // To add the sidebar
     $PAGE->set_title(get_string('pluginname', 'local_moodle_reminders'));
@@ -32,5 +32,5 @@ if (!$teacher['courses']) {
 } else {
     $teacher['web_view'] = true;
     $renderer = new template_renderer(false);
-    echo $renderer->render('teacher_email.twig', 'teacher_email.css', $teacher);
+    echo $renderer->render('teacher_email.twig', 'teacher_email.css', (array) $teacher);
 }

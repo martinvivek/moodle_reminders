@@ -25,8 +25,8 @@ $PAGE->set_heading('Mailer Test');
 
 echo $OUTPUT->header();
 
-$teacher = (array)array_values($teachers)[0];
-if (!$teacher['courses']) {
+$teacher = array_values($teachers)[0];
+if (!$teacher->courses) {
     echo '<h2>Error: You are not teaching an active course</h2> ';
 } else {
     echo '
@@ -41,7 +41,7 @@ if (!$teacher['courses']) {
     if ($addresses) {
 
         $renderer = new template_renderer(false);
-        $email_html = $renderer->render('teacher_email.twig', 'teacher_email.css', $teacher);
+        $email_html = $renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher);
 
         $mail = new PHPMailer();
         $mail->isSendmail();
