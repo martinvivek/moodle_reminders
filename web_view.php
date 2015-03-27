@@ -18,8 +18,8 @@ global $USER;
 $teacher_factory = new teacher_factory();
 $teachers = $teacher_factory->load_records('teacher_by_id.sql', array('teacher_id' => $USER->id));
 
-$teacher = array_values($teachers)[0];
-if (!$teacher->courses) {
+$teacher = (array)array_values($teachers)[0];
+if (!$teacher['courses']) {
 // Set Renderer Options
     $PAGE->set_pagelayout('report'); // To add the sidebar
     $PAGE->set_title(get_string('pluginname', 'local_moodle_reminders'));
