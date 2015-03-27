@@ -7,24 +7,14 @@
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/../../../config.php');
-require_once(__DIR__ . '/../teacher/teacher.php');
+require_once(__DIR__ . '/../classes/factory/teacher_factory.php');
 require_once(__DIR__ . '/../template_renderer.php');
 
 $url = new moodle_url('/local/moodle_reminders/web_view.php');
 $PAGE->set_url($url);
 
-global $DB;
-$teacher_ids = $DB->get_records_sql('
-    SELECT {user}.id FROM {user}
-    INNER JOIN {role_assignments} ON {role_assignments}.userid = {user}.id AND ({role_assignments}.roleid =  3 OR {role_assignments}.roleid = 4)
-    WHERE {user}.id = ? OR ? IS NULL
-    LIMIT 1;
-', array($_GET['teacher_id'], $_GET['teacher_id']));
-
-$found_teacher = array_values($teacher_ids)[0];
-if(!$found_teacher) die('No teacher found');
-
-$teachers = teacher\teacher::get_all($found_teacher->id);
+$teacher_factory = new teacher_factory();
+$teachers = $teacher_factory->load_records('teacher.sql');
 
 if (sizeof($teachers) == 0) {
 // Set Renderer Options
@@ -48,9 +38,7 @@ if (sizeof($teachers) == 0) {
 
     $mail->From = 'noreply@unic.ac.cy';
     $mail->FromName = 'DLIT';
-    $mail->addAddress('andreas_stocker@outlook.com', 'Teacher Email Recipient');
-    $mail->addAddress('alexander.c@unic.ac.cy', 'Teacher Email Recipient');
-    $mail->addAddress('savva.c@unic.ac.cy', 'Teacher Email Recipient');
+    $mail->addAddress('shadowstep7@gmail.com', 'Teacher Email Recipient');
     $mail->isHTML(true);
 
     $mail->Subject = 'Weekly Course Report';

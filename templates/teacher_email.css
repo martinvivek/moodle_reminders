@@ -3,6 +3,10 @@
   max-height: 400px;
 }
 
+.student-engagement th:last-child {
+  padding-left: 5px;
+}
+
 .student-row td {
   border-bottom: 1px #8ec4ce solid;
 }
@@ -16,7 +20,7 @@
 }
 
 .last-login {
-  padding-top: 10px;
+  padding-top: 15px;
   padding-left: 38px;
   font-family: Verdana, Arial;
   color: #4b5863;
@@ -323,6 +327,7 @@ h1 {
   border-top: 1px dotted #9c9c93;
   margin-top: 15px;
 }
+
 .course-tr:nth-child(2) .border {
   border-top: none;
   margin-top: 0;

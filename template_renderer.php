@@ -14,18 +14,6 @@ define('IMG_DIR', '/local/moodle_reminders/images/');
 class template_renderer {
     public $twig;
 
-    static function sort_by_filter($arr, $property, $direction = 'desc') {
-        usort($arr, function($item1, $item2) use ($property, $direction) {
-            $item1_arr = (array) $item1;
-            $item2_arr = (array) $item2;
-
-            $result =  $item1_arr[$property] > $item2_arr[$property];
-
-            return $direction == 'desc' ? $result : !$result;
-        });
-        return $arr;
-    }
-
     /**
      * Creates a twig loader and environment
      * @param $cache boolean
@@ -35,7 +23,6 @@ class template_renderer {
         $config = array();
         if ($cache) $config['cache'] = TWIG_CACHE_DIR;
         $this->twig = new Twig_Environment($loader, $config);
-        $this->twig->addFilter('sort_by', new Twig_Filter_Function('template_renderer::sort_by_filter'));
     }
 
     /**
