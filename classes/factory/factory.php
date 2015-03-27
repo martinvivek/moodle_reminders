@@ -1,7 +1,7 @@
 <?php
 
 define('FACTORY_QUERY_FOLDER', __DIR__ . '/../../sql/factory/');
-define('UNESCAPED_VAR_PREFIX', '#SQL:');
+define('UNESCAPED_VAR_PREFIX', '#SQL ');
 
 abstract class factory {
 
