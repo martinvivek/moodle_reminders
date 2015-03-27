@@ -179,7 +179,7 @@
                           {% for discussion in course.discussions %}
                             <p>
                               <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
-                              {{ discussion.name }}
+                              {{ discussion.name }} <b>x {{ discussion.post_count }}</b>
                               <a target="_blank" href="{{ discussion.get_link() }}">Read Now</a>
                             </p>
                           {% else %}
@@ -200,6 +200,7 @@
                                                                                               width="1"
                                                                                               height="12" alt=""/></td>
               </tr>
+              {% if not web_view %}
               <tr>
                 <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
                 <td valign="top" align="center"
@@ -207,10 +208,12 @@
                   <p>
                     <a target="_blank" href="{{ unsubscribe_link }}">Unsubscribe</a> /
                     <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">Resubscribe</a>
+                    <a class="browser-view" target="_blank" href="{{ browser_view_link }}">View in Browser</a>
                   </p>
                 </td>
                 <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
               </tr>
+              {% endif %}
               <tr>
                 <td><img src="images/blank.gif" width="570" height="8" alt=""/></td>
               </tr>

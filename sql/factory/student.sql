@@ -5,7 +5,7 @@ SELECT
   FROM_UNIXTIME(MAX(mdl_logstore_standard_log.timecreated)) AS last_access_date,
   SUM(
       CASE mdl_logstore_standard_log.action
-      #SQL:action_cases
+      #SQL action_cases
       ELSE 0 END)
   /* Has the same effect of only getting distinct rows */
   * COUNT(DISTINCT mdl_logstore_standard_log.id) / COUNT(mdl_logstore_standard_log.id) /
