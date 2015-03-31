@@ -19,10 +19,9 @@ function local_moodle_reminders_cron() {
         echo "Sending Emails ... \n";
 
         foreach ($teachers as $teacher) {
-            $email_html = $renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher);
+            $email_html = $renderer->render_email('teacher_email.twig', 'teacher_email.css', (array)$teacher);
 
             $mail = new PHPMailer();
-            $mail->isSendmail();
             $mail->CharSet = 'UTF-8';
 
             $mail->From = 'noreply@unic.ac.cy';

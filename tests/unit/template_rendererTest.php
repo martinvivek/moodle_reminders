@@ -8,7 +8,7 @@ class template_rendererTest extends PHPUnit_Framework_TestCase {
         $env = array('name' => 'Andy');
         $renderer = new \template_renderer(false);
 
-        $html = $renderer->render('tests/test_renderer.twig', 'tests/test_renderer.css', $env);
+        $html = $renderer->render_email('tests/test_renderer.twig', 'tests/test_renderer.css', $env);
         // Test Variable Insertion
         $this->assertContains('Hello Andy!', $html);
         // Test conversion of external css to inline styles

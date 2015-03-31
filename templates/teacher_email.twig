@@ -123,6 +123,8 @@
                           {% else %}
                             <p>This course has no students</p>
                           {% endif %}
+
+                          <a target="_blank" href="{{ course.get_student_mailer_link() }}">Contact these Students</a>
                         </td>
                       </tr>
                     </table>

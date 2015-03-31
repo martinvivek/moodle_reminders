@@ -32,4 +32,9 @@ class course {
         global $CFG;
         return $CFG->wwwroot . '/course/view.php?id=' . $this->id;
     }
+
+    function get_student_mailer_link() {
+        global $CFG;
+        return $CFG->wwwroot . '/local/moodle_reminders/student_mailer.php?course_id=' . $this->id;
+    }
 }

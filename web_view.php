@@ -31,5 +31,5 @@ if (!$teacher['courses']) {
 } else {
     $teacher['web_view'] = true;
     $renderer = new template_renderer(false);
-    echo $renderer->render('teacher_email.twig', 'teacher_email.css', $teacher);
+    echo $renderer->render_email('teacher_email.twig', 'teacher_email.css', $teacher);
 }

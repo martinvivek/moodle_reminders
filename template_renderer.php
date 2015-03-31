@@ -26,15 +26,26 @@ class template_renderer {
     }
 
     /**
-     * @param $file_name
-     * @param $style_name
-     * @param $vars
+     * A simple alias the twig render function
+     * @param $file_name string Location of file relative to TEMPLATE_DIR
+     * @param $vars mixed Objects to be used by Twig
      * @return string Rendered template
      */
-    public function render($file_name, $style_name, $vars = array()) {
+    public function render($file_name, $vars) {
+        return $this->twig->render($file_name, (array) $vars);
+    }
+
+    /**
+     * Renders html with twig, generates inline css, sets image paths to full url of image folder
+     * @param $file_name string Location of file relative to TEMPLATE_DIR
+     * @param $stylesheet string stylesheet to convert to inline css
+     * @param $vars mixed Objects to be used by Twig
+     * @return string Rendered template
+     */
+    public function render_email($file_name, $stylesheet, $vars = array()) {
         $cssInliner = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
-        $cssInliner->setHTML($this->twig->render($file_name, $vars));
-        $cssInliner->setCSS($this->twig->render($style_name, $vars));
+        $cssInliner->setHTML($this->twig->render($file_name, (array) $vars));
+        $cssInliner->setCSS($this->twig->render($stylesheet));
         $html_with_inline_styles = $cssInliner->convert();
 
         global $CFG;

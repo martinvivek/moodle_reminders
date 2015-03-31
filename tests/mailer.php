@@ -43,7 +43,7 @@ if (!$teacher->courses) {
     if ($addresses) {
 
         $renderer = new template_renderer(false);
-        $email_html = $renderer->render('teacher_email.twig', 'teacher_email.css', (array)$teacher);
+        $email_html = $renderer->render_email('teacher_email.twig', 'teacher_email.css', (array)$teacher);
 
         $mail = new PHPMailer();
         $mail->isSendmail();

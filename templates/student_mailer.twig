@@ -1,0 +1,112 @@
+<style>
+  .selection-options {
+    margin-bottom: 20px;
+  }
+
+  .selection-options a {
+    margin-right: 20px;
+  }
+
+  .student-table {
+    width: 99%;
+  }
+
+  .student-table th,
+  .student-table td {
+    padding: 3px 10px;
+  }
+
+  .score-progress-container {
+    border: 1px solid #ccd1c1;
+    height: 10px;
+    width: 50px;
+  }
+
+  .score-progress-bar {
+    height: 100%;
+    background: #4b5863;
+  }
+
+  .student-message-input {
+    margin: 20px 0;
+    width: 99%;
+  }
+
+  .message-note {
+    margin-top: 30px;
+  }
+</style>
+<script>
+  function setAllSelected(selected) {
+    for (var i = 1; i <= {{ students | length}}; i++) {
+      $('#student_checkbox_' + i).prop('checked', selected);
+    }
+  }
+  /**
+   * Selects the current student in the list as well as those with lower
+   * grades then that student
+   */
+  function selectUpwards(student_id) {
+    setAllSelected(false);
+    for (var i = student_id; i > 0; i--) {
+      $('#student_checkbox_' + i).prop('checked', true);
+    }
+  }
+  function sendEmails() {
+    var emailAddresses = [];
+    for (var i = 1; i <= {{ students | length}}; i++) {
+      var studentCheckbox = $('#student_checkbox_' + i);
+      if (studentCheckbox.prop('checked')) {
+        emailAddresses.push(studentCheckbox.prop('name'));
+      }
+    }
+    $('#email_addresses').val(emailAddresses.join(','));
+    $('#student_mailer_form').submit();
+  }
+</script>
+<div class="selection-options">
+  <a href="javascript:setAllSelected(true)">Select All</a>
+  <a href="javascript:setAllSelected(false)">Select None</a>
+</div>
+<hr/>
+<form id="student_mailer_form" action="" method="post">
+  <table class="student-table">
+    <tr>
+      <th>{#Checkboxes go here#}</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Last Access</th>
+      <th>Activity Level</th>
+    </tr>
+    {% for student in students %}
+      <tr>
+        <td>
+          <input type="checkbox" name="{{ student.email }}" id="student_checkbox_{{ loop.index }}"/>
+          <a href="javascript:selectUpwards({{ loop.index }})" title="Select Upwards">↟</a>
+        </td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.email }}</td>
+        <td>
+          {% if student.last_accessed %}
+            {{ student.last_accessed | date("d/m/y") }}
+          {% else %}
+            Never
+          {% endif %}
+        </td>
+        <td>
+          <div class="score-progress-container">
+            <div class="score-progress-bar" style="width:{{ student.score * 100 }}%"></div>
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  <input type="hidden" name="email_addresses" id="email_addresses"/>
+  <input type="hidden" name="course_id" value="{{ course.id }}"/>
+  <div class="message-note">Note: <b>[COURSE_LINK]</b> will be replaced with <a target="_blank" href="{{ course.get_link() }}">{{ course.name }}</a>
+  </div>
+  <textarea class="student-message-input" name="message" id="" rows="10">{{ default_message }}</textarea>
+
+  <input onclick="sendEmails()" type="button" value="Send Email to Selected Students"/>
+</form>
+
