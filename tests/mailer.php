@@ -10,8 +10,10 @@ require_once(__DIR__ . '/../../../config.php');
 require_once(__DIR__ . '/../classes/factory/teacher_factory.php');
 require_once(__DIR__ . '/../template_renderer.php');
 
-$url = new moodle_url('/local/moodle_reminders/web_view.php');
+$url = new moodle_url('/local/moodle_reminders/tests/mailer.php');
 $PAGE->set_url($url);
+
+require_login();
 
 global $USER;
 
@@ -61,8 +63,7 @@ if (!$teacher->courses) {
             echo "Message could not be sent.<br>";
             echo 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
-            echo "Messages Sent: \n \n";
-            var_dump($mail->getAllRecipientAddresses());
+            echo "Messages Sent \n \n";
         }
     }
 }
