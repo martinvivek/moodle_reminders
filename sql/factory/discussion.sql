@@ -7,7 +7,7 @@ FROM mdl_forum_discussions
   JOIN mdl_forum_posts ON
                          mdl_forum_posts.discussion = mdl_forum_discussions.id AND
                          mdl_forum_posts.userid != mdl_user.id AND
-                         mdl_forum_posts.created > (
+                         IFNULL(mdl_forum_posts.created > (
                            SELECT MAX(mdl_logstore_standard_log.timecreated)
                            FROM mdl_logstore_standard_log
                            WHERE
@@ -15,7 +15,7 @@ FROM mdl_forum_discussions
                              mdl_logstore_standard_log.objectid = mdl_forum_discussions.id
                              AND
                              mdl_logstore_standard_log.userid = mdl_user.id
-                         )
+                         ), TRUE)
 WHERE mdl_forum_discussions.course = :course_id
 GROUP BY mdl_forum_discussions.id
 ORDER BY mdl_forum_discussions.name
