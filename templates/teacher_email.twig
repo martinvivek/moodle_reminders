@@ -9,21 +9,17 @@
   <title>Weekly Moodle Report</title>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 </head>
-
 <body>
-
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
   <tr>
     <td valign="top" align="center" id="top" class="outer" background="images/bg_body.gif">
-      <table class="texttopbottom" cellpadding="0" cellspacing="0" align="center" width="600">
-        <tr>
-          <td valign="top"><img src="images/blank.gif" width="1" height="8" alt=""/></td>
-        </tr>
-        <tr>
-          <td style="background: url(images/bg_top.png) no-repeat;"><img src="images/blank.gif" width="1" height="12"
-                                                                         alt=""/></td>
-        </tr>
-      </table>
+      {% if not web_view %}
+        <div class="top-links">
+          <a target="_blank" href="{{ browser_view_link }}">View in Browser</a>
+          <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">Resubscribe</a>
+          <a target="_blank" href="{{ unsubscribe_link }}">Unsubscribe</a>
+        </div>
+      {% endif %}
       <table cellpadding="0" cellspacing="0" align="center" width="600"
              style="background: url(images/bg_email_rightcol.png);">
         <tr>
@@ -62,7 +58,7 @@
                 <td></td>
               </tr>
               {% for course in courses %}
-                <tr class="course-tr" >
+                <tr class="course-tr">
                   <td valign="top" width="360">
                     <table cellpadding="0" cellspacing="0" width="360" class="whitecol">
                       <tr>
@@ -115,7 +111,11 @@
                                         Never
                                       {% endif %}
                                     </td>
-                                    <td>{{ student.get_stars() }}</td>
+                                    <td>
+                                      <div class="score-progress-container">
+                                        <div class="score-progress-bar" style="width:{{ student.score * 100 }}%"></div>
+                                      </div>
+                                    </td>
                                   </tr>
                                 {% endfor %}
                               </table>
@@ -176,7 +176,7 @@
                       </tr>
                       <tr>
                         <td bgcolor="#d3e7eb" valign="top">
-                          {% for discussion in course.discussions %}
+                          {% for discussion in course.discussions | slice(0, 8) %}
                             <p>
                               <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
                               {{ discussion.name }} <b>x {{ discussion.post_count }}</b>
@@ -187,6 +187,12 @@
                               No unread forum posts
                             </p>
                           {% endfor %}
+
+                          {% if course.discussions | length > 8 %}
+                            <p>(
+{{ course.discussions | length - 8 }} older discussion{% if course.discussions | length - 9%}s{% endif %} not shown
+                            )</p>
+                          {% endif %}
                         </td>
                       </tr>
                     </table>
@@ -201,18 +207,15 @@
                                                                                               height="12" alt=""/></td>
               </tr>
               {% if not web_view %}
-              <tr>
-                <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
-                <td valign="top" align="center"
-                    style="font-family: Verdana, Arial, sans-serif; color: #8d9ca4;font-size: 10px;margin: 0;">
-                  <p>
-                    <a target="_blank" href="{{ unsubscribe_link }}">Unsubscribe</a> /
-                    <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">Resubscribe</a>
-                    <a class="browser-view" target="_blank" href="{{ browser_view_link }}">View in Browser</a>
-                  </p>
-                </td>
-                <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
-              </tr>
+                <tr>
+                  <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
+                  <td valign="top" align="center"
+                      style="font-family: Verdana, Arial, sans-serif; color: #8d9ca4;font-size: 10px;margin: 0;">
+                    <p>
+                    </p>
+                  </td>
+                  <td rowspan="2"><img src="images/blank.gif" width="15" height="1" alt=""/></td>
+                </tr>
               {% endif %}
               <tr>
                 <td><img src="images/blank.gif" width="570" height="8" alt=""/></td>

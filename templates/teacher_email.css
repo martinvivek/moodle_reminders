@@ -1,9 +1,22 @@
-.browser-view {
-  margin-left: 20px;
+.top-links {
+  margin: 5px 0 7px 0;
+}
+.top-links a {
+  margin: 0 10px;
+}
+.score-progress-container{
+  border: 1px solid #ccd1c1;
+  height: 10px;
+  width: 50px;
+}
+.score-progress-bar {
+  height: 100%;
+  background: #4b5863;
 }
 .student-engagement-table-container {
   overflow: auto;
   max-height: 400px;
+  width: 315px;
 }
 
 .student-engagement th:last-child {
@@ -33,7 +46,7 @@
 
 .last-course-accessed {
   font-family: Verdana, Arial;
-  color: #8d9ca4;
+  color: #4b5863;
   font-size: 10px;
   text-wrap: avoid;
   padding-bottom: 10px;

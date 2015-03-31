@@ -18,4 +18,4 @@ FROM mdl_forum_discussions
                          ), TRUE)
 WHERE mdl_forum_discussions.course = :course_id
 GROUP BY mdl_forum_discussions.id
-ORDER BY mdl_forum_discussions.name
+ORDER BY MAX(mdl_forum_posts.created)
