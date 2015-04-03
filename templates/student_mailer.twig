@@ -53,14 +53,14 @@
     }
   }
   function sendEmails() {
-    var emailAddresses = [];
+    var studentIds = [];
     for (var i = 1; i <= {{ students | length}}; i++) {
       var studentCheckbox = $('#student_checkbox_' + i);
       if (studentCheckbox.prop('checked')) {
-        emailAddresses.push(studentCheckbox.prop('name'));
+        studentIds.push(studentCheckbox.prop('name'));
       }
     }
-    $('#email_addresses').val(emailAddresses.join(','));
+    $('#student_ids').val(studentIds.join(','));
     $('#student_mailer_form').submit();
   }
 </script>
@@ -81,7 +81,7 @@
     {% for student in students %}
       <tr>
         <td>
-          <input type="checkbox" name="{{ student.email }}" id="student_checkbox_{{ loop.index }}"/>
+          <input type="checkbox" name="{{ student.id }}" id="student_checkbox_{{ loop.index }}"/>
           <a href="javascript:selectUpwards({{ loop.index }})" title="Select Upwards">↟</a>
         </td>
         <td>{{ student.name }}</td>
@@ -101,7 +101,7 @@
       </tr>
     {% endfor %}
   </table>
-  <input type="hidden" name="email_addresses" id="email_addresses"/>
+  <input type="hidden" name="student_ids" id="student_ids"/>
   <input type="hidden" name="course_id" value="{{ course.id }}"/>
   <div class="message-note">Note: <b>[COURSE_LINK]</b> will be replaced with <a target="_blank" href="{{ course.get_link() }}">{{ course.name }}</a>
   </div>

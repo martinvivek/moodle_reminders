@@ -178,7 +178,8 @@
                       </tr>
                       <tr>
                         <td bgcolor="#d3e7eb" valign="top">
-                          {% for discussion in course.discussions | slice(0, 8) %}
+                          {% set max_discussions = 5 %}
+                          {% for discussion in course.discussions | slice(0, max_discussions) %}
                             <p>
                               <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
                               {{ discussion.name }} <b>x {{ discussion.post_count }}</b>
@@ -190,9 +191,9 @@
                             </p>
                           {% endfor %}
 
-                          {% if course.discussions | length > 8 %}
+                          {% if course.discussions | length > max_discussions %}
                             <p>(
-{{ course.discussions | length - 8 }} older discussion{% if course.discussions | length - 9%}s{% endif %} not shown
+{{ course.discussions | length - max_discussions }} older discussion{% if course.discussions | length - max_discussions - 1%}s{% endif %} not shown
                             )</p>
                           {% endif %}
                         </td>
