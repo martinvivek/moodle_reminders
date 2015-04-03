@@ -8,8 +8,7 @@ class student_factory extends factory {
      * @var array Maps the name of an action (see mdl_logstore_standard_log.action) to the number of times a week a good student should take that action
      */
     private $weekly_action_targets = array(
-        'submitted' => 2,
-        'viewed' => 10
+        'viewed' => 15
     );
 
     /**
