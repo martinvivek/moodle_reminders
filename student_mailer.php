@@ -31,12 +31,13 @@ function mailer_options_page() {
     // Load the teacher's name and put it into the default message
     $teacher = $DB->get_record('user', array('id' => $USER->id));
     $default_message = "
-Hello,
+Dear [STUDENT_NAME]
 
-it seems that you have not been very active in the course [COURSE_LINK].
+It seems that you have not been very active in your online course [COURSE_LINK].
+
 This is a kind reminder from your teacher to encourage you to get back on track.
 
-Regards,
+Kind regards
 
 " . $teacher->firstname . " " . $teacher->lastname;
 
@@ -86,14 +87,6 @@ function send_mail() {
     if (!$courses) {
         echo '<h3>Error: You are not authorized to send these emails</h3>';
     } else {
-
-        // Initialize PHPMailer
-        $mail = new PHPMailer();
-        $mail->CharSet = 'UTF-8';
-        $mail->From = 'noreply@unic.ac.cy';
-        $mail->FromName = 'UNIC Moodle';
-
-        // Get a list of students to make sure every email address actually belongs to a student of that course
         $student_factory = new student_factory();
         $students = $student_factory->load_records('student.sql',
             array('course_id' => $_GET['course_id']),
@@ -103,28 +96,36 @@ function send_mail() {
 
         foreach ($students as &$student) {
             if (in_array($student->id, $student_ids)) {
+                // Initialize PHPMailer
+                $mail = new PHPMailer();
+                $mail->CharSet = 'UTF-8';
+                $mail->From = 'noreply@unic.ac.cy';
+                $mail->FromName = 'UNIC Moodle';
+
+                // Get a list of students to make sure every email address actually belongs to a student of that course
                 $mail->addAddress($student->email, $student->name);
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Participation Reminder';
+
+                // Set message text
+                $message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
+                $message = str_replace("\n", '<br>', $message);
+                $message = '<div style="color: #333; font-size: 15px;">' . $message . '</div>';
+                $course = $courses[0];
+                $message = str_replace('[COURSE_LINK]', '<a target="_blank" href="' . $course->get_link() . '">' . $course->name . '</a>', $message);
+                $message = str_replace('[STUDENT_NAME]', $student->name, $message);
+                $mail->Body = $message;
+
+                if (!$mail->send()) {
+                    echo 'Could not send emails to student '. $student->name .' ';
+                    echo 'Mailer Error: ' . $mail->ErrorInfo. '<br>';
+                } else {
+                    echo 'Email sent to student '. $student->name .'<br>';
+                }
             }
         }
-
-        $mail->isHTML(true);
-        $mail->Subject = 'Participation Reminder';
-
-        // Set message text
-        $message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
-        $message = str_replace("\n", '<br>', $message);
-        $message = '<div style="color: #333; font-size: 15px;">' . $message . '</div>';
-        $course = $courses[0];
-        $message = str_replace('[COURSE_LINK]', '<a target="_blank" href="' . $course->get_link() . '">' . $course->name . '</a>', $message);
-        $mail->Body = $message;
-
-        if (!$mail->send()) {
-            echo '<h3>Could not Send Emails</h3>';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-        } else {
-            echo '<h3>Emails sent</h3>';
-        }
-        echo '<p><a href="">Back to Student List</a></p>';
+        echo '<br><br><p><a href="">Back to Student List</a></p>';
     }
 
     echo $OUTPUT->footer();

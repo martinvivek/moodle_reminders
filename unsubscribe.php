@@ -28,7 +28,7 @@ if ($_GET['resubscribe']) {
     $user_setting = 'email';
     $message = ' <h1>You have resubscribed!</h1> You will now get these emails again.';
 } else {
-    $user_setting = 'none';
+    $user_setting = 'unsubscribed';
     $message = ' <h1>You have unsubscribed!</h1> You will no longer get these emails.';
 }
 

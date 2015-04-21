@@ -2,7 +2,11 @@
   margin: 5px 0 7px 0;
 }
 .top-links a {
+  font-size: 15px;
   margin: 0 10px;
+}
+.contact-students {
+  font-size: 15px;
 }
 .score-progress-container{
   border: 1px solid #ccd1c1;

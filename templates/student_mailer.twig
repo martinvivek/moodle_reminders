@@ -104,7 +104,7 @@
   </table>
   <input type="hidden" name="student_ids" id="student_ids"/>
   <input type="hidden" name="course_id" value="{{ course.id }}"/>
-  <div class="message-note">Note: <b>[COURSE_LINK]</b> will be replaced with <a target="_blank" href="{{ course.get_link() }}">{{ course.name }}</a>
+  <div class="message-note">Note:  <b>[STUDENT_NAME]</b> will  be replaced with the student's name and <b>[COURSE_LINK]</b> will be replaced with <a target="_blank" href="{{ course.get_link() }}">{{ course.name }}</a>
   </div>
   <textarea class="student-message-input" name="message" id="" rows="10">{{ default_message }}</textarea>
 
