@@ -1,0 +1,47 @@
+<style>
+  .subscription-stats {
+    width: 300px;
+    margin-bottom: 15px;
+  }
+
+  .danger-area {
+    color: red;
+    line-height: 30px;
+  }
+  .danger-area .warning {
+    font-size: 17px;
+    padding: 10px 0;
+  }
+</style>
+
+<table class="subscription-stats generaltable ">
+  <tr>
+    <td>Subscribed Teachers</td>
+    <td>{{ subscribed_count }}</td>
+  </tr>
+  <tr>
+    <td>Teachers who unsubscribed themselves</td>
+    <td>{{ manually_unsubscribed_count }}</td>
+  </tr>
+</table>
+<p>
+  <button onclick='location.href="?action=subscribe_all"'>Subscribe All</button>
+  Subscribe teachers that have not explicitly unsubscribed themselves.
+</p>
+<p>
+  <button onclick='location.href="?action=unsubscribe_all"'>Unsubscribe All</button>
+  Unsubscribe all teachers but remember if they have unsubscribed themselves
+</p>
+
+<br>
+<div class="danger-area">
+  <h1>Danger Area</h1>
+  <div class="warning">
+    Warning: If you force all teachers to subscribe we won't know who manually unsubscribed<br>
+  </div>
+  <button
+    onclick='if(confirm("Do you really want to force subscribe all?")) location.href="?action=force_subscribe_all"'>
+    Force Subscribe All
+  </button>
+  Subscribe all teachers even if they have previously unsubscribed
+</div>
