@@ -3,14 +3,8 @@
     width: 300px;
     margin-bottom: 15px;
   }
-
-  .danger-area {
+  .manually-unsubscribed {
     color: red;
-    line-height: 30px;
-  }
-  .danger-area .warning {
-    font-size: 17px;
-    padding: 10px 0;
   }
 </style>
 
@@ -20,28 +14,53 @@
     <td>{{ subscribed_count }}</td>
   </tr>
   <tr>
+    <td>Teachers unsubscribed by default</td>
+    <td>{{ teachers | length - manually_unsubscribed_count - subscribed_count }}</td>
+  </tr>
+  <tr class="manually-unsubscribed">
     <td>Teachers who unsubscribed themselves</td>
     <td>{{ manually_unsubscribed_count }}</td>
   </tr>
 </table>
-<p>
-  <button onclick='location.href="?action=subscribe_all"'>Subscribe All</button>
-  Subscribe teachers that have not explicitly unsubscribed themselves.
-</p>
-<p>
-  <button onclick='location.href="?action=unsubscribe_all"'>Unsubscribe All</button>
-  Unsubscribe all teachers but remember if they have unsubscribed themselves
-</p>
 
-<br>
-<div class="danger-area">
-  <h1>Danger Area</h1>
-  <div class="warning">
-    Warning: If you force all teachers to subscribe we won't know who manually unsubscribed<br>
-  </div>
-  <button
+<div>
+  <button {% if subscribed_count == teachers | length - manually_unsubscribed_count %} disabled {% endif %} onclick='location.href="?action=subscribe"'>Subscribe All</button>
+  <button {% if subscribed_count == 0 %} disabled {% endif %} onclick='location.href="?action=unsubscribe"'>Unsubscribe All</button>
+  <button {% if manually_unsubscribed_count == 0 %} disabled {% endif %} class="manually-unsubscribed"
     onclick='if(confirm("Do you really want to force subscribe all?")) location.href="?action=force_subscribe_all"'>
     Force Subscribe All
   </button>
-  Subscribe all teachers even if they have previously unsubscribed
+
 </div>
+
+<table class="generaltable">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Subscription Status</th>
+    <td>Unsubscribe</td>
+    <td>Subscribe</td>
+  </tr>
+{% for teacher in teachers %}
+  <tr>
+    <td>{{ teacher.firstname}} {{ teacher.lastname }}</td>
+    <td>{{ teacher.email }}</td>
+    <td>
+      {% if teacher.subscribed == 'email' %}
+        Subscribed
+      {% elseif teacher.subscribed == 'unsubscribed' %}
+        <span class="manually-unsubscribed">Unsubscribed (By Choice)</span>
+      {% else %}
+        Unsubscribed (By Default)
+      {% endif %}
+    </td>
+    <td>
+      <button onclick='location.href="?action=unsubscribe&force=1&teacher_id={{ teacher.id }}"' {% if teacher.subscribed != 'email' %} disabled {% endif %}>Unsubscribe</button>
+    </td>
+    <td>
+      <button onclick='location.href="?action=subscribe&force=1&teacher_id={{ teacher.id }}"' {% if teacher.subscribed == 'email' %} disabled {% elseif teacher.subscribed == 'unsubscribed' %} class="manually-unsubscribed" {% endif %}>Subscribe</button>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+

@@ -13,13 +13,13 @@
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
   <tr>
     <td valign="top" align="center" id="top" class="outer" background="images/bg_body.gif">
-      {% if not web_view %}
-        <div class="top-links">
+      <div class="top-links">
+        {% if not web_view %}
           <a target="_blank" href="{{ browser_view_link }}">View in Browser</a>
-          <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">Resubscribe</a>
-          <a target="_blank" href="{{ unsubscribe_link }}">Unsubscribe</a>
-        </div>
-      {% endif %}
+        {% endif %}
+        <a target="_blank" href="{{ unsubscribe_link }}?resubscribe=1">Resubscribe</a>
+        <a target="_blank" href="{{ unsubscribe_link }}">Unsubscribe</a>
+      </div>
       <table cellpadding="0" cellspacing="0" align="center" width="600"
              style="background: url(images/bg_email_rightcol.png);">
         <tr>
@@ -52,7 +52,7 @@
                    cellpadding="0" cellspacing="0" width="600" align="left">
               <tr>
                 <td class="last-login">
-                  Your last login:
+                  Last login to Moodle:
                   <b>{{ course['last-accessed'] | date("d/m/y") }}</b>
                 </td>
                 <td></td>
@@ -72,12 +72,12 @@
                       </tr>
                       <tr>
                         <td bgcolor="#eaf4f7" valign="top" width="319">
-                          <h2>{{ course.name }}</h2>
+                          <a class="course_link" target="_blank" href="{{ course.get_link() }}">{{ course.name }}</a>
 
                           <div class="last-course-accessed">
-                            Last accessed by you:
+                            Course last accessed:
                             <b>
-                              {% if course.last_accessed != 0 %}
+                              {% if course.last_accessed %}
                                 {{ course.last_accessed | date('d/m/y') }}
                               {% else %}
                                 Never
@@ -95,7 +95,7 @@
                                   <th></th>
                                   <th>Name</th>
                                   <th>Last Access</th>
-                                  <th>Activity Level</th>
+                                  <th title="Cumulative average Weekly Page Views">*Activity Level</th>
                                 </tr>
                                 {% for student in course.students %}
                                   <tr class="student-row">
@@ -124,7 +124,8 @@
                             <p>This course has no students</p>
                           {% endif %}
 
-                          <a class="contact-students" target="_blank" href="{{ course.get_student_mailer_link() }}">Contact these Students</a>
+                          <a class="contact-students" target="_blank" href="{{ course.get_student_mailer_link() }}">Contact
+                            these Students</a>
                           <br><br>
                         </td>
                       </tr>
@@ -194,9 +195,13 @@
 
                           {% if course.discussions | length > max_discussions %}
                             <p>(
-{{ course.discussions | length - max_discussions }} older discussion{% if course.discussions | length - max_discussions - 1%}s{% endif %} not shown
-                            )</p>
+                              {{ course.discussions | length - max_discussions }} older
+                              discussion{% if course.discussions | length - max_discussions - 1 %}s{% endif %} not shown
+                              )</p>
                           {% endif %}
+                            <p>
+                              If you have already read your forum posts as an email, please ignore this.
+                            </p>
                         </td>
                       </tr>
                     </table>
@@ -225,6 +230,14 @@
                 <td><img src="images/blank.gif" width="570" height="8" alt=""/></td>
               </tr>
             </table>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="2">
+            <div class="activity-level-info">
+              <b>*Activity Level:</b> Cumulative average weekly page views
+            </div>
           </td>
         </tr>
       </table>

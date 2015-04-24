@@ -7,6 +7,9 @@ __Note:__ Teachers are NOT subscribed by default. No emails will be sent automat
 ## Installation
 * `cd MOODLE_DIR/local`
 * `git clone https://github.com/Arubaruba/moodle-reminders.git`
+* `cd moodle_reminders`
+* `mkdir twig_cache`
+* `chmod 666 twig_cache`
 * In the browser: `MOODLE_URL/admin/index.php?confirmplugincheck=1&cache=0`
 
 ## Preview Emails in Browser

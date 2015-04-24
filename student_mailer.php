@@ -118,10 +118,10 @@ function send_mail() {
                 $mail->Body = $message;
 
                 if (!$mail->send()) {
-                    echo 'Could not send emails to student '. $student->name .' ';
-                    echo 'Mailer Error: ' . $mail->ErrorInfo. '<br>';
+                    echo 'Could not send emails to student ' . $student->name . ' ';
+                    echo 'Mailer Error: ' . $mail->ErrorInfo . '<br>';
                 } else {
-                    echo 'Email sent to student '. $student->name .'<br>';
+                    echo 'Email sent to student ' . $student->name . '<br>';
                 }
             }
         }

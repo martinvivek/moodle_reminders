@@ -1,7 +1,14 @@
 <?php
 
-define('CLI_SCRIPT', true);
-
 require_once(__DIR__ . '/../lib.php');
 
-local_moodle_reminders_cron();
+global $USER;
+
+$is_admin = false;
+foreach (get_admins() as $admin) {
+    if ($admin->id == $USER->id) $is_admin = true;
+}
+
+if ($is_admin) local_moodle_reminders_cron();
+else echo 'You must be admin to do this';
+
