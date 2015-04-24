@@ -14,4 +14,5 @@ FROM mdl_course
                                          mdl_logstore_standard_log.courseid = mdl_course.id
 WHERE mdl_course.visible = 1 AND mdl_course.format != 'site'
 # Prevents a bug which causes MAX(logstore.timecreated) to reduce the number of records found to 1
-GROUP BY mdl_course.id ORDER BY mdl_course.fullname
+GROUP BY mdl_course.id
+ORDER BY mdl_course.fullname

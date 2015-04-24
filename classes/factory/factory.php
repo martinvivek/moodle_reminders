@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . '/../../logstore_cache.php');
+
 define('FACTORY_QUERY_FOLDER', __DIR__ . '/../../sql/factory/');
 define('UNESCAPED_VAR_PREFIX', '#SQL ');
 
@@ -34,6 +36,8 @@ abstract class factory {
         $query_string = file_get_contents(FACTORY_QUERY_FOLDER . $file_name);
         // Insert unescaped vars
         $query_string = str_replace($prefixed_unescaped_var_keys, array_values($unescaped_vars), $query_string);
+        // Use the logstore cache instead of the actual logstore
+        $query_string = str_replace('mdl_logstore_standard_log', LOGSTORE_CACHE_TABLE_NAME, $query_string);
         // Replace mdl_table with {table} for maximum compatibility
         // (we don't do this in the file so phpstorm hinting can load the actual tables from the database)
         $query_string = preg_replace('/mdl_(\w+)/','{$1}', $query_string);

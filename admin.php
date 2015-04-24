@@ -82,7 +82,7 @@ function render_page() {
 
     $teachers = $DB->get_records_sql("
 SELECT {user}.id, firstname, lastname, email,{user_preferences}.value AS subscribed FROM {user}
-JOIN {role_assignments} ON {role_assignments}.userid = {user}.id AND {role_assignments}.roleid = 3 OR {role_assignments}.roleid = 4
+JOIN {role_assignments} ON {role_assignments}.userid = {user}.id AND ({role_assignments}.roleid = 3 OR {role_assignments}.roleid = 4)
 LEFT JOIN {user_preferences} ON {user_preferences}.userid = {user}.id AND NAME = 'message_provider_local_moodle_reminders_course_reports_loggedoff'
 ");
 
