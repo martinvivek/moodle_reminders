@@ -3,7 +3,6 @@
 require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/classes/factory/teacher_factory.php');
 require_once(__DIR__ . '/template_renderer.php');
-require_once(__DIR__ . '/logstore_cache.php');
 
 /**
  * @return float Microtime to be passed to end_timer function
@@ -21,9 +20,6 @@ function end_timer($start_time) {
 }
 
 function local_moodle_reminders_cron() {
-
-    // Update the logstore cache
-    update_cache();
 
     $renderer = new template_renderer();
 

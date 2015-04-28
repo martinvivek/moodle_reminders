@@ -1,4 +1,4 @@
-SELECT
+SELECT SQL_NO_CACHE
 /* Prevent score inflation through rapid page refreshing
    By only counting a specific page view every 30 seconds */
   mdl_user.id                                               AS id,
@@ -7,7 +7,8 @@ SELECT
   FROM_UNIXTIME(MAX(mdl_logstore_standard_log.timecreated)) AS last_access_date,
   SUM(
       CASE mdl_logstore_standard_log.action
-      #SQL action_cases
+      #         WHEN 'viewed' THEN 1
+            #SQL action_cases
       ELSE 0 END)
   /* we multiply by the percentage of events that where created within 3 seconds distance of another */
   * (COUNT(DISTINCT ROUND(mdl_logstore_standard_log.timecreated / 3)) / COUNT(mdl_logstore_standard_log.id))
