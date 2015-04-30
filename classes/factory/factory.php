@@ -48,7 +48,7 @@ abstract class factory {
         $records = array();
         if ($query_result) {
             for ($i = 0, $ii = $query_result->num_rows, $records = array($ii); $i < $ii; $i++) {
-                $records[$i] = $this->construct_record((object) $query_result->fetch_assoc(), $load_dependencies);
+                $records[$i] = $this->construct_record((object)$query_result->fetch_assoc(), $load_dependencies);
             }
         }
         return $records;
