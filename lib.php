@@ -4,6 +4,8 @@ require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/classes/factory/teacher_factory.php');
 require_once(__DIR__ . '/template_renderer.php');
 
+set_time_limit(6000); # One hour
+
 /**
  * @return float Microtime to be passed to end_timer function
  */

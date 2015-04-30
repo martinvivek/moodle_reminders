@@ -5,13 +5,8 @@ require_once(__DIR__ . '/../../classes/factory/teacher_factory.php');
 
 class factoryTest extends PHPUnit_Framework_TestCase {
 
-    protected $maximum_query_time = 300; # Milliseconds
-    protected $teacher_id = 5, $course_id = 4;
-
-    function __construct() {
-        // This means logstore queries should disable caching so we can gauge their true slowness
-        define('TESTING_LOGSTORE_QUERIES', true);
-    }
+    protected $maximum_query_time = 20; # Milliseconds
+    protected $teacher_id = 5, $course_id = 11;
 
     public function test_factories() {
         $this->factory_test_helper(new teacher_factory(), 'teacher.sql');

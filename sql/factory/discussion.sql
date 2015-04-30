@@ -1,4 +1,4 @@
-SELECT SQL_NO_CACHE
+SELECT
   mdl_forum_discussions.id,
   mdl_forum_discussions.name
 FROM mdl_forum_discussions

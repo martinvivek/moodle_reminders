@@ -16,22 +16,10 @@ class course_factory extends factory {
     }
 
     protected function construct_record($row, $load_dependencies) {
-
-        // For performance reasons, we need to load the last accessed date separately
-        global $DB;
-        $select = TESTING_LOGSTORE_QUERIES ? 'SELECT SQL_NO_CACHE' : 'SELECT';
-
-        $last_accessed_date = $DB->get_record_sql($select . '
-            FROM_UNIXTIME(timecreated) AS timecreated
-            FROM {logstore_standard_log}
-            WHERE userid = ? AND courseid = ?
-            ORDER BY id DESC LIMIT 1
-        ', array($row->teacher_id, $row->id))->timecreated;
-
         $course = new course(
             $row->id,
             $row->name,
-            $last_accessed_date
+            $row->last_accessed_date
         );
 
         if ($load_dependencies) {

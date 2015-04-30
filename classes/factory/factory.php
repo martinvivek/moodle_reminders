@@ -3,6 +3,8 @@
 define('FACTORY_QUERY_FOLDER', __DIR__ . '/../../sql/factory/');
 define('UNESCAPED_VAR_PREFIX', '#SQL ');
 
+require_once(__DIR__ . '/../../backup_server_connection.php');
+
 abstract class factory {
 
     /**
@@ -26,8 +28,6 @@ abstract class factory {
      * @return array() Records found by the query
      */
     public function load_records($file_name, $vars = array(), $unescaped_vars = array(), $load_dependencies = true) {
-        global $DB;
-
         $prefixed_unescaped_var_keys = array_map(function ($key) {
             return UNESCAPED_VAR_PREFIX . $key;
         }, array_keys($unescaped_vars));
@@ -36,16 +36,21 @@ abstract class factory {
         $query_string = file_get_contents(FACTORY_QUERY_FOLDER . $file_name);
         // Insert unescaped vars
         $query_string = str_replace($prefixed_unescaped_var_keys, array_values($unescaped_vars), $query_string);
-        // Replace mdl_table with {table} for maximum compatibility
-        // (we don't do this in the file so phpstorm hinting can load the actual tables from the database)
-        $query_string = preg_replace('/mdl_(\w+)/', '{$1}', $query_string);
 
-        // Execute the query and map each record with a custom defined 'construct_record' function
-        $records = $DB->get_records_sql($query_string, $vars);
-        $constructed_records = array();
-        foreach ($records as &$record) {
-            array_push($constructed_records, $this->construct_record($record, $load_dependencies));
+        global $__backup_server_database_connection;
+
+        foreach (array_keys($vars) as $var) {
+            $query_string = str_replace(':' . $var, $__backup_server_database_connection->real_escape_string($vars[$var]), $query_string, $count = 1);
         }
-        return $constructed_records;
+
+        $query_result = $__backup_server_database_connection->query($query_string);
+
+        $records = array();
+        if ($query_result) {
+            for ($i = 0, $ii = $query_result->num_rows, $records = array($ii); $i < $ii; $i++) {
+                $records[$i] = $this->construct_record((object) $query_result->fetch_assoc(), $load_dependencies);
+            }
+        }
+        return $records;
     }
 }
