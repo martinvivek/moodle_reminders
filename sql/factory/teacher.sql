@@ -1,5 +1,5 @@
 SELECT
-  mdl_user.id,
+  DISTINCT mdl_user.id,
   mdl_user.email,
   FROM_UNIXTIME(mdl_user.lastaccess) AS last_login
 FROM mdl_user
@@ -10,3 +10,5 @@ FROM mdl_user
                                      mdl_user_preferences.name =
                                      'message_provider_local_moodle_reminders_course_reports_loggedoff' AND
                                      mdl_user_preferences.value LIKE 'email'
+
+

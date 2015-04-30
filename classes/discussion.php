@@ -8,12 +8,11 @@ class discussion {
      * @var $name string
      * @var $post_count integer
      */
-    public $id, $name, $post_count;
+    public $id, $name;
 
-    function __construct($id, $name, $post_count) {
+    function __construct($id, $name) {
         $this->id = $id;
         $this->name = $name;
-        $this->post_count = $post_count;
     }
 
     /**

@@ -32,9 +32,17 @@ if ($_GET['resubscribe']) {
     $message = ' <h1>You have unsubscribed!</h1> You will no longer get these emails.';
 }
 
+// If the user unsubscribed themselves they will still have a preference record
 $DB->execute('
   UPDATE {user_preferences} SET {user_preferences}.value = ? WHERE userid = ? AND {user_preferences}.name = "message_provider_local_moodle_reminders_course_reports_loggedoff"
 ', array($user_setting, $USER->id));
+
+if ($user_setting = 'email') {
+// If the user was unsubscribed by default we will need to create a preference record
+    $DB->execute("INSERT IGNORE INTO {user_preferences} (id, userid, NAME, VALUE)
+SELECT NULL, ?,'message_provider_local_moodle_reminders_course_reports_loggedoff', 'email'", array($USER->id));
+}
+
 echo $message;
 
 echo $OUTPUT->footer();

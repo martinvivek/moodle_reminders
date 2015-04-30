@@ -22,7 +22,7 @@ class teacher {
     public $unsubscribe_link = UNSUBSCRIBE_LINK;
     public $browser_view_link = BROWSER_VIEW_LINK;
 
-    function __construct($id, $email, $last_login, $courses = array()) {
+    function __construct($id, $email, $last_login, $courses = null) {
         $this->id = $id;
         $this->email = $email;
         $this->last_login = $last_login;

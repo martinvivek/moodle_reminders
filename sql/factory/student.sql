@@ -18,7 +18,6 @@ SELECT SQL_NO_CACHE
 FROM mdl_user
   JOIN mdl_course ON mdl_course.id = :course_id
   JOIN mdl_context ON mdl_context.contextlevel = 50 AND mdl_context.instanceid = mdl_course.id
-# The student
   JOIN mdl_role_assignments
     ON mdl_role_assignments.roleid = 5 AND mdl_user.id = mdl_role_assignments.userid AND
        mdl_role_assignments.contextid = mdl_context.id

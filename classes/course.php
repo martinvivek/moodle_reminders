@@ -19,7 +19,7 @@ class course {
      */
     public $id, $name, $last_accessed, $assignments, $discussions, $students;
 
-    function __construct($id, $name, $last_accessed, $assignments, $discussions, $students) {
+    function __construct($id, $name, $last_accessed, $assignments = null, $discussions = null, $students = null) {
         $this->id = $id;
         $this->name = $name;
         $this->last_accessed = $last_accessed;

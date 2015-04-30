@@ -172,7 +172,7 @@
                                                                                        alt=""
                                                                                        width="20" height="36"/></td>
                         <td bgcolor="#d3e7eb" valign="bottom" width="175">
-                          <h2>Unread Forum Posts</h2>
+                          <h2>Recent Forum Discussions</h2>
                         </td>
                         <td bgcolor="#d3e7eb" rowspan="2"><img src="images/blank.gif" alt="" width="15" height="1"/>
                         </td>
@@ -180,28 +180,17 @@
                       </tr>
                       <tr>
                         <td bgcolor="#d3e7eb" valign="top">
-                          {% set max_discussions = 5 %}
                           {% for discussion in course.discussions | slice(0, max_discussions) %}
                             <p>
                               <img src="images/bullet_blue.gif" alt="" width="11" height="12" class="inline"/>
-                              {{ discussion.name }} <b>x {{ discussion.post_count }}</b>
+                              {{ discussion.name }}
                               <a target="_blank" href="{{ discussion.get_link() }}">Read Now</a>
                             </p>
                           {% else %}
                             <p class="light">
-                              No unread forum posts
+                              No forum discussions
                             </p>
                           {% endfor %}
-
-                          {% if course.discussions | length > max_discussions %}
-                            <p>(
-                              {{ course.discussions | length - max_discussions }} older
-                              discussion{% if course.discussions | length - max_discussions - 1 %}s{% endif %} not shown
-                              )</p>
-                          {% endif %}
-                            <p>
-                              If you have already read your forum posts as an email, please ignore this.
-                            </p>
                         </td>
                       </tr>
                     </table>

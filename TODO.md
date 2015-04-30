@@ -1,3 +1,7 @@
+Remove sql_no_cache from sql queries
+Uncomment condition in discussion.sql
+
+
 Optimize mdl_logstore queries in:
 
 course.sql

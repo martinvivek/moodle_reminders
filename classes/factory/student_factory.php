@@ -1,6 +1,6 @@
 <?php
 
-require_once('factory.php');
+require_once(__DIR__ .'/factory.php');
 require_once(__DIR__ .'/../student.php');
 
 class student_factory extends factory {
@@ -34,7 +34,7 @@ class student_factory extends factory {
         return $sql;
     }
 
-    protected function construct_record($row) {
+    protected function construct_record($row, $load_dependencies) {
         return new student($row->id, $row->name, $row->email, $row->last_access_date, $row->score);
     }
 }
