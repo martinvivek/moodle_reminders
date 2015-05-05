@@ -15,6 +15,9 @@ $PAGE->set_url($url);
 
 require_login();
 
+// Change the php timeout for this session
+set_time_limit(6000); # One hour
+
 global $USER;
 
 $teacher_factory = new teacher_factory();

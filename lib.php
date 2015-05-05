@@ -21,6 +21,7 @@ function end_timer($start_time) {
 
 function local_moodle_reminders_cron() {
 
+    // Change the php timeout for this session
     set_time_limit(6000); # One hour
 
     $renderer = new template_renderer();
