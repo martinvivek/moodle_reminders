@@ -20,6 +20,7 @@ __Note:__ Teachers are NOT subscribed by default. No emails will be sent automat
 ``` php
 <php? define('LOCAL_MOODLE_REMINDERS_REDIS_PASSWORD', 'generated_password');
 ```
+* Import moodle logstore to redis `mysql -u root -p moodle_table_name --skip-column-names --raw < sql/moodle_logstore_to_redis.sql | redis-cli --pipe`
 
 ### Set Correct Permissions for Twig Cache
 * `mkdir twig_cache`
