@@ -1,4 +1,7 @@
 <?php
+
+namespace local_moodle_reminders;
+
 /**
  * This script allows individuals to view their course report in
  * the browser instead of inside an email client
@@ -7,12 +10,13 @@ require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/classes/factory/teacher_factory.php');
 require_once(__DIR__ . '/template_renderer.php');
 
-$url = new moodle_url('/local/moodle_reminders/web_view.php');
+global $USER, $PAGE, $OUTPUT;
+
+$url = new \moodle_url('/local/moodle_reminders/web_view.php');
 $PAGE->set_url($url);
 
 require_login();
 
-global $USER;
 
 $teacher_factory = new teacher_factory();
 $teachers = $teacher_factory->load_records('teacher_by_id.sql', array('teacher_id' => $USER->id));

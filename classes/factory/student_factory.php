@@ -1,7 +1,10 @@
 <?php
 
-require_once(__DIR__ .'/factory.php');
-require_once(__DIR__ .'/../student.php');
+namespace local_moodle_reminders;
+
+require_once(__DIR__ . '/../redis_logstore.php');
+require_once(__DIR__ . '/factory.php');
+require_once(__DIR__ . '/../student.php');
 
 class student_factory extends factory {
     /**
@@ -11,30 +14,30 @@ class student_factory extends factory {
         'viewed' => 15
     );
 
-    /**
-     * The formula for converting weekly action targets to points rewarded per action event
-     * @param $weekly_action_target
-     * @param $action_type_count
-     * @return float
-     */
-    private function calculate_action_points($weekly_action_target, $action_type_count) {
-        return 1 / $weekly_action_target / $action_type_count;
-    }
-
-    /**
-     * @return string SQL covering cases of rewarded actions and specifying the amount rewarded
-     */
-    public function get_action_cases_sql() {
-        $sql = '';
-        foreach ($this->weekly_action_targets as $action => $weekly_target) {
-            $points = $this->calculate_action_points($weekly_target, count($this->weekly_action_targets));
-            $sql .= 'WHEN \'' . filter_var($action, FILTER_SANITIZE_STRING) . '\' THEN ' .
-                filter_var($points, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) . "\n";
-        }
-        return $sql;
-    }
-
     protected function construct_record($row, $load_dependencies) {
-        return new student($row->id, $row->name, $row->email, $row->last_access_date, $row->score);
+
+        global $redisDB;
+
+        // Get the average number of a certain action type per week then divide by the weekly target
+        $current_time = new \DateTime();
+        $course_creation_time = new \DateTime();
+        $course_creation_time->setTimestamp($row->course_timecreated);
+        $weeks_since_course_was_created = $current_time->diff($course_creation_time)->days / 7;
+
+        $action_scores = array();
+        foreach ($this->weekly_action_targets as $action_name => $target_action_count) {
+            $key = redis_logstore::get_event_key($action_name, $row->id, $row->course_id);
+            $action_scores[$action_name] = $redisDB->zcard($key) / $weeks_since_course_was_created / $target_action_count;
+        }
+
+        // The total score is the average of the scores of all action types
+        $total_score = array_sum($action_scores) / count($action_scores);
+
+        // Get the last time when the student accessed the course
+        $last_view_query = $redisDB->zrevrangebyscore(redis_logstore::get_event_key('viewed', $row->id, $row->course_id),
+            '+inf', '-inf', array('WITHSCORES' => true, 'LIMIT' => array(0, 1)));
+        $last_view_time = array_values($last_view_query)[0];
+
+        return new student($row->id, $row->name, $row->email, $last_view_time, $total_score);
     }
 }

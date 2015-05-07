@@ -1,5 +1,7 @@
 <?php
 
+namespace local_moodle_reminders;
+
 /**
  * Allows teachers to select students from a list and send them emails
  */
@@ -17,7 +19,7 @@ function mailer_options_page() {
     global $DB, $USER, $PAGE, $OUTPUT;
 
     // Set the url in case the user is not logged in so they will be redirected to this page upon login
-    $url = new moodle_url('/local/moodle_reminders/student_mailer.php?course_id=' .
+    $url = new \moodle_url('/local/moodle_reminders/student_mailer.php?course_id=' .
         filter_var($_GET['course_id'], FILTER_SANITIZE_NUMBER_INT));
     $PAGE->set_url($url);
     require_login();
@@ -56,8 +58,7 @@ Kind regards
         $template_renderer = new template_renderer(false);
         $student_factory = new student_factory();
         $students = $student_factory->load_records('student.sql',
-            array('course_id' => $_GET['course_id']),
-            array('action_cases' => $student_factory->get_action_cases_sql()));
+            array('course_id' => $_GET['course_id']));
 
         if (!$students) {
             echo '<h3>Error: This course has no students</h3>';
@@ -88,16 +89,14 @@ function send_mail() {
         echo '<h3>Error: You are not authorized to send these emails</h3>';
     } else {
         $student_factory = new student_factory();
-        $students = $student_factory->load_records('student.sql',
-            array('course_id' => $_GET['course_id']),
-            array('action_cases' => $student_factory->get_action_cases_sql()));
+        $students = $student_factory->load_records('student.sql', array('course_id' => $_GET['course_id']));
 
         $student_ids = explode(',', $_POST['student_ids']);
 
         foreach ($students as &$student) {
             if (in_array($student->id, $student_ids)) {
                 // Initialize PHPMailer
-                $mail = new PHPMailer();
+                $mail = new \PHPMailer();
                 $mail->CharSet = 'UTF-8';
                 $mail->From = 'noreply@unic.ac.cy';
                 $mail->FromName = 'UNIC Moodle';

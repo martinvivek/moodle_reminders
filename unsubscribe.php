@@ -1,16 +1,19 @@
 <?php
 
+namespace local_moodle_reminders;
+
 require_once('../../config.php');
 
 $url_unsubscribe = '/local/moodle_reminders/unsubscribe.php';
 $url_resubscribe = '/local/moodle_reminders/unsubscribe.php?resubscribe=1';
 
-$url = new moodle_url(($_GET['resubscribe']) ? $url_resubscribe : $url_unsubscribe);
+$url = new \moodle_url(($_GET['resubscribe']) ? $url_resubscribe : $url_unsubscribe);
+global $PAGE;
 $PAGE->set_url($url);
 
 require_login();
 
-global $USER, $DB;
+global $USER, $DB, $OUTPUT;
 
 // Set Renderer Options
 $PAGE->set_pagelayout('report'); // To add the sidebar
@@ -18,11 +21,6 @@ $PAGE->set_title(get_string('pluginname', 'local_moodle_reminders'));
 $PAGE->set_heading(get_string('pluginname', 'local_moodle_reminders'));
 
 echo $OUTPUT->header();
-
-global $CFG;
-
-$user_setting = '';
-$message = '';
 
 if ($_GET['resubscribe']) {
     $user_setting = 'email';

@@ -1,5 +1,7 @@
 <?php
 
+namespace local_moodle_reminders;
+
 require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/classes/factory/teacher_factory.php');
 require_once(__DIR__ . '/template_renderer.php');
@@ -21,9 +23,6 @@ function end_timer($start_time) {
 
 function local_moodle_reminders_cron() {
 
-    // Change the php timeout for this session
-    set_time_limit(6000); # One hour
-
     $renderer = new template_renderer();
 
     echo 'MOODLE REMINDERS<br>';
@@ -44,7 +43,7 @@ function local_moodle_reminders_cron() {
         foreach ($teachers as $teacher) {
             $email_html = $renderer->render_email('teacher_email.twig', 'teacher_email.css', (array)$teacher);
 
-            $mail = new PHPMailer();
+            $mail = new \PHPMailer();
             $mail->CharSet = 'UTF-8';
 
             $mail->From = 'noreply@unic.ac.cy';

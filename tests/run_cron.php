@@ -1,5 +1,7 @@
 <?php
 
+namespace local_moodle_reminders;
+
 require_once(__DIR__ . '/../lib.php');
 
 global $USER;

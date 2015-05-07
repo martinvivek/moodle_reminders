@@ -1,7 +1,11 @@
 <?php
 
+namespace local_moodle_reminders;
+
 require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/../../config.php');
+
+use \TijsVerkoyen\CssToInlineStyles\CssToInlineStyles as CssToInlineConverter;
 
 /** The twig template source files are stored here */
 define('TEMPLATE_DIR', __DIR__ . '/templates');
@@ -19,10 +23,10 @@ class template_renderer {
      * @param $cache boolean
      */
     function __construct($cache = true) {
-        $loader = new Twig_Loader_Filesystem(TEMPLATE_DIR);
+        $loader = new \Twig_Loader_Filesystem(TEMPLATE_DIR);
         $config = array();
         if ($cache) $config['cache'] = TWIG_CACHE_DIR;
-        $this->twig = new Twig_Environment($loader, $config);
+        $this->twig = new \Twig_Environment($loader, $config);
     }
 
     /**
@@ -43,7 +47,7 @@ class template_renderer {
      * @return string Rendered template
      */
     public function render_email($file_name, $stylesheet, $vars = array()) {
-        $cssInliner = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
+        $cssInliner = new CssToInlineConverter();
         $cssInliner->setHTML($this->twig->render($file_name, (array) $vars));
         $cssInliner->setCSS($this->twig->render($stylesheet));
         $html_with_inline_styles = $cssInliner->convert();

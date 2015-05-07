@@ -1,9 +1,12 @@
 <?php
 
+namespace local_moodle_reminders;
+
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/template_renderer.php');
 
-$url = new moodle_url('/local/moodle_reminders/admin.php');
+$url = new \moodle_url('/local/moodle_reminders/admin.php');
+global $PAGE;
 $PAGE->set_url($url);
 
 require_login();

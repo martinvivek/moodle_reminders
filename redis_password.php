@@ -1,0 +1,3 @@
+<?php
+
+define('LOCAL_MOODLE_REMINDERS_REDIS_PASSWORD', '1/yI3SKe5hGnbTWAjNnWwcWivOheWcT7RrO+RNw1q6U=');

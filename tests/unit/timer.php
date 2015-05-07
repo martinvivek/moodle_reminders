@@ -1,5 +1,7 @@
 <?php
 
+namespace local_moodle_reminders;
+
 /* Utility class for keeping track of execution time */
 class timer {
     private $start_time;

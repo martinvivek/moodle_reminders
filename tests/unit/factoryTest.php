@@ -1,5 +1,7 @@
 <?php
 
+namespace local_moodle_reminders;
+
 define('CLI_SCRIPT', true);
 
 require_once(__DIR__ . '/timer.php');
@@ -11,7 +13,7 @@ require_once(__DIR__ . '/../../classes/factory/teacher_factory.php');
  * This script WILL NOT WORK if another test that uses the database is run
  */
 
-class factoryTest extends PHPUnit_Framework_TestCase {
+class factoryTest extends \PHPUnit_Framework_TestCase {
 
     protected $maximum_query_time = 20; # Milliseconds
     protected $teacher_id = 5, $course_id = 11;
@@ -19,8 +21,8 @@ class factoryTest extends PHPUnit_Framework_TestCase {
     public function test_factories() {
 //        $this->factory_test_helper(new teacher_factory(), 'teacher.sql');
         $this->factory_test_helper(new course_factory(), 'course.sql', array('teacher_id' => $this->teacher_id));
-        $this->factory_test_helper(new discussion_factory(), 'discussion.sql', array('teacher_id' => $this->teacher_id, 'course_id' => $this->course_id), array('action_cases' => (new student_factory())->get_action_cases_sql()));
-        $this->factory_test_helper(new student_factory(), 'student.sql', array('teacher_id' => $this->teacher_id, 'course_id' => $this->course_id), array('action_cases' => (new student_factory())->get_action_cases_sql()));
+        $this->factory_test_helper(new discussion_factory(), 'discussion.sql', array('teacher_id' => $this->teacher_id, 'course_id' => $this->course_id));
+        $this->factory_test_helper(new student_factory(), 'student.sql', array('teacher_id' => $this->teacher_id, 'course_id' => $this->course_id));
     }
 
     /**

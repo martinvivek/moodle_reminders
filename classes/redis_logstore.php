@@ -3,39 +3,44 @@
 namespace local_moodle_reminders;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
+require_once(__DIR__ . '/../redis_password.php');
+
+define('REDIS_LOGSTORE_TABLE', 'logstore_standard_log');
+
+/**
+ * Class redis_logstore
+ * @package local_moodle_reminders
+ */
+
+try {
+    global $redisDB;
+    $redisDB = new \Predis\Client(array('password' => LOCAL_MOODLE_REMINDERS_REDIS_PASSWORD));
+} catch (\Exception $exception) {
+    echo 'Could not connect to redis.';
+    echo $exception->getMessage();
+}
 
 class redis_logstore {
 
-    private static function connect_to_redis() {
-        $redis = null;
-        try {
-            $redis = new \Predis\Client();
-        } catch (\Exception $exception) {
-            echo 'Could not connect to redis.';
-            echo $exception->getMessage();
-        }
-        return $redis;
+    public static function get_event_key($action, $userid, $courseid) {
+        return json_encode(array(
+            'table' => REDIS_LOGSTORE_TABLE,
+            'userid' => intval($userid),
+            'courseid' => intval($courseid),
+            'action' => $action
+        ));
     }
-
-//    private $redis;
-//    function __construct() {
-//        try {
-//            $this->redis = new Predis\Client();
-//            $this->redis->set('php', 1);
-//        } catch (Exception $exception) {
-//            echo 'Could not connect to redis.';
-//            echo $exception->getMessage();
-//        }
-//    }
-//
-//    public function add_record($id, $course_id, $user_id, $eventname, $object_id, $ip) {
-//        $this->redis->set('php', 'got_event 1234');
-//    }
 
     public static function on_event($event) {
         // Try to connect to redis; if this fails connect_to_redis will return null
-        if ($redis = redis_logstore::connect_to_redis()) {
-            $redis->set('php', $event->timecreated);
-        }
+        global $redisDB;
+        $key = redis_logstore::get_event_key($event->action, $event->userid, $event->courseid);
+        $value = json_encode(array(
+            'id' => $redisDB->incr(REDIS_LOGSTORE_TABLE . ':autoincrement'),
+            'eventname' => $event->eventname,
+            'objectid' => intval($event->objectid)
+        ));
+        $score = intval($event->timecreated);
+        $redisDB->zadd($key, array($value => $score));
     }
 }

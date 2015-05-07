@@ -1,5 +1,7 @@
 <?php
 
+namespace local_moodle_reminders;
+
 require_once(__DIR__ . '/../../../config.php');
 
 class discussion {

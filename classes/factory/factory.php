@@ -1,9 +1,9 @@
 <?php
 
+namespace local_moodle_reminders;
+
 define('FACTORY_QUERY_FOLDER', __DIR__ . '/../../sql/factory/');
 define('UNESCAPED_VAR_PREFIX', '#SQL ');
-
-require_once(__DIR__ . '/../../backup_server_connection.php');
 
 abstract class factory {
 
@@ -37,20 +37,13 @@ abstract class factory {
         // Insert unescaped vars
         $query_string = str_replace($prefixed_unescaped_var_keys, array_values($unescaped_vars), $query_string);
 
-        global $__backup_server_database_connection;
+        global $DB;
 
-        foreach (array_keys($vars) as $var) {
-            $query_string = str_replace(':' . $var, $__backup_server_database_connection->real_escape_string($vars[$var]), $query_string, $count = 1);
+        $records = $DB->get_records_sql($query_string, $vars);
+        $constructed_records = array();
+        foreach ($records as &$record) {
+            array_push($constructed_records, $this->construct_record($record, $load_dependencies));
         }
-
-        $query_result = $__backup_server_database_connection->query($query_string);
-
-        $records = array();
-        if ($query_result) {
-            for ($i = 0, $ii = $query_result->num_rows, $records = array($ii); $i < $ii; $i++) {
-                $records[$i] = $this->construct_record((object)$query_result->fetch_assoc(), $load_dependencies);
-            }
-        }
-        return $records;
+        return $constructed_records;
     }
 }
