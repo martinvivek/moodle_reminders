@@ -3,44 +3,64 @@
 namespace local_moodle_reminders;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
-require_once(__DIR__ . '/../redis_password.php');
 
-define('REDIS_LOGSTORE_TABLE', 'logstore_standard_log');
 
 /**
  * Class redis_logstore
  * @package local_moodle_reminders
  */
-
-try {
-    global $redisDB;
-    $redisDB = new \Predis\Client(array('password' => LOCAL_MOODLE_REMINDERS_REDIS_PASSWORD));
-} catch (\Exception $exception) {
-    echo 'Could not connect to redis.';
-    echo $exception->getMessage();
-}
-
 class redis_logstore {
+    /**
+     * @var $redis_connection \Predis\Client Should only be accessed by the connect_to_redis_once function
+     */
+    private static $redis_connection;
 
-    public static function get_event_key($action, $userid, $courseid) {
-        return json_encode(array(
-            'table' => REDIS_LOGSTORE_TABLE,
-            'userid' => intval($userid),
-            'courseid' => intval($courseid),
-            'action' => $action
-        ));
+    /**
+     * We only connect to redis when we need to
+     * @return \Predis\Client
+     */
+    private static function connect_to_redis_once() {
+        if (!redis_logstore::$redis_connection) {
+            try {
+                redis_logstore::$redis_connection = new \Predis\Client(require(__DIR__ . '/../redis_config.php'));
+            } catch (\Exception $exception) {
+                echo 'Could not connect to redis.';
+                echo $exception->getMessage();
+            }
+        }
+        return redis_logstore::$redis_connection;
     }
 
+    /**
+     * @param $user_id
+     * @param $action String Moodle event action type like "viewed", "created" etc...
+     * @param $course_id
+     * @return Integer How many times a user performed an action of a certain type within a course
+     */
+    public static function user_action_frequency_in_course($user_id, $action, $course_id) {
+        $redis = redis_logstore::connect_to_redis_once();
+        return $redis->hget('course:' . $course_id . ':' . $action, $user_id);
+    }
+
+    /**
+     * @param $course_id
+     * @param $user_id
+     * @return Integer UNIX timestamp
+     */
+    public static function course_last_accessed_by_user($course_id, $user_id) {
+        $redis = redis_logstore::connect_to_redis_once();
+        return $redis->hget('course:' . $course_id . ':last_access', $user_id);
+    }
+
+    /**
+     * Configured hook into the moodle event system
+     * @param $event
+     */
     public static function on_event($event) {
-        // Try to connect to redis; if this fails connect_to_redis will return null
-        global $redisDB;
-        $key = redis_logstore::get_event_key($event->action, $event->userid, $event->courseid);
-        $value = json_encode(array(
-            'id' => $redisDB->incr(REDIS_LOGSTORE_TABLE . ':autoincrement'),
-            'eventname' => $event->eventname,
-            'objectid' => intval($event->objectid)
-        ));
-        $score = intval($event->timecreated);
-        $redisDB->zadd($key, array($value => $score));
+        if ($event->action == 'viewed') {
+            $redis = redis_logstore::connect_to_redis_once();
+            $redis->hincrby('course:' . $event->courseid . ':viewed', $event->userid, 1);
+            $redis->hmset('course:' . $event->courseid . ':last_access', $event->userid, $event->timecreated);
+        }
     }
 }

@@ -9,6 +9,9 @@ require_once(__DIR__ . '/assignment_factory.php');
 require_once(__DIR__ . '/discussion_factory.php');
 require_once(__DIR__ . '/student_factory.php');
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 class course_factory extends factory {
     private $assignment_factory, $discussion_factory, $student_factory;
 
@@ -19,16 +22,10 @@ class course_factory extends factory {
     }
 
     protected function construct_record($row, $load_dependencies) {
-
-        global $redisDB;
-
-        $last_view_query = $redisDB->zrevrangebyscore(redis_logstore::get_event_key('viewed', $row->teacher_id, $row->id),
-            '+inf', '-inf', array('WITHSCORES' => true, 'LIMIT' => array(0, 1)));
-
         $course = new course(
             $row->id,
             $row->name,
-            array_values($last_view_query)[0]
+            redis_logstore::course_last_accessed_by_user($row->id, $row->teacher_id)
         );
 
         if ($load_dependencies) {

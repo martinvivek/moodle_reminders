@@ -16,8 +16,6 @@ class student_factory extends factory {
 
     protected function construct_record($row, $load_dependencies) {
 
-        global $redisDB;
-
         // Get the average number of a certain action type per week then divide by the weekly target
         $current_time = new \DateTime();
         $course_creation_time = new \DateTime();
@@ -26,18 +24,15 @@ class student_factory extends factory {
 
         $action_scores = array();
         foreach ($this->weekly_action_targets as $action_name => $target_action_count) {
-            $key = redis_logstore::get_event_key($action_name, $row->id, $row->course_id);
-            $action_scores[$action_name] = $redisDB->zcard($key) / $weeks_since_course_was_created / $target_action_count;
+            $action_occurrences = redis_logstore::user_action_frequency_in_course($row->id, $action_name, $row->course_id);
+            $action_scores[$action_name] = $action_occurrences / $weeks_since_course_was_created / $target_action_count;
         }
 
         // The total score is the average of the scores of all action types
         $total_score = array_sum($action_scores) / count($action_scores);
 
-        // Get the last time when the student accessed the course
-        $last_view_query = $redisDB->zrevrangebyscore(redis_logstore::get_event_key('viewed', $row->id, $row->course_id),
-            '+inf', '-inf', array('WITHSCORES' => true, 'LIMIT' => array(0, 1)));
-        $last_view_time = array_values($last_view_query)[0];
+        $last_access = redis_logstore::course_last_accessed_by_user($row->course_id, $row->id);
 
-        return new student($row->id, $row->name, $row->email, $last_view_time, $total_score);
+        return new student($row->id, $row->name, $row->email, $last_access, $total_score);
     }
 }
