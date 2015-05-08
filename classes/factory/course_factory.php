@@ -35,6 +35,11 @@ class course_factory extends factory {
                 array('course_id' => $row->id, 'teacher_id' => $row->teacher_id));
             $course->students = $this->student_factory->load_records('student.sql',
                 array('course_id' => $row->id));
+
+            usort($course->students, function($student1, $student2) {
+                // We need an int here, but the scores are floats
+                return intval(($student1->score - $student2->score) * 1000);
+            });
         }
 
         return $course;
