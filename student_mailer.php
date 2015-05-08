@@ -32,6 +32,7 @@ function mailer_options_page() {
 
     // Load the teacher's name and put it into the default message
     $teacher = $DB->get_record('user', array('id' => $USER->id));
+
     $default_message = "
 Dear [STUDENT_NAME]
 
@@ -59,6 +60,11 @@ Kind regards
         $student_factory = new student_factory();
         $students = $student_factory->load_records('student.sql',
             array('course_id' => $_GET['course_id']));
+
+        usort($students, function($student1, $student2) {
+            // We need an int here, but the scores are floats
+            return intval(($student1->score - $student2->score) * 1000);
+        });
 
         if (!$students) {
             echo '<h3>Error: This course has no students</h3>';

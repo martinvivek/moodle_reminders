@@ -51,9 +51,14 @@
             <table background="images/topbot_rightcol.gif" style="background: url(images/topbot_rightcol.gif)"
                    cellpadding="0" cellspacing="0" width="600" align="left">
               <tr>
-                <td class="last-login">
-                  Last login to Moodle:
-                  <b>{{ course['last-accessed'] | date("d/m/y") }}</b>
+                <td class="top-info">
+                  <div>
+                    Your last login to Moodle: {{ course['last-accessed'] | date("d/m/y") }}
+
+                    <div class="activity-level-info">
+                      <b>Activity Level *</b> Cumulative average weekly page views from <i>least to greatest</i>
+                    </div>
+                  </div>
                 </td>
                 <td></td>
               </tr>
@@ -95,15 +100,12 @@
                                   <th></th>
                                   <th>Name</th>
                                   <th>Last Access</th>
-                                  <th title="Cumulative average Weekly Page Views">*Activity Level</th>
+                                  <th title="Cumulative average Weekly Page Views">Activity Level *</th>
                                 </tr>
                                 {% for student in course.students %}
                                   <tr class="student-row">
                                     <td><img src="images/bullet_white.gif" alt=""/></td>
-                                    <td>{{ student.name }}
-                                      <br>
-                                      <b>{{ student.email }}</b>
-                                    </td>
+                                    <td>{{ student.name }}</td>
                                     <td>
                                       {% if student.last_accessed %}
                                         {{ student.last_accessed | date("d/m/y") }}
@@ -219,14 +221,6 @@
                 <td><img src="images/blank.gif" width="570" height="8" alt=""/></td>
               </tr>
             </table>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td colspan="2">
-            <div class="activity-level-info">
-              <b>*Activity Level:</b> Cumulative average weekly page views
-            </div>
           </td>
         </tr>
       </table>
