@@ -130,6 +130,9 @@ function send_mail() {
                 }
             }
         }
+        if (!$_POST['student_ids']) {
+            echo 'You have not selected any students';
+        }
         echo '<br><br><p><a href="">Back to Student List</a></p>';
     }
 
