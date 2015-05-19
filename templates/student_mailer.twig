@@ -95,8 +95,8 @@
           {% endif %}
         </td>
         <td>
-          {{ student.get_score_string() }}
-        </td>
+          <span style="font-size:14px;font-family:'Courier New', Courier, monospace ;background: #ccc">{{ student.get_score_string()  | raw}}</span>
+         </td>
       </tr>
     {% endfor %}
   </table>

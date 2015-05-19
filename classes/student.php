@@ -42,6 +42,11 @@ class student {
             $score_string .= '█';
         }
         if ($char_count - floor($char_count) >= 0.5) $score_string .= '▌';
+
+        // empty spaces
+        for ($i = 0; $i < student::$max_score_chars - floor($char_count + 0.5); $i++) {
+            $score_string .= '&#x2004';
+        }
         return $score_string;
     }
 }
