@@ -14,15 +14,6 @@
 .contact-students {
   font-size: 13px;
 }
-.score-progress-container{
-  border: 1px solid #ccd1c1;
-  height: 10px;
-  width: 50px;
-}
-.score-progress-bar {
-  height: 10px;
-  background: #4b5863;
-}
 .student-engagement-table-container {
   overflow: auto;
   max-height: 400px;
@@ -127,12 +118,12 @@
 }
 
 table.student-engagement {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  /*-webkit-touch-callout: none;*/
+  /*-webkit-user-select: none;*/
+  /*-khtml-user-select: none;*/
+  /*-moz-user-select: none;*/
+  /*-ms-user-select: none;*/
+  /*user-select: none;*/
   width: 99%;
   color: #4b5863;
   font-family: Verdana, Arial;

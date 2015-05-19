@@ -41,7 +41,7 @@
         <tr>
           <td style="background: url(images/bg_title.gif) no-repeat;" background="images/bg_title.gif" valign="bottom"
               colspan="3" height="65" align="left">
-            <h1 style="color: #91DAD2">
+            <h1>
               Weekly Report
             </h1>
           </td>
@@ -113,11 +113,7 @@
                                         Never
                                       {% endif %}
                                     </td>
-                                    <td>
-                                      <div class="score-progress-container">
-                                        <div class="score-progress-bar" style="width:{{ student.score * 100 }}%"></div>
-                                      </div>
-                                    </td>
+                                    <td style="font-size: 10px">{{ student.get_score_string() }}</td>
                                   </tr>
                                 {% endfor %}
                               </table>

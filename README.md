@@ -13,7 +13,7 @@ __Note:__ Teachers are NOT subscribed by default. No emails will be sent automat
 * In the browser: `MOODLE_URL/admin/index.php?confirmplugincheck=1&cache=0`
 
 ### Set up Redis
-* `sudo apt-get install redis-server redis-cli`
+* `sudo apt-get install redis-server`
 * Generate secure password `openssl rand -base64 32`
 * Add to _/etc/redis/redis.conf_: `requirepass "generated_password"`
 * Create _redis_config.php_ (in _MOODLE_DIR/local/moodle_reminders_)

@@ -95,9 +95,7 @@
           {% endif %}
         </td>
         <td>
-          <div class="score-progress-container">
-            <div class="score-progress-bar" style="width:{{ student.score * 100 }}%"></div>
-          </div>
+          {{ student.get_score_string() }}
         </td>
       </tr>
     {% endfor %}
